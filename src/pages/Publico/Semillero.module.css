@@ -1,0 +1,228 @@
+/* ── Hero Banner ── */
+.hero {
+  background: linear-gradient(to bottom right, var(--obs-purple), var(--obs-purple2));
+  color: white;
+}
+
+.heroInner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 64px 16px;
+}
+
+@media (min-width: 640px) {
+  .heroInner {
+    padding: 64px 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroInner {
+    padding: 64px 32px;
+  }
+}
+
+.heroIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-xl);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.heroIcon {
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.heroTitle {
+  margin-top: 24px;
+  max-width: 560px;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: white;
+}
+
+@media (min-width: 640px) {
+  .heroTitle {
+    font-size: 2.25rem;
+  }
+}
+
+.heroDescription {
+  margin-top: 16px;
+  max-width: 560px;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.heroBtn {
+  margin-top: 32px;
+}
+
+/* ── Pilares ── */
+.pilaresSection {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 56px 16px;
+}
+
+@media (min-width: 640px) {
+  .pilaresSection {
+    padding: 56px 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pilaresSection {
+    padding: 56px 32px;
+  }
+}
+
+.pilaresGrid {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .pilaresGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pilarCard {
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--slate-200);
+  background-color: white;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.pilarIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: var(--obs-skyLight);
+}
+
+.pilarIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--obs-purple);
+}
+
+.pilarTitle {
+  margin-top: 16px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--obs-navy);
+}
+
+.pilarDescription {
+  margin-top: 8px;
+  font-size: 0.875rem;
+  color: var(--slate-600);
+  line-height: 1.5;
+}
+
+/* ── Objetivos y participación ── */
+.objetivosSection {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 16px 56px;
+}
+
+@media (min-width: 640px) {
+  .objetivosSection {
+    padding: 0 24px 56px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .objetivosSection {
+    padding: 0 32px 56px;
+  }
+}
+
+.objetivosGrid {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .objetivosGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.objetivosCard {
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--slate-200);
+  background-color: white;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.objetivosTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--obs-navy);
+}
+
+.objetivosList {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.objetivoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.875rem;
+  color: var(--slate-600);
+  line-height: 1.5;
+}
+
+.objetivoBala {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--obs-gold);
+}
+
+.participarTexto {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  color: var(--slate-600);
+  line-height: 1.6;
+}
+
+.participarBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  border-radius: var(--radius-lg);
+  background-color: var(--obs-blue-light);
+  padding: 12px 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition-base);
+}
+
+.participarBtn:hover {
+  background-color: var(--obs-bluemed);
+}

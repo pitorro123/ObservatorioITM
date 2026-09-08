@@ -1,0 +1,127 @@
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espacio-md);
+}
+
+.grupoPestañas {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-xs);
+  flex-wrap: wrap;
+}
+
+.pildora {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2xs);
+  padding: var(--espacio-xs) var(--espacio-md);
+  border-radius: var(--radio-pildora);
+  background-color: var(--color-fondo-general);
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-semibold);
+  transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+}
+
+.pildora:hover {
+  background-color: var(--color-borde);
+}
+
+.pildoraActiva {
+  background-color: var(--color-primario);
+  color: var(--color-texto-invertido);
+}
+
+.pildoraActiva:hover {
+  background-color: var(--color-primario-hover);
+}
+
+.contador {
+  font-weight: var(--peso-medio);
+  opacity: 0.85;
+}
+
+.grupoAcciones {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  flex-wrap: wrap;
+}
+
+.campoBusqueda {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-xs);
+  padding: var(--espacio-xs) var(--espacio-md);
+  border-radius: var(--radio-pildora);
+  background-color: var(--color-fondo-general);
+  min-width: 200px;
+}
+
+.iconoBusqueda {
+  width: 16px;
+  height: 16px;
+  color: var(--color-texto-terciario);
+  flex-shrink: 0;
+}
+
+.input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: var(--texto-sm);
+  color: var(--color-texto-principal);
+}
+
+.input::placeholder {
+  color: var(--color-texto-terciario);
+}
+
+.selectorFecha {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-xs);
+  padding: var(--espacio-xs) var(--espacio-md);
+  border-radius: var(--radio-pildora);
+  background-color: var(--color-primario);
+  color: var(--color-texto-invertido);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  white-space: nowrap;
+  transition: background-color var(--transicion-rapida);
+}
+
+.selectorFecha:hover {
+  background-color: var(--color-primario-hover);
+}
+
+.iconoSelector {
+  width: 16px;
+  height: 16px;
+  color: var(--color-texto-invertido);
+}
+
+.iconoChevron {
+  width: 14px;
+  height: 14px;
+  color: var(--color-texto-invertido);
+}
+
+@media (max-width: 768px) {
+  .barra {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .grupoAcciones {
+    justify-content: space-between;
+  }
+
+  .campoBusqueda {
+    min-width: 0;
+    flex: 1;
+  }
+}

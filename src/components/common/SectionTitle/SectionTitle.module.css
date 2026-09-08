@@ -1,0 +1,62 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--obs-navy);
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 1.875rem;
+  }
+}
+
+/* ── Variante gold ── */
+.goldWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.goldTitle {
+  display: inline-block;
+  border-radius: var(--radius-md);
+  background-color: var(--obs-gold);
+  padding: 8px 20px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--obs-navy);
+}
+
+@media (min-width: 640px) {
+  .goldTitle {
+    font-size: 1.25rem;
+  }
+}
+
+.link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--obs-blue);
+  transition: text-decoration var(--transition-fast);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.linkGold {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--obs-gold);
+  transition: text-decoration var(--transition-fast);
+}
+
+.linkGold:hover {
+  text-decoration: underline;
+}

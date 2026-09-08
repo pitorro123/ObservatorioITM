@@ -1,0 +1,180 @@
+import { createContext, useContext, useState } from "react";
+
+const AuthContext = createContext(null);
+
+const usuariosIniciales = [
+  {
+    id: 1,
+    nombre: "Administrador",
+    correo: "admin@itm.edu.co",
+    rol: "Administrador",
+    password: "admin123",
+    estado: "Activo",
+    token: null,
+  },
+  {
+    id: 2,
+    nombre: "Juan Camilo",
+    correo: "juan.camilo@itm.edu.co",
+    rol: "Docente",
+    password: "docente123",
+    estado: "Activo",
+    token: null,
+  },
+  {
+    id: 3,
+    nombre: "Laura Gómez",
+    correo: "laura.gomez@itm.edu.co",
+    rol: "Docente",
+    password: "docente123",
+    estado: "Activo",
+    token: null,
+  },
+];
+
+function generarToken() {
+  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+}
+
+function generarPasswordTemporal() {
+  return Math.random().toString(36).slice(2, 10);
+}
+
+export function AuthProvider({ children }) {
+  const [usuarios, setUsuarios] = useState(usuariosIniciales);
+  const [usuarioActual, setUsuarioActual] = useState(null);
+
+  const login = (correo, password) => {
+    const usuario = usuarios.find(
+      (u) => u.correo.toLowerCase() === correo.trim().toLowerCase()
+    );
+
+    if (!usuario) {
+      return { exito: false, error: "No existe una cuenta con ese correo." };
+    }
+
+    if (usuario.estado !== "Activo") {
+      return { exito: false, error: "La cuenta está desactivada. Contacta al administrador." };
+    }
+
+    if (!usuario.password) {
+      return {
+        exito: false,
+        error:
+          "Tu contraseña aún no ha sido establecida. Usa el enlace enviado a tu correo para configurarla.",
+      };
+    }
+
+    if (usuario.password !== password) {
+      return { exito: false, error: "Correo o contraseña incorrectos." };
+    }
+
+    setUsuarioActual(usuario);
+    return { exito: true };
+  };
+
+  const logout = () => {
+    setUsuarioActual(null);
+  };
+
+  const docentes = usuarios.filter((usuario) => usuario.rol === "Docente");
+
+  const crearDocente = ({ nombre, correo }) => {
+    const correoRegistrado = usuarios.some(
+      (u) => u.correo.toLowerCase() === correo.trim().toLowerCase()
+    );
+    if (correoRegistrado) {
+      return { exito: false, error: "Ya existe una cuenta con ese correo electrónico." };
+    }
+
+    const token = generarToken();
+    const passwordTemporal = generarPasswordTemporal();
+    const nuevoDocente = {
+      id: usuarios.reduce((max, u) => Math.max(max, u.id), 0) + 1,
+      nombre: nombre.trim(),
+      correo: correo.trim(),
+      rol: "Docente",
+      password: null,
+      passwordTemporal,
+      estado: "Pendiente",
+      token,
+    };
+
+    setUsuarios((prev) => [...prev, nuevoDocente]);
+
+    const enlace = `${window.location.origin}/cambiar-password?token=${token}`;
+    return { exito: true, docente: nuevoDocente, enlace };
+  };
+
+  const editarDocente = (id, cambios) => {
+    const correoRepetido = usuarios.some(
+      (u) =>
+        u.id !== id &&
+        u.correo.toLowerCase() === (cambios.correo || "").toLowerCase()
+    );
+    if (correoRepetido) {
+      return { exito: false, error: "Ya existe una cuenta con ese correo electrónico." };
+    }
+
+    setUsuarios((prev) =>
+      prev.map((u) => (u.id === id ? { ...u, ...cambios } : u))
+    );
+
+    if (usuarioActual && usuarioActual.id === id) {
+      const actualizado = usuarios.find((u) => u.id === id);
+      setUsuarioActual({ ...actualizado, ...cambios });
+    }
+
+    return { exito: true };
+  };
+
+  const eliminarDocente = (id) => {
+    setUsuarios((prev) => prev.filter((u) => u.id !== id));
+  };
+
+  const establecerPassword = (token, nuevaPassword) => {
+    const usuario = usuarios.find((u) => u.token === token);
+    if (!usuario) {
+      return { exito: false, error: "El enlace no es válido o ya fue utilizado." };
+    }
+
+    setUsuarios((prev) =>
+      prev.map((u) =>
+        u.id === usuario.id
+          ? { ...u, password: nuevaPassword, token: null, estado: "Activo", passwordTemporal: null }
+          : u
+      )
+    );
+
+    return { exito: true, usuario };
+  };
+
+  const esAdmin = usuarioActual?.rol === "Administrador";
+  const esDocente = usuarioActual?.rol === "Docente";
+  const estaAutenticado = Boolean(usuarioActual);
+
+  const value = {
+    usuarios,
+    usuarioActual,
+    estaAutenticado,
+    esAdmin,
+    esDocente,
+    login,
+    logout,
+    docentes,
+    crearDocente,
+    editarDocente,
+    eliminarDocente,
+    establecerPassword,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth debe usarse dentro de AuthProvider");
+  }
+  return context;
+}

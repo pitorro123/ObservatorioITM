@@ -1,0 +1,14 @@
+.pagina {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tarjetaResumen {
+  background-color: var(--color-superficie);
+  border-radius: var(--radio-xl);
+  padding: var(--espacio-xl);
+  box-shadow: var(--sombra-tarjeta);
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-sm);
+}
