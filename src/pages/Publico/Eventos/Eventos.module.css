@@ -1,18 +1,18 @@
 .raiz {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 48px 16px;
+  padding: 8px 16px 48px;
 }
 
 @media (min-width: 640px) {
   .raiz {
-    padding: 48px 24px;
+    padding: 8px 24px 48px;
   }
 }
 
 @media (min-width: 1024px) {
   .raiz {
-    padding: 48px 32px;
+    padding: 12px 32px 48px;
   }
 }
 
@@ -29,7 +29,7 @@
 }
 
 .subtitle {
-  margin-top: 8px;
+  margin-top: 0;
   max-width: 640px;
   font-size: 0.875rem;
   color: var(--slate-600);
