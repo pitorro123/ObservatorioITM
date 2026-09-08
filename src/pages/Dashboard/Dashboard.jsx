@@ -49,50 +49,54 @@ export default function Dashboard() {
 
   return (
     <div className={estilos.pagina}>
-      <Header rutaBreadcrumb={["Dashboard"]} titulo="Dashboard" />
-
-      <div className={estilos.tarjetaBienvenida}>
-        <h2 className={estilos.tituloBienvenida}>
-          Bienvenido al panel del Observatorio Astronómico ITM
-        </h2>
-        <p className={estilos.textoBienvenida}>
-          Aquí puedes gestionar los eventos y consultar las estadísticas de
-          participación de la comunidad.
-        </p>
+      <div className={estilos.seccionSuperior}>
+        <Header rutaBreadcrumb={["Dashboard"]} titulo="Dashboard" />
       </div>
 
-      <div className={estilos.gridIndicadores}>
-        {indicadores.map((indicador) => {
-          const IconoIndicador = iconos[indicador.icono];
-          return (
-            <article key={indicador.id} className={estilos.tarjetaIndicador}>
-              <span className={estilos.iconoWrap}>
-                {IconoIndicador && (
-                  <IconoIndicador className={estilos.icono} aria-hidden="true" />
-                )}
-              </span>
-              <p className={estilos.etiquetaIndicador}>{indicador.etiqueta}</p>
-              <p className={estilos.valorIndicador}>{indicador.valor}</p>
-            </article>
-          );
-        })}
-      </div>
+      <div className={estilos.contenedorTarjetas}>
+        <div className={estilos.tarjetaBienvenida}>
+          <h2 className={estilos.tituloBienvenida}>
+            Bienvenido al panel del Observatorio Astronómico ITM
+          </h2>
+          <p className={estilos.textoBienvenida}>
+            Aquí puedes gestionar los eventos y consultar las estadísticas de
+            participación de la comunidad.
+          </p>
+        </div>
 
-      <div className={estilos.tarjetaLista}>
-        <h3 className={estilos.tituloLista}>Próximos eventos publicados</h3>
-        {eventosPublicados.length === 0 ? (
-          <p className={estilos.sinEventos}>No hay eventos publicados próximamente.</p>
-        ) : (
-          <ul className={estilos.lista}>
-            {eventosPublicados.slice(0, 5).map((evento) => (
-              <li key={evento.id} className={estilos.itemLista}>
-                <span className={estilos.bala} aria-hidden="true" />
-                <span className={estilos.nombreEvento}>{evento.titulo}</span>
-                <span className={estilos.fechaEvento}>{evento.fecha}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className={estilos.gridIndicadores}>
+          {indicadores.map((indicador) => {
+            const IconoIndicador = iconos[indicador.icono];
+            return (
+              <article key={indicador.id} className={estilos.tarjetaIndicador}>
+                <span className={estilos.iconoWrap}>
+                  {IconoIndicador && (
+                    <IconoIndicador className={estilos.icono} aria-hidden="true" />
+                  )}
+                </span>
+                <p className={estilos.etiquetaIndicador}>{indicador.etiqueta}</p>
+                <p className={estilos.valorIndicador}>{indicador.valor}</p>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className={estilos.tarjetaLista}>
+          <h3 className={estilos.tituloLista}>Próximos eventos publicados</h3>
+          {eventosPublicados.length === 0 ? (
+            <p className={estilos.sinEventos}>No hay eventos publicados próximamente.</p>
+          ) : (
+            <ul className={estilos.lista}>
+              {eventosPublicados.slice(0, 5).map((evento) => (
+                <li key={evento.id} className={estilos.itemLista}>
+                  <span className={estilos.bala} aria-hidden="true" />
+                  <span className={estilos.nombreEvento}>{evento.titulo}</span>
+                  <span className={estilos.fechaEvento}>{evento.fecha}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );
