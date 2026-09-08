@@ -120,6 +120,51 @@
   color: var(--color-texto-secundario);
 }
 
+.barra_opciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.botonEscanear {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radio-md);
+  border: 1px solid var(--color-primario);
+  background-color: var(--color-primario-suave);
+  color: var(--color-primario);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-semibold);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+}
+
+.botonEscanear:hover {
+  background-color: var(--color-primario);
+  color: var(--color-texto-invertido);
+}
+
+.tarjetaCamara {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background-color: #ffffff;
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-lg);
+  box-shadow: var(--sombra-suave);
+}
+
+.tituloCamara {
+  font-size: var(--texto-md);
+  font-weight: var(--peso-bold);
+  color: var(--color-texto-principal);
+}
+
 .tarjetaResultado {
   display: flex;
   align-items: center;

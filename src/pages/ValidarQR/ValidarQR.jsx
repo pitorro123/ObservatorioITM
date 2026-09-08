@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   ScanLine,
+  Camera,
   Search,
   CheckCircle2,
   XCircle,
@@ -13,6 +14,7 @@ import {
 import { QRCodeSVG } from "qrcode.react";
 import Header from "../../components/layout/Header/Header.jsx";
 import Notificacion from "../../components/pages/Eventos/Notificacion/Notificacion.jsx";
+import EscanerVideo from "../../components/pages/ValidarQR/EscanerVideo/EscanerVideo.jsx";
 import { useEventosContext } from "../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../utils/formato.js";
 import estilos from "./ValidarQR.module.css";
@@ -24,12 +26,10 @@ export default function ValidarQR() {
   const [tipoResultado, setTipoResultado] = useState("");
   const [ingresos, setIngresos] = useState([]);
   const [notificacion, setNotificacion] = useState("");
+  const [escanerAbierto, setEscanerAbierto] = useState(false);
 
-  const manejarValidar = (e) => {
-    e.preventDefault();
-    if (!codigo.trim()) return;
-
-    const verificar = obtenerInscripcion(codigo);
+  const validarCodigo = (texto) => {
+    const verificar = obtenerInscripcion(texto);
     if (!verificar.exito) {
       setResultado({
         inscripcion: verificar.inscripcion || null,
@@ -48,6 +48,17 @@ export default function ValidarQR() {
     });
     setTipoResultado("encontrado");
     setCodigo("");
+  };
+
+  const manejarValidar = (e) => {
+    e.preventDefault();
+    if (!codigo.trim()) return;
+    validarCodigo(codigo.trim());
+  };
+
+  const manejarDetectado = (texto) => {
+    setEscanerAbierto(false);
+    validarCodigo(texto);
   };
 
   const manejarConfirmar = () => {
@@ -100,12 +111,31 @@ export default function ValidarQR() {
                 Validar
               </button>
             </div>
-            <p className={estilos.ayuda}>
-              Escanea el QR del participante con cualquier lector o ingresa el código
-              manualmente para registrar su asistencia.
-            </p>
+            <div className={estilos.barra_opciones}>
+              <button
+                type="button"
+                className={estilos.botonEscanear}
+                onClick={() => setEscanerAbierto((abierto) => !abierto)}
+              >
+                <Camera className={estilos.iconoBoton} aria-hidden="true" />
+                {escanerAbierto ? "Cerrar cámara" : "Escanear con cámara"}
+              </button>
+              <p className={estilos.ayuda}>
+                Escanea el QR del participante con la cámara o ingresa el código
+                manualmente para registrar su asistencia.
+              </p>
+            </div>
           </form>
         </div>
+
+        {escanerAbierto && (
+          <div className={estilos.tarjetaCamara}>
+            <h2 className={estilos.tituloCamara}>
+              Escanea el código QR del participante
+            </h2>
+            <EscanerVideo onDetect={manejarDetectado} onCerrar={() => setEscanerAbierto(false)} />
+          </div>
+        )}
 
         {tipoResultado === "encontrado" && inscripcionVisible && eventoVisible && (
           <div className={estilos.tarjetaResultado} role="status">
