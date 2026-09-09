@@ -6,7 +6,7 @@ import MobileMenu from "../MobileMenu/MobileMenu.jsx";
 import logo from "../../../assets/images/observatorio/logo/logo.png";
 import styles from "./Navbar.module.css";
 
-export default function Navbar() {
+export default function Navbar({ simple = false }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -30,43 +30,47 @@ export default function Navbar() {
             </span>
           </NavLink>
 
-          <Link to="/login" className={styles.enlaceSesion}>
-            <UserRound className={styles.iconoSesion} aria-hidden="true" />
-            <span>Acceder</span>
-          </Link>
+          {!simple && (
+            <Link to="/login" className={styles.enlaceSesion}>
+              <UserRound className={styles.iconoSesion} aria-hidden="true" />
+              <span>Acceder</span>
+            </Link>
+          )}
         </div>
       </div>
 
-      <div className={styles.bottomBar}>
-        <div className={styles.bottomBarInner}>
-          <nav
-            className={styles.navDesktop}
-            aria-label="Navegación principal"
-          >
-            {enlacesNavegacionPublica.map((enlace) => (
-              <NavLink
-                key={enlace.ruta}
-                to={enlace.ruta}
-                className={({ isActive }) =>
-                  `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
-                }
-              >
-                {enlace.etiqueta}
-              </NavLink>
-            ))}
-          </nav>
+      {!simple && (
+        <div className={styles.bottomBar}>
+          <div className={styles.bottomBarInner}>
+            <nav
+              className={styles.navDesktop}
+              aria-label="Navegación principal"
+            >
+              {enlacesNavegacionPublica.map((enlace) => (
+                <NavLink
+                  key={enlace.ruta}
+                  to={enlace.ruta}
+                  className={({ isActive }) =>
+                    `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
+                  }
+                >
+                  {enlace.etiqueta}
+                </NavLink>
+              ))}
+            </nav>
 
-          <button
-            type="button"
-            className={styles.menuToggle}
-            onClick={() => setIsMenuOpen(true)}
-            aria-label="Abrir menú de navegación"
-            aria-expanded={isMenuOpen}
-          >
-            <Menu size={28} aria-hidden="true" />
-          </button>
+            <button
+              type="button"
+              className={styles.menuToggle}
+              onClick={() => setIsMenuOpen(true)}
+              aria-label="Abrir menú de navegación"
+              aria-expanded={isMenuOpen}
+            >
+              <Menu size={28} aria-hidden="true" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </header>

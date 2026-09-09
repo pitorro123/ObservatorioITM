@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { LogIn, Eye, EyeOff, AlertCircle, ArrowLeft, Info } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import logo from "../../assets/images/observatorio/logo/logo.png";
+import Navbar from "../../components/layout/Navbar/Navbar.jsx";
 import estilos from "./Login.module.css";
 
 export default function Login() {
@@ -30,21 +30,23 @@ export default function Login() {
   };
 
   return (
-    <main className={estilos.raiz}>
-      <div className={estilos.tarjeta}>
-        <div className={estilos.cabecera}>
-          <img src={logo} alt="Logo del Observatorio Astronómico ITM" className={estilos.logo} />
-          <Link to="/" className={estilos.volver}>
-            <ArrowLeft className={estilos.iconoVolver} aria-hidden="true" />
-            Volver al portal
-          </Link>
-          <h1 className={estilos.titulo}>Iniciar sesión</h1>
-          <p className={estilos.subtitulo}>
-            Accede al panel de administración del Observatorio Astronómico del ITM.
-          </p>
-        </div>
+    <div className={estilos.pagina}>
+      <Navbar simple />
+      <main className={estilos.raiz}>
+        <Link to="/" className={estilos.volver}>
+          <ArrowLeft className={estilos.iconoVolver} aria-hidden="true" />
+          Volver al portal
+        </Link>
 
-        <form className={estilos.formulario} onSubmit={manejarEnvio} noValidate>
+        <div className={estilos.tarjeta}>
+          <div className={estilos.cabecera}>
+            <h1 className={estilos.titulo}>Iniciar sesión</h1>
+            <p className={estilos.subtitulo}>
+              Accede al panel de administración del Observatorio Astronómico del ITM.
+            </p>
+          </div>
+
+          <form className={estilos.formulario} onSubmit={manejarEnvio} noValidate>
           {error && (
             <div className={estilos.alerta} role="alert">
               <AlertCircle className={estilos.iconoAlerta} aria-hidden="true" />
@@ -118,7 +120,8 @@ export default function Login() {
             </p>
           </div>
         </div>
-      </div>
-    </main>
+        </div>
+      </main>
+    </div>
   );
 }
