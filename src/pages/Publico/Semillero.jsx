@@ -73,16 +73,6 @@ export default function Semillero() {
               ))}
             </ul>
           </div>
-
-          <div className={estilos.objetivosCard}>
-            <h2 className={estilos.objetivosTitle}>¿Cómo hacer parte?</h2>
-            <p className={estilos.participarTexto}>
-              {semillero.comoParticipar}
-            </p>
-            <Button to="/eventos?tipo=semillero" className={estilos.participarBtn}>
-              Ver actividades del semillero
-            </Button>
-          </div>
         </div>
       </section>
     </>

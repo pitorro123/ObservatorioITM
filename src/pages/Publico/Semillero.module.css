@@ -172,12 +172,6 @@
   gap: 24px;
 }
 
-@media (min-width: 768px) {
-  .objetivosGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 .objetivosCard {
   border-radius: var(--radius-2xl);
   border: 1px solid var(--slate-200);
@@ -215,30 +209,4 @@
   flex-shrink: 0;
   border-radius: var(--radius-full);
   background-color: var(--obs-gold);
-}
-
-.participarTexto {
-  margin-top: 12px;
-  font-size: 0.875rem;
-  color: var(--slate-600);
-  line-height: 1.6;
-}
-
-.participarBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 24px;
-  border-radius: var(--radius-lg);
-  background-color: var(--obs-blue-light);
-  padding: 12px 24px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: white;
-  box-shadow: var(--shadow-card);
-  transition: background-color var(--transition-base);
-}
-
-.participarBtn:hover {
-  background-color: var(--obs-bluemed);
 }
