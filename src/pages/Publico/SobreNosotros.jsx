@@ -79,8 +79,8 @@ export default function SobreNosotros() {
           <Telescope className={estilos.bannerIcon} aria-hidden="true" />
         </span>
         <p className={estilos.bannerText}>
-          ¿Listo para mirar el cielo con nosotros? Visita el{" "}
-          <span className={estilos.bannerFuerte}>Sobre Nosotros</span> y conoce qué
+          ¿Listo para mirar el cielo con nosotros? Visita la sección de{" "}
+          <span className={estilos.bannerFuerte}>eventos</span> y conoce qué
           actividades tenemos preparadas.
         </p>
       </section>
