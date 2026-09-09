@@ -80,6 +80,10 @@
   color: var(--color-texto-terciario);
 }
 
+.selectorFechaWrap {
+  position: relative;
+}
+
 .selectorFecha {
   display: flex;
   align-items: center;
@@ -115,6 +119,67 @@
   width: 14px;
   height: 14px;
   color: var(--color-texto-invertido);
+  transition: transform var(--transicion-rapida);
+}
+
+.chevronAbierto {
+  transform: rotate(180deg);
+}
+
+.cierre {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.menuMeses {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  min-width: 200px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: var(--espacio-xs);
+  border-radius: var(--radio-md);
+  background-color: #ffffff;
+  box-shadow: var(--sombra-flotante);
+  border: 1px solid var(--color-borde);
+  display: flex;
+  flex-direction: column;
+}
+
+.menuOpcion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-sm);
+  padding: var(--espacio-xs) var(--espacio-sm);
+  border: none;
+  border-radius: var(--radio-sm);
+  background-color: transparent;
+  color: var(--color-texto-principal);
+  font-size: var(--texto-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--transicion-rapida);
+}
+
+.menuOpcion:hover {
+  background-color: var(--color-fondo-general);
+}
+
+.menuOpcionActiva {
+  background-color: var(--color-primario-suave);
+  color: var(--color-primario);
+  font-weight: var(--peso-semibold);
+}
+
+.menuCheck {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--color-primario);
 }
 
 @media (max-width: 768px) {

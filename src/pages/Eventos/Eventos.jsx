@@ -20,7 +20,7 @@ export default function Eventos() {
     cambiarPestaña,
     valorBusqueda,
     cambiarBusqueda,
-    filtroMesActivo,
+    filtroMes,
     cambiarFiltroMes,
     paginaActual,
     setPaginaActual,
@@ -89,7 +89,7 @@ export default function Eventos() {
           onCambiarPestaña={cambiarPestaña}
           valorBusqueda={valorBusqueda}
           onCambiarBusqueda={cambiarBusqueda}
-          filtroMesActivo={filtroMesActivo}
+          filtroMes={filtroMes}
           onCambiarFiltroMes={cambiarFiltroMes}
         />
       </div>
