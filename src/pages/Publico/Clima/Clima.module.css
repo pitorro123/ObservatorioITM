@@ -230,7 +230,7 @@
 .tarjetaRecomendacion {
   margin-top: 16px;
   border-radius: var(--radius-2xl);
-  background: linear-gradient(135deg, var(--obs-navy), #0d1b2a);
+  background: var(--obs-navy);
   color: white;
   padding: 24px;
   display: flex;
