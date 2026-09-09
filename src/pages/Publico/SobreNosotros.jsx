@@ -23,18 +23,21 @@ export default function SobreNosotros() {
 
           <div className={estilos.cardsGrid}>
             <div className={estilos.card}>
-              <span className={estilos.cardIconWrap}>
-                <Target className={estilos.cardIcon} aria-hidden="true" />
-              </span>
-              <h2 className={estilos.cardTitle}>Misión</h2>
+              <h2 className={estilos.cardTitle}>
+                <Target
+                  className={estilos.cardTitleIcon}
+                  aria-hidden="true"
+                />
+                <span>Misión</span>
+              </h2>
               <p className={estilos.cardDescription}>{observatorio.mision}</p>
             </div>
 
             <div className={estilos.card}>
-              <span className={estilos.cardIconWrap}>
-                <Eye className={estilos.cardIcon} aria-hidden="true" />
-              </span>
-              <h2 className={estilos.cardTitle}>Visión</h2>
+              <h2 className={estilos.cardTitle}>
+                <Eye className={estilos.cardTitleIcon} aria-hidden="true" />
+                <span>Visión</span>
+              </h2>
               <p className={estilos.cardDescription}>{observatorio.vision}</p>
             </div>
           </div>
