@@ -28,6 +28,9 @@ export default function TarjetaEvento({ evento, onEditar, onEliminar, onPublicar
           <span className={estilos.puntoEstado} aria-hidden="true" />
           {etiquetasEstado[evento.estado] || evento.estado}
         </span>
+        {evento.tipo === "semillero" && (
+          <span className={estilos.insigniaSemillero}>Semillero</span>
+        )}
       </div>
 
       <div className={estilos.cuerpo}>

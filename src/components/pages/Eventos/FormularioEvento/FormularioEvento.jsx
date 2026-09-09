@@ -9,6 +9,7 @@ const formularioVacio = {
   hora: "",
   lugar: "",
   imagen: "",
+  tipo: "abierto",
   publicarDirectamente: false,
 };
 
@@ -26,6 +27,7 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
         hora: evento.hora,
         lugar: evento.lugar,
         imagen: evento.imagen || "",
+        tipo: evento.tipo || "abierto",
         publicarDirectamente: evento.estado === "publicado",
       });
     } else {
@@ -63,6 +65,7 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
       hora: formulario.hora,
       lugar: formulario.lugar,
       imagen: formulario.imagen,
+      tipo: formulario.tipo,
       estado: formulario.publicarDirectamente ? "publicado" : "borrador",
     };
 
@@ -160,6 +163,21 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
               className={estilos.input}
               placeholder="Ej: Observatorio Astronómico ITM - Sede Fraternidad"
             />
+          </div>
+
+          <div className={estilos.campo}>
+            <label className={estilos.etiqueta} htmlFor="ev-tipo">
+              Tipo de evento
+            </label>
+            <select
+              id="ev-tipo"
+              value={formulario.tipo}
+              onChange={cambiarCampo("tipo")}
+              className={`${estilos.input} ${estilos.select}`}
+            >
+              <option value="abierto">Abierto a la comunidad</option>
+              <option value="semillero">Semillero de astronomía</option>
+            </select>
           </div>
 
           <div className={estilos.campo}>

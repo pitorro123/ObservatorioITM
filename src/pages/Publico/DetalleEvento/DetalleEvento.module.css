@@ -101,6 +101,18 @@
   color: var(--obs-navy);
 }
 
+.badgeSemillero {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: var(--obs-gold);
+  color: var(--obs-navy);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 .descripcion {
   max-width: 720px;
   font-size: 0.875rem;

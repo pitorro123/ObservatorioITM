@@ -49,6 +49,18 @@
   flex-shrink: 0;
 }
 
+.insigniaSemillero {
+  position: absolute;
+  top: var(--espacio-sm);
+  left: var(--espacio-sm);
+  padding: 4px var(--espacio-sm);
+  border-radius: var(--radio-pildora);
+  background-color: var(--obs-gold);
+  color: var(--obs-navy);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+}
+
 .estadoPublicado .puntoEstado {
   background-color: var(--color-exito);
 }

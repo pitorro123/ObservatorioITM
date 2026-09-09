@@ -75,9 +75,9 @@ export default function Semillero() {
             <p className={estilos.participarTexto}>
               {semillero.comoParticipar}
             </p>
-            <a href="mailto:observatorioitm25@gmail.com" className={estilos.participarBtn}>
-              Escríbenos
-            </a>
+            <Button to="/eventos?tipo=semillero" className={estilos.participarBtn}>
+              Ver actividades del semillero
+            </Button>
           </div>
         </div>
       </section>

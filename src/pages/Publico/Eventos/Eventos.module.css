@@ -46,6 +46,40 @@
   font-size: 0.875rem;
 }
 
+.filtros {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filtro {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  color: var(--slate-600);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.filtro:hover {
+  border-color: var(--obs-navy);
+  color: var(--obs-navy);
+}
+
+.filtroActivo {
+  background-color: var(--obs-navy);
+  border-color: var(--obs-navy);
+  color: white;
+}
+
+.filtroActivo:hover {
+  color: white;
+}
+
 .grid {
   margin-top: 32px;
   display: grid;
@@ -73,8 +107,23 @@
 }
 
 .cardImageWrap {
+  position: relative;
   height: 176px;
   width: 100%;
+}
+
+.badgeSemillero {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: var(--obs-gold);
+  color: var(--obs-navy);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .cardImage {

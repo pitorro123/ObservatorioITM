@@ -24,6 +24,7 @@ export function EventosProvider({ children }) {
       lugar: datos.lugar.trim(),
       imagen: datos.imagen || "/images/Imagen.png",
       estado: datos.estado || "borrador",
+      tipo: datos.tipo || "abierto",
       inscritos: 0,
       asistentes: 0,
     };

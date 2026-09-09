@@ -93,6 +93,9 @@ export default function DetalleEvento() {
             </div>
           )}
           <div className={estilos.info}>
+            {evento.tipo === "semillero" && (
+              <span className={estilos.badgeSemillero}>Semillero de astronomía</span>
+            )}
             <h1 className={estilos.titulo}>{evento.titulo}</h1>
             <p className={estilos.descripcion}>{evento.descripcion}</p>
 
