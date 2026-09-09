@@ -1,8 +1,10 @@
-/* ── Hero (tarjeta estilo landing) ── */
+/* ── Hero: tarjeta izquierda + trayectoria derecha ── */
 .hero {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 24px 16px 8px;
+  display: grid;
+  gap: 24px;
 }
 
 @media (min-width: 640px) {
@@ -13,6 +15,8 @@
 
 @media (min-width: 1024px) {
   .hero {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
     padding: 24px 32px 8px;
   }
 }
@@ -143,22 +147,12 @@
 }
 
 /* ── Trayectoria ── */
-.trayectoriaSection {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 16px 16px 0;
-}
-
-@media (min-width: 640px) {
-  .trayectoriaSection {
-    padding: 16px 24px 0;
-  }
-}
-
-@media (min-width: 1024px) {
-  .trayectoriaSection {
-    padding: 16px 32px 0;
-  }
+.trayectoriaBox {
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-2xl);
+  background-color: white;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
 }
 
 .trayectoriaTitle,
@@ -194,11 +188,9 @@
 }
 
 .servicios {
-  margin-top: 40px;
-  border-radius: var(--radius-2xl);
-  background-color: white;
-  padding: 24px;
-  box-shadow: var(--shadow-card);
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--slate-200);
 }
 
 .serviciosList {

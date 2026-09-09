@@ -21,35 +21,35 @@ export default function SobreNosotros() {
             </Button>
           </div>
         </article>
-      </section>
 
-      <section className={estilos.trayectoriaSection}>
-        <h2 className={estilos.trayectoriaTitle}>Nuestra trayectoria</h2>
-        <ul className={estilos.trayectoriaList}>
-          {observatorio.trayectoria.map((parrafo) => (
-            <li key={parrafo} className={estilos.trayectoriaItem}>
-              <span className={estilos.trayectoriaBala} aria-hidden="true" />
-              <span>{parrafo}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className={estilos.servicios}>
-          <h2 className={estilos.serviciosTitle}>Servicios y recursos</h2>
-          <ul className={estilos.serviciosList}>
-            <li>
-              <strong>Observaciones públicas</strong> con telescopios del
-              observatorio.
-            </li>
-            <li>
-              <strong>Talleres y conferencias</strong> de divulgación astronómica
-              para la comunidad.
-            </li>
-            <li>
-              <strong>Espacios de formación</strong> para estudiantes del ITM y
-              semilleros de investigación.
-            </li>
+        <div className={estilos.trayectoriaBox}>
+          <h2 className={estilos.trayectoriaTitle}>Nuestra trayectoria</h2>
+          <ul className={estilos.trayectoriaList}>
+            {observatorio.trayectoria.map((parrafo) => (
+              <li key={parrafo} className={estilos.trayectoriaItem}>
+                <span className={estilos.trayectoriaBala} aria-hidden="true" />
+                <span>{parrafo}</span>
+              </li>
+            ))}
           </ul>
+
+          <div className={estilos.servicios}>
+            <h2 className={estilos.serviciosTitle}>Servicios y recursos</h2>
+            <ul className={estilos.serviciosList}>
+              <li>
+                <strong>Observaciones públicas</strong> con telescopios del
+                observatorio.
+              </li>
+              <li>
+                <strong>Talleres y conferencias</strong> de divulgación astronómica
+                para la comunidad.
+              </li>
+              <li>
+                <strong>Espacios de formación</strong> para estudiantes del ITM y
+                semilleros de investigación.
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
 
