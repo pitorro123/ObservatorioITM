@@ -55,7 +55,50 @@ export default function DetalleEvento() {
 
   const manejarEnvio = (e) => {
     e.preventDefault();
-    const resultado = inscribir({ eventoId: evento.id, ...datos });
+
+    const nombre = datos.nombre.trim();
+    const correo = datos.correo.trim();
+    const telefono = datos.telefono.trim();
+
+    if (!nombre) {
+      setError("Escribe tu nombre completo.");
+      return;
+    }
+
+    const palabrasNombre = nombre.split(/\s+/).filter(Boolean);
+    const palabraValida = (palabra) =>
+      /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ']{2,}$/.test(palabra) &&
+      /[aeiouáéíóúü]/i.test(palabra);
+
+    if (palabrasNombre.length < 2) {
+      setError("Ingresa tu nombre y apellido.");
+      return;
+    }
+    if (!palabrasNombre.every(palabraValida)) {
+      setError("El nombre no parece real. Escribe tu nombre y apellido.");
+      return;
+    }
+
+    const formatoCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formatoCorreo.test(correo)) {
+      setError("Ingresa un correo electrónico válido.");
+      return;
+    }
+
+    if (telefono) {
+      const soloDigitos = telefono.replace(/\D/g, "");
+      if (soloDigitos.length < 7 || soloDigitos.length > 15) {
+        setError("Ingresa un número de teléfono válido (solo números).");
+        return;
+      }
+    }
+
+    const resultado = inscribir({
+      eventoId: evento.id,
+      nombre,
+      correo,
+      telefono,
+    });
     if (!resultado.exito) {
       setError(resultado.error);
       return;
