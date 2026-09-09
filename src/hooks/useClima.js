@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 
-const LAT = 6.2457;
-const LON = -75.5808;
+const LAT = 6.2422;
+const LON = -75.5494;
 
 const URL_CONSULTA =
   `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
