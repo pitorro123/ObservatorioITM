@@ -77,6 +77,29 @@ export function AuthProvider({ children }) {
     setUsuarioActual(null);
   };
 
+  const actualizarPerfil = ({ nombre, correo, nuevaPassword }) => {
+    const correoRepetido = usuarios.some(
+      (u) =>
+        u.id !== usuarioActual?.id &&
+        u.correo.toLowerCase() === (correo || "").trim().toLowerCase()
+    );
+    if (correoRepetido) {
+      return { exito: false, error: "Ya existe una cuenta con ese correo electrónico." };
+    }
+
+    const cambios = {};
+    if (nombre) cambios.nombre = nombre.trim();
+    if (correo) cambios.correo = correo.trim();
+    if (nuevaPassword) cambios.password = nuevaPassword;
+
+    setUsuarios((prev) =>
+      prev.map((u) => (u.id === usuarioActual?.id ? { ...u, ...cambios } : u))
+    );
+    setUsuarioActual((prev) => (prev ? { ...prev, ...cambios } : prev));
+
+    return { exito: true };
+  };
+
   const docentes = usuarios.filter((usuario) => usuario.rol === "Docente");
 
   const crearDocente = ({ nombre, correo }) => {
@@ -161,6 +184,7 @@ export function AuthProvider({ children }) {
     esDocente,
     login,
     logout,
+    actualizarPerfil,
     docentes,
     crearDocente,
     editarDocente,

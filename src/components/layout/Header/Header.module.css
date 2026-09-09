@@ -51,6 +51,10 @@
   gap: var(--espacio-md);
 }
 
+.configuracionWrap {
+  position: relative;
+}
+
 .botonIcono {
   display: flex;
   align-items: center;
@@ -60,7 +64,9 @@
   border-radius: var(--radio-circulo);
   background-color: var(--color-primario-suave);
   color: var(--color-primario);
-  transition: background-color var(--transicion-rapida);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
 }
 
 .botonIcono:hover {
@@ -71,6 +77,79 @@
 .icono {
   width: 20px;
   height: 20px;
+}
+
+.menuConfiguracion {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 60;
+  min-width: 240px;
+  padding: var(--espacio-xs);
+  border-radius: var(--radio-lg);
+  border: 1px solid var(--color-borde);
+  background-color: #ffffff;
+  box-shadow: var(--sombra-flotante);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menuEncabezado {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  padding: var(--espacio-sm);
+  border-radius: var(--radio-md);
+  background-color: var(--color-fondo-general);
+  margin-bottom: 4px;
+}
+
+.menuIcono {
+  width: 20px;
+  height: 20px;
+  color: var(--color-primario);
+  flex-shrink: 0;
+}
+
+.menuNombre {
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-bold);
+  color: var(--color-texto-principal);
+  white-space: nowrap;
+}
+
+.menuCorreo {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-secundario);
+  white-space: nowrap;
+}
+
+.menuOpcion {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  padding: var(--espacio-xs) var(--espacio-sm);
+  border: none;
+  border-radius: var(--radio-md);
+  background-color: transparent;
+  color: var(--color-texto-principal);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-semibold);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--transicion-rapida);
+}
+
+.menuOpcion:hover {
+  background-color: var(--color-primario-suave);
+  color: var(--color-primario);
+}
+
+.menuIconoOpcion {
+  width: 18px;
+  height: 18px;
+  color: var(--color-primario);
 }
 
 .perfilUsuario {

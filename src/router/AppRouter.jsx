@@ -15,6 +15,7 @@ import Eventos from "../pages/Eventos/Eventos.jsx";
 import Asistencia from "../pages/Asistencia/Asistencia.jsx";
 import ValidarQR from "../pages/ValidarQR/ValidarQR.jsx";
 import Docentes from "../pages/Docentes/Docentes.jsx";
+import Perfil from "../pages/Perfil/Perfil.jsx";
 import Contenido from "../pages/Contenido/Contenido.jsx";
 import Feedback from "../pages/Feedback/Feedback.jsx";
 import ProtegerRuta from "./ProtegerRuta.jsx";
@@ -57,6 +58,7 @@ export default function AppRouter() {
           }
         />
         <Route path="contenido" element={<Contenido />} />
+        <Route path="perfil" element={<Perfil />} />
         <Route path="feedback" element={<Feedback />} />
         <Route index element={<Navigate to={RUTAS.DASHBOARD} replace />} />
       </Route>

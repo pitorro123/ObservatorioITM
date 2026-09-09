@@ -1,4 +1,6 @@
-import { Settings, User } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Settings, User, UserRoundPen } from "lucide-react";
 import estilos from "./Header.module.css";
 import { useAuth } from "../../../context/AuthContext.jsx";
 
@@ -9,6 +11,27 @@ import { useAuth } from "../../../context/AuthContext.jsx";
  */
 export default function Header({ rutaBreadcrumb = [], titulo = "" }) {
   const { usuarioActual } = useAuth();
+  const navigate = useNavigate();
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const botonRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuAbierto) return;
+
+    const manejarClicFuera = (evento) => {
+      if (botonRef.current && !botonRef.current.contains(evento.target)) {
+        setMenuAbierto(false);
+      }
+    };
+
+    document.addEventListener("mousedown", manejarClicFuera);
+    return () => document.removeEventListener("mousedown", manejarClicFuera);
+  }, [menuAbierto]);
+
+  const irAPerfil = () => {
+    setMenuAbierto(false);
+    navigate("/admin/perfil");
+  };
 
   return (
     <header className={estilos.encabezado}>
@@ -35,13 +58,43 @@ export default function Header({ rutaBreadcrumb = [], titulo = "" }) {
       </div>
 
       <div className={estilos.bloqueAcciones}>
-        <button
-          type="button"
-          className={estilos.botonIcono}
-          aria-label="Abrir configuración"
-        >
-          <Settings className={estilos.icono} aria-hidden="true" />
-        </button>
+        <div className={estilos.configuracionWrap} ref={botonRef}>
+          <button
+            type="button"
+            className={estilos.botonIcono}
+            aria-label="Abrir configuración"
+            aria-expanded={menuAbierto}
+            onClick={() => setMenuAbierto((prev) => !prev)}
+          >
+            <Settings className={estilos.icono} aria-hidden="true" />
+          </button>
+
+          {menuAbierto && (
+            <div className={estilos.menuConfiguracion} role="menu">
+              <div className={estilos.menuEncabezado}>
+                <User className={estilos.menuIcono} aria-hidden="true" />
+                <div>
+                  <p className={estilos.menuNombre}>
+                    {usuarioActual?.nombre || "Invitado"}
+                  </p>
+                  <p className={estilos.menuCorreo}>
+                    {usuarioActual?.correo || "Sin sesión"}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className={estilos.menuOpcion}
+                role="menuitem"
+                onClick={irAPerfil}
+              >
+                <UserRoundPen className={estilos.menuIconoOpcion} aria-hidden="true" />
+                Editar perfil
+              </button>
+            </div>
+          )}
+        </div>
 
         <div className={estilos.perfilUsuario}>
           <span className={estilos.avatarContenedor}>
