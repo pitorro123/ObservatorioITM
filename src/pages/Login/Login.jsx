@@ -104,6 +104,10 @@ export default function Login() {
             <LogIn className={estilos.iconoIngresar} aria-hidden="true" />
             Ingresar
           </button>
+
+          <Link to="/recuperar-password" className={estilos.olvido}>
+            ¿Olvidaste tu contraseña?
+          </Link>
         </form>
 
         <div className={estilos.aviso}>

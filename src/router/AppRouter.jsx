@@ -9,6 +9,7 @@ import Galeria from "../pages/Publico/Galeria.jsx";
 import SobreNosotros from "../pages/Publico/SobreNosotros.jsx";
 import Clima from "../pages/Publico/Clima/Clima.jsx";
 import Login from "../pages/Login/Login.jsx";
+import RecuperarPassword from "../pages/Login/RecuperarPassword.jsx";
 import CambiarPassword from "../pages/Login/CambiarPassword.jsx";
 import Dashboard from "../pages/Dashboard/Dashboard.jsx";
 import Eventos from "../pages/Eventos/Eventos.jsx";
@@ -35,6 +36,7 @@ export default function AppRouter() {
       </Route>
 
       <Route path="/login" element={<Login />} />
+      <Route path="/recuperar-password" element={<RecuperarPassword />} />
       <Route path="/cambiar-password" element={<CambiarPassword />} />
 
       <Route

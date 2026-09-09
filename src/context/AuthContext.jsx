@@ -155,6 +155,28 @@ export function AuthProvider({ children }) {
     setUsuarios((prev) => prev.filter((u) => u.id !== id));
   };
 
+  const solicitarRecuperacion = (correo) => {
+    const usuario = usuarios.find(
+      (u) => u.correo.toLowerCase() === correo.trim().toLowerCase()
+    );
+
+    if (!usuario) {
+      return { exito: false, error: "No existe una cuenta con ese correo." };
+    }
+
+    if (usuario.estado !== "Activo") {
+      return { exito: false, error: "La cuenta está desactivada. Contacta al administrador." };
+    }
+
+    const token = generarToken();
+    setUsuarios((prev) =>
+      prev.map((u) => (u.id === usuario.id ? { ...u, token } : u))
+    );
+
+    const enlace = `${window.location.origin}/cambiar-password?token=${token}`;
+    return { exito: true, enlace, usuario };
+  };
+
   const establecerPassword = (token, nuevaPassword) => {
     const usuario = usuarios.find((u) => u.token === token);
     if (!usuario) {
@@ -189,6 +211,7 @@ export function AuthProvider({ children }) {
     crearDocente,
     editarDocente,
     eliminarDocente,
+    solicitarRecuperacion,
     establecerPassword,
   };
 
