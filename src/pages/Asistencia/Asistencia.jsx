@@ -8,6 +8,7 @@ import {
   Clock,
 } from "lucide-react";
 import Header from "../../components/layout/Header/Header.jsx";
+import BuscadorSelect from "../../components/common/BuscadorSelect/BuscadorSelect.jsx";
 import Notificacion from "../../components/pages/Eventos/Notificacion/Notificacion.jsx";
 import { useEventosContext } from "../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../utils/formato.js";
@@ -66,19 +67,15 @@ export default function Asistencia() {
             <CalendarDays className={estilos.iconoEtiqueta} aria-hidden="true" />
             Selecciona un evento
           </label>
-          <select
-            id="evento-asistencia"
-            className={estilos.select}
-            value={eventoId}
-            onChange={(e) => setEventoId(e.target.value)}
-          >
-            {eventos.map((eventoOption) => (
-              <option key={eventoOption.id} value={eventoOption.id}>
-                {eventoOption.titulo} (
-                {inscripcionesPorEvento(eventoOption.id).length} inscritos)
-              </option>
-            ))}
-          </select>
+          <BuscadorSelect
+            opciones={eventos.map((eventoOption) => ({
+              valor: eventoOption.id,
+              etiqueta: `${eventoOption.titulo} (${inscripcionesPorEvento(eventoOption.id).length} inscritos)`,
+            }))}
+            valor={eventoId}
+            onCambio={setEventoId}
+            placeholder="Selecciona un evento"
+          />
         </div>
 
         {evento && (

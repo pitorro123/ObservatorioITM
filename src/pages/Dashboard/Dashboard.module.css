@@ -27,11 +27,10 @@
   gap: var(--espacio-lg);
 }
 
-.tarjetaBienvenida {
-  background-color: var(--color-superficie);
+.bienvenida {
+  background-color: #E8E9ED;
   border-radius: var(--radio-xl);
   padding: var(--espacio-xl);
-  box-shadow: var(--sombra-tarjeta);
 }
 
 .tituloBienvenida {
@@ -47,58 +46,10 @@
   line-height: 1.6;
 }
 
-.gridIndicadores {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--espacio-md);
-}
-
-.tarjetaIndicador {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--espacio-sm);
-  border-radius: var(--radio-xl);
-  background-color: var(--color-superficie);
-  padding: var(--espacio-sm) var(--espacio-lg);
-  box-shadow: var(--sombra-tarjeta);
-}
-
-.iconoWrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radio-md);
-  background-color: var(--color-primario-suave);
-  color: var(--color-primario);
-}
-
-.icono {
-  width: 22px;
-  height: 22px;
-}
-
-.etiquetaIndicador {
-  flex: 1;
-  min-width: 0;
-  font-size: var(--texto-sm);
-  color: var(--color-texto-secundario);
-  font-weight: var(--peso-medio);
-}
-
-.valorIndicador {
-  font-size: var(--texto-xl);
-  font-weight: var(--peso-extrabold);
-  color: var(--color-texto-principal);
-}
-
 .tarjetaLista {
-  background-color: var(--color-superficie);
+  background-color: #E8E9ED;
   border-radius: var(--radio-xl);
   padding: var(--espacio-xl);
-  box-shadow: var(--sombra-tarjeta);
 }
 
 .tituloLista {
@@ -113,54 +64,92 @@
   font-size: var(--texto-sm);
 }
 
-.lista {
+.tablaWrap {
   margin-top: var(--espacio-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-sm);
+  overflow-x: auto;
+  border-radius: var(--radio-lg);
 }
 
-.itemLista {
-  display: flex;
-  align-items: center;
-  gap: var(--espacio-sm);
-  padding: var(--espacio-sm) var(--espacio-md);
-  border-radius: var(--radio-md);
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+}
+
+.tabla thead th {
+  padding: 12px 14px;
+  text-align: left;
   background-color: var(--color-fondo-general);
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
-.bala {
-  width: 8px;
-  height: 8px;
-  flex-shrink: 0;
-  border-radius: var(--radio-circulo);
-  background-color: var(--color-primario);
+.tabla tbody td {
+  padding: 12px 14px;
+  border-top: 1px solid var(--color-borde);
+  vertical-align: middle;
 }
 
 .nombreEvento {
-  flex: 1;
-  min-width: 0;
-  font-size: var(--texto-sm);
-  font-weight: var(--peso-semibold);
+  font-weight: var(--peso-bold);
   color: var(--color-texto-principal);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .fechaEvento {
+  margin-top: 4px;
   font-size: var(--texto-xs);
   color: var(--color-texto-secundario);
   white-space: nowrap;
 }
 
-@media (max-width: 560px) {
-  .gridIndicadores {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.datoCentrado {
+  text-align: center;
+  color: var(--color-texto-principal);
+}
 
-  .itemLista {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radio-full);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+  white-space: nowrap;
+}
+
+.badgeActivo {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.badgeBorrador {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.badgeCancelado {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.badgeProximo {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radio-full);
+  background-color: var(--color-primario-suave);
+  color: var(--color-primario);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+  white-space: nowrap;
+}
+
+.textoNo {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-terciario);
 }
