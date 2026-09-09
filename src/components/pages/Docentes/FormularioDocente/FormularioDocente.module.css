@@ -93,6 +93,123 @@
   gap: 16px;
 }
 
+/* ── Resumen de la cuenta en edición ── */
+.resumenCuenta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: var(--radio-md);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+}
+
+.filaResumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.etiquetaResumen {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-secundario);
+}
+
+.valorResumen {
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-semibold);
+  color: var(--color-texto-principal);
+  text-align: right;
+}
+
+/* ── Pregunta y opciones ── */
+.pregunta {
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-bold);
+  color: var(--color-texto-principal);
+}
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background-color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color var(--transicion-rapida),
+    background-color var(--transicion-rapida);
+}
+
+.opcion:hover {
+  border-color: var(--color-primario);
+}
+
+.opcionActiva {
+  border-color: var(--color-primario);
+  background-color: var(--color-primario-suave);
+}
+
+.checkWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-sm);
+  background-color: #ffffff;
+}
+
+.checkWrapActivo {
+  border-color: var(--color-primario);
+  background-color: var(--color-primario);
+}
+
+.check {
+  width: 14px;
+  height: 14px;
+  color: var(--color-texto-invertido);
+}
+
+.opcionTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opcionEtiqueta {
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-semibold);
+  color: var(--color-texto-principal);
+}
+
+.opcionDescripcion {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-secundario);
+}
+
+.camposEditar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border: 1px dashed var(--color-borde);
+  border-radius: var(--radio-md);
+  background-color: var(--color-fondo);
+}
+
 .alertError {
   display: flex;
   align-items: flex-start;

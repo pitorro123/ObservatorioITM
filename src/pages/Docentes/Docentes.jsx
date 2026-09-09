@@ -199,6 +199,7 @@ export default function Docentes() {
       </button>
 
       <FormularioDocente
+        key={docenteEditando?.id || "nuevo"}
         abierto={formularioAbierto}
         docente={docenteEditando}
         onCerrar={() => {

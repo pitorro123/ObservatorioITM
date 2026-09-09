@@ -1,6 +1,24 @@
 import { useState } from "react";
-import { UserPlus, Pencil, X, AlertCircle } from "lucide-react";
+import { UserPlus, Pencil, X, AlertCircle, Check } from "lucide-react";
 import estilos from "./FormularioDocente.module.css";
+
+const opcionesEdicion = [
+  {
+    clave: "nombre",
+    etiqueta: "Nombre completo",
+    descripcion: "Cambiar el nombre del docente",
+  },
+  {
+    clave: "correo",
+    etiqueta: "Correo electrónico",
+    descripcion: "Cambiar el correo del docente",
+  },
+  {
+    clave: "estado",
+    etiqueta: "Estado de la cuenta",
+    descripcion: "Activar o desactivar la cuenta",
+  },
+];
 
 export default function FormularioDocente({
   abierto,
@@ -13,6 +31,7 @@ export default function FormularioDocente({
     correo: docente?.correo || "",
     estado: docente?.estado || "Activo",
   }));
+  const [camposEdicion, setCamposEdicion] = useState([]);
   const [error, setError] = useState("");
 
   if (!abierto) return null;
@@ -24,8 +43,63 @@ export default function FormularioDocente({
     if (error) setError("");
   };
 
+  const alternarCampo = (clave) => {
+    setCamposEdicion((prev) =>
+      prev.includes(clave) ? prev.filter((c) => c !== clave) : [...prev, clave]
+    );
+    if (error) setError("");
+  };
+
   const manejarEnvio = (e) => {
     e.preventDefault();
+
+    if (esEdicion) {
+      if (camposEdicion.length === 0) {
+        setError("Selecciona al menos un campo para editar.");
+        return;
+      }
+
+      const cambios = {};
+
+      if (camposEdicion.includes("nombre")) {
+        const nombre = datos.nombre.trim();
+        if (nombre.length < 3) {
+          setError("Ingresa el nombre completo del docente.");
+          return;
+        }
+        cambios.nombre = nombre;
+      }
+
+      if (camposEdicion.includes("correo")) {
+        const correo = datos.correo.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+          setError("Ingresa un correo electrónico válido.");
+          return;
+        }
+        cambios.correo = correo;
+      }
+
+      if (camposEdicion.includes("estado")) {
+        cambios.estado = datos.estado;
+      }
+
+      const resultado = onGuardar(cambios);
+
+      if (resultado && !resultado.exito) {
+        setError(resultado.error);
+        return;
+      }
+
+      setDatos({
+        nombre: docente.nombre,
+        correo: docente.correo,
+        estado: docente.estado,
+      });
+      setCamposEdicion([]);
+      setError("");
+      return;
+    }
+
     const nombre = datos.nombre.trim();
     const correo = datos.correo.trim();
 
@@ -41,7 +115,7 @@ export default function FormularioDocente({
     const resultado = onGuardar({
       nombre,
       correo,
-      estado: esEdicion ? datos.estado : "Pendiente",
+      estado: "Pendiente",
     });
 
     if (resultado && !resultado.exito) {
@@ -50,6 +124,7 @@ export default function FormularioDocente({
     }
 
     setDatos({ nombre: "", correo: "", estado: "Activo" });
+    setCamposEdicion([]);
     setError("");
   };
 
@@ -71,7 +146,7 @@ export default function FormularioDocente({
               </h2>
               <p className={estilos.subtitulo}>
                 {esEdicion
-                  ? "Actualiza los datos de la cuenta."
+                  ? "Selecciona qué datos deseas actualizar."
                   : "La cuenta recibirá un enlace por correo para configurar su contraseña."}
               </p>
             </div>
@@ -94,56 +169,171 @@ export default function FormularioDocente({
             </div>
           )}
 
-          <div className={estilos.campo}>
-            <label className={estilos.etiqueta} htmlFor="docente-nombre">
-              Nombre completo
-            </label>
-            <input
-              id="docente-nombre"
-              type="text"
-              required
-              value={datos.nombre}
-              onChange={manejarCambio("nombre")}
-              className={estilos.input}
-              placeholder="Ej. María Fernanda Ospina"
-            />
-          </div>
+          {esEdicion ? (
+            <>
+              <div className={estilos.resumenCuenta}>
+                <div className={estilos.filaResumen}>
+                  <span className={estilos.etiquetaResumen}>
+                    Nombre completo
+                  </span>
+                  <span className={estilos.valorResumen}>{docente.nombre}</span>
+                </div>
+                <div className={estilos.filaResumen}>
+                  <span className={estilos.etiquetaResumen}>
+                    Correo electrónico
+                  </span>
+                  <span className={estilos.valorResumen}>{docente.correo}</span>
+                </div>
+                <div className={estilos.filaResumen}>
+                  <span className={estilos.etiquetaResumen}>
+                    Estado de la cuenta
+                  </span>
+                  <span className={estilos.valorResumen}>{docente.estado}</span>
+                </div>
+              </div>
 
-          <div className={estilos.campo}>
-            <label className={estilos.etiqueta} htmlFor="docente-correo">
-              Correo electrónico
-            </label>
-            <input
-              id="docente-correo"
-              type="email"
-              required
-              value={datos.correo}
-              onChange={manejarCambio("correo")}
-              className={estilos.input}
-              placeholder="nombre@itm.edu.co"
-            />
-          </div>
+              <p className={estilos.pregunta}>¿Qué deseas editar?</p>
 
-          {esEdicion && (
-            <div className={estilos.campo}>
-              <label className={estilos.etiqueta} htmlFor="docente-estado">
-                Estado de la cuenta
-              </label>
-              <select
-                id="docente-estado"
-                value={datos.estado}
-                onChange={manejarCambio("estado")}
-                className={estilos.input}
-              >
-                <option value="Activo">Activo</option>
-                <option value="Desactivado">Desactivado</option>
-                <option value="Pendiente">Pendiente</option>
-              </select>
-            </div>
+              <div className={estilos.opciones}>
+                {opcionesEdicion.map((opcion) => {
+                  const activa = camposEdicion.includes(opcion.clave);
+                  return (
+                    <button
+                      key={opcion.clave}
+                      type="button"
+                      className={`${estilos.opcion} ${
+                        activa ? estilos.opcionActiva : ""
+                      }`}
+                      onClick={() => alternarCampo(opcion.clave)}
+                      aria-pressed={activa}
+                    >
+                      <span
+                        className={`${estilos.checkWrap} ${
+                          activa ? estilos.checkWrapActivo : ""
+                        }`}
+                      >
+                        {activa && (
+                          <Check className={estilos.check} aria-hidden="true" />
+                        )}
+                      </span>
+                      <span className={estilos.opcionTexto}>
+                        <span className={estilos.opcionEtiqueta}>
+                          {opcion.etiqueta}
+                        </span>
+                        <span className={estilos.opcionDescripcion}>
+                          {opcion.descripcion}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {camposEdicion.length > 0 && (
+                <div className={estilos.camposEditar}>
+                  {camposEdicion.includes("nombre") && (
+                    <div className={estilos.campo}>
+                      <label
+                        className={estilos.etiqueta}
+                        htmlFor="docente-nombre"
+                      >
+                        Nuevo nombre completo
+                      </label>
+                      <input
+                        id="docente-nombre"
+                        type="text"
+                        required
+                        value={datos.nombre}
+                        onChange={manejarCambio("nombre")}
+                        className={estilos.input}
+                        placeholder="Ej. María Fernanda Ospina"
+                      />
+                    </div>
+                  )}
+
+                  {camposEdicion.includes("correo") && (
+                    <div className={estilos.campo}>
+                      <label
+                        className={estilos.etiqueta}
+                        htmlFor="docente-correo"
+                      >
+                        Nuevo correo electrónico
+                      </label>
+                      <input
+                        id="docente-correo"
+                        type="email"
+                        required
+                        value={datos.correo}
+                        onChange={manejarCambio("correo")}
+                        className={estilos.input}
+                        placeholder="nombre@itm.edu.co"
+                      />
+                    </div>
+                  )}
+
+                  {camposEdicion.includes("estado") && (
+                    <div className={estilos.campo}>
+                      <label
+                        className={estilos.etiqueta}
+                        htmlFor="docente-estado"
+                      >
+                        Estado de la cuenta
+                      </label>
+                      <select
+                        id="docente-estado"
+                        value={datos.estado}
+                        onChange={manejarCambio("estado")}
+                        className={estilos.input}
+                      >
+                        <option value="Activo">Activo</option>
+                        <option value="Desactivado">Desactivado</option>
+                        <option value="Pendiente">Pendiente</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div className={estilos.campo}>
+                <label className={estilos.etiqueta} htmlFor="docente-nombre">
+                  Nombre completo
+                </label>
+                <input
+                  id="docente-nombre"
+                  type="text"
+                  required
+                  value={datos.nombre}
+                  onChange={manejarCambio("nombre")}
+                  className={estilos.input}
+                  placeholder="Ej. María Fernanda Ospina"
+                />
+              </div>
+
+              <div className={estilos.campo}>
+                <label className={estilos.etiqueta} htmlFor="docente-correo">
+                  Correo electrónico
+                </label>
+                <input
+                  id="docente-correo"
+                  type="email"
+                  required
+                  value={datos.correo}
+                  onChange={manejarCambio("correo")}
+                  className={estilos.input}
+                  placeholder="nombre@itm.edu.co"
+                />
+              </div>
+            </>
           )}
 
           <div className={estilos.acciones}>
-            <button type="button" className={estilos.botonCancelar} onClick={onCerrar}>
+            <button
+              type="button"
+              className={estilos.botonCancelar}
+              onClick={onCerrar}
+            >
               Cancelar
             </button>
             <button type="submit" className={estilos.botonGuardar}>
