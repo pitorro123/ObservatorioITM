@@ -1,4 +1,4 @@
-import { Trash2, Pencil, Send } from "lucide-react";
+import { Trash2, Pencil, Send, XCircle } from "lucide-react";
 import { formatearFechaCorta, formatearHora } from "../../../../utils/formato.js";
 import estilos from "./TarjetaEvento.module.css";
 
@@ -14,7 +14,13 @@ const etiquetasEstado = {
   cancelado: "Cancelado",
 };
 
-export default function TarjetaEvento({ evento, onEditar, onEliminar, onPublicar }) {
+export default function TarjetaEvento({
+  evento,
+  onEditar,
+  onEliminar,
+  onPublicar,
+  onCancelar,
+}) {
   return (
     <article className={estilos.tarjeta}>
       <div className={estilos.contenedorImagen}>
@@ -64,6 +70,19 @@ export default function TarjetaEvento({ evento, onEditar, onEliminar, onPublicar
           Editar
           <span className={estilos.tooltip}>Editar evento</span>
         </button>
+
+        {evento.estado !== "cancelado" && (
+          <button
+            type="button"
+            className={`${estilos.botonAccion} ${estilos.botonCancelar}`}
+            onClick={() => onCancelar?.(evento)}
+            aria-label="Cancelar evento"
+          >
+            <XCircle className={estilos.iconoAccion} aria-hidden="true" />
+            Cancelar
+            <span className={estilos.tooltip}>Cancelar evento</span>
+          </button>
+        )}
 
         <button
           type="button"

@@ -12,7 +12,7 @@ import { Plus } from "lucide-react";
 import estilos from "./Eventos.module.css";
 
 export default function Eventos() {
-  const { eventos, crearEvento, editarEvento, eliminarEvento, publicarEvento, conteoPorEstado } =
+  const { eventos, crearEvento, editarEvento, eliminarEvento, publicarEvento, cancelarEvento, conteoPorEstado } =
     useEventosContext();
 
   const {
@@ -20,6 +20,8 @@ export default function Eventos() {
     cambiarPestaña,
     valorBusqueda,
     cambiarBusqueda,
+    filtroMesActivo,
+    cambiarFiltroMes,
     paginaActual,
     setPaginaActual,
     totalPaginas,
@@ -29,6 +31,7 @@ export default function Eventos() {
   const [formularioAbierto, setFormularioAbierto] = useState(false);
   const [eventoEditando, setEventoEditando] = useState(null);
   const [eventoEliminar, setEventoEliminar] = useState(null);
+  const [eventoCancelar, setEventoCancelar] = useState(null);
   const [notificacion, setNotificacion] = useState("");
 
   const abrirCrear = () => {
@@ -67,6 +70,14 @@ export default function Eventos() {
     setNotificacion(`"${evento.titulo}" publicado en el portal.`);
   };
 
+  const manejarCancelar = () => {
+    if (eventoCancelar) {
+      cancelarEvento(eventoCancelar.id);
+      setNotificacion(`"${eventoCancelar.titulo}" cancelado.`);
+    }
+    setEventoCancelar(null);
+  };
+
   return (
     <div className={estilos.pagina}>
       <div className={estilos.seccionSuperior}>
@@ -78,6 +89,8 @@ export default function Eventos() {
           onCambiarPestaña={cambiarPestaña}
           valorBusqueda={valorBusqueda}
           onCambiarBusqueda={cambiarBusqueda}
+          filtroMesActivo={filtroMesActivo}
+          onCambiarFiltroMes={cambiarFiltroMes}
         />
       </div>
 
@@ -87,6 +100,7 @@ export default function Eventos() {
           onEditar={abrirEditar}
           onEliminar={setEventoEliminar}
           onPublicar={manejarPublicar}
+          onCancelar={setEventoCancelar}
         />
         <Paginacion
           paginaActual={paginaActual}
@@ -126,6 +140,19 @@ export default function Eventos() {
         onCerrar={() => setEventoEliminar(null)}
         onConfirmar={manejarEliminar}
         etiquetaConfirmar="Eliminar"
+      />
+
+      <ConfirmacionModal
+        abierto={Boolean(eventoCancelar)}
+        titulo="¿Cancelar este evento?"
+        mensaje={
+          eventoCancelar
+            ? `Se cancelará "${eventoCancelar.titulo}". Dejará de mostrarse en el portal público.`
+            : ""
+        }
+        onCerrar={() => setEventoCancelar(null)}
+        onConfirmar={manejarCancelar}
+        etiquetaConfirmar="Cancelar evento"
       />
 
       <Notificacion mensaje={notificacion} onCerrar={() => setNotificacion("")} />

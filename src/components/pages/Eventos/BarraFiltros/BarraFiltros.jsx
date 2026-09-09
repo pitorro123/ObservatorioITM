@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Search, Calendar, ChevronDown } from "lucide-react";
 import estilos from "./BarraFiltros.module.css";
 
@@ -12,6 +11,7 @@ const pestañas = [
  * conteos: { publicado: number, borradores: number, cancelado: number }
  * pestañaActiva / onCambiarPestaña: control del filtro seleccionado
  * valorBusqueda / onCambiarBusqueda: control del input de búsqueda
+ * filtroMesActivo / onCambiarFiltroMes: filtro de "Este mes"
  */
 export default function BarraFiltros({
   conteos,
@@ -19,9 +19,9 @@ export default function BarraFiltros({
   onCambiarPestaña,
   valorBusqueda,
   onCambiarBusqueda,
+  filtroMesActivo,
+  onCambiarFiltroMes,
 }) {
-  const [rangoFecha] = useState("Este Mes");
-
   return (
     <div className={estilos.barra}>
       <div className={estilos.grupoPestañas} role="tablist" aria-label="Estado del evento">
@@ -45,7 +45,6 @@ export default function BarraFiltros({
 
       <div className={estilos.grupoAcciones}>
         <div className={estilos.campoBusqueda}>
-          <Search className={estilos.iconoBusqueda} aria-hidden="true" />
           <input
             type="search"
             placeholder="Buscar evento"
@@ -54,11 +53,19 @@ export default function BarraFiltros({
             aria-label="Buscar evento"
             className={estilos.input}
           />
+          <Search className={estilos.iconoBusqueda} aria-hidden="true" />
         </div>
 
-        <button type="button" className={estilos.selectorFecha}>
+        <button
+          type="button"
+          className={`${estilos.selectorFecha} ${
+            filtroMesActivo ? estilos.selectorFechaActiva : ""
+          }`}
+          onClick={onCambiarFiltroMes}
+          aria-pressed={filtroMesActivo}
+        >
           <Calendar className={estilos.iconoSelector} aria-hidden="true" />
-          <span>{rangoFecha}</span>
+          <span>Este Mes</span>
           <ChevronDown className={estilos.iconoChevron} aria-hidden="true" />
         </button>
       </div>

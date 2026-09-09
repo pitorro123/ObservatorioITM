@@ -10,7 +10,10 @@ const CLAVE_A_ESTADO = {
 export function useEventos(listaEventos) {
   const [pestañaActiva, setPestañaActiva] = useState("publicado");
   const [valorBusqueda, setValorBusqueda] = useState("");
+  const [filtroMesActivo, setFiltroMesActivo] = useState(false);
   const [paginaActual, setPaginaActual] = useState(1);
+
+  const mesActual = new Date().toISOString().slice(0, 7);
 
   const eventosFiltrados = useMemo(() => {
     const estadoActivo = CLAVE_A_ESTADO[pestañaActiva];
@@ -18,12 +21,15 @@ export function useEventos(listaEventos) {
       const coincideEstado = estadoActivo
         ? evento.estado === estadoActivo
         : true;
+      const coincideMes = filtroMesActivo
+        ? evento.fecha.slice(0, 7) === mesActual
+        : true;
       const coincideBusqueda = evento.titulo
         .toLowerCase()
         .includes(valorBusqueda.toLowerCase());
-      return coincideEstado && coincideBusqueda;
+      return coincideEstado && coincideMes && coincideBusqueda;
     });
-  }, [listaEventos, valorBusqueda, pestañaActiva]);
+  }, [listaEventos, valorBusqueda, pestañaActiva, filtroMesActivo, mesActual]);
 
   const totalPaginas = Math.max(
     1,
@@ -45,11 +51,18 @@ export function useEventos(listaEventos) {
     setPaginaActual(1);
   };
 
+  const cambiarFiltroMes = () => {
+    setFiltroMesActivo((prev) => !prev);
+    setPaginaActual(1);
+  };
+
   return {
     pestañaActiva,
     cambiarPestaña,
     valorBusqueda,
     cambiarBusqueda,
+    filtroMesActivo,
+    cambiarFiltroMes,
     paginaActual,
     setPaginaActual,
     totalPaginas,
