@@ -21,8 +21,8 @@ export default function Asistencia() {
     obtenerInscripcion,
   } = useEventosContext();
 
-  const eventosConInscritos = eventos.filter((evento) =>
-    evento.inscritos > 0
+  const eventosConInscritos = eventos.filter(
+    (evento) => inscripcionesPorEvento(evento.id).length > 0
   );
 
   const [eventoId, setEventoId] = useState(
@@ -74,7 +74,8 @@ export default function Asistencia() {
           >
             {eventos.map((eventoOption) => (
               <option key={eventoOption.id} value={eventoOption.id}>
-                {eventoOption.titulo} ({eventoOption.inscritos || 0} inscritos)
+                {eventoOption.titulo} (
+                {inscripcionesPorEvento(eventoOption.id).length} inscritos)
               </option>
             ))}
           </select>
