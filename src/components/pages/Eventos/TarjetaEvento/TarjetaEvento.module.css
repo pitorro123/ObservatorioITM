@@ -114,9 +114,23 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--espacio-sm);
+  gap: var(--espacio-xs);
   padding: 0 var(--espacio-md) var(--espacio-md);
   margin-top: auto;
+}
+
+.botonIcono {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: var(--radio-md);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
 }
 
 .botonAccion {

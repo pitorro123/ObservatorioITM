@@ -62,31 +62,29 @@ export default function TarjetaEvento({
 
         <button
           type="button"
-          className={`${estilos.botonAccion} ${estilos.botonEditar}`}
+          className={`${estilos.botonIcono} ${estilos.botonEditar}`}
           onClick={() => onEditar?.(evento)}
           aria-label="Editar evento"
         >
           <Pencil className={estilos.iconoAccion} aria-hidden="true" />
-          Editar
           <span className={estilos.tooltip}>Editar evento</span>
         </button>
 
         {evento.estado !== "cancelado" && (
           <button
             type="button"
-            className={`${estilos.botonAccion} ${estilos.botonCancelar}`}
+            className={`${estilos.botonIcono} ${estilos.botonCancelar}`}
             onClick={() => onCancelar?.(evento)}
             aria-label="Cancelar evento"
           >
             <XCircle className={estilos.iconoAccion} aria-hidden="true" />
-            Cancelar
             <span className={estilos.tooltip}>Cancelar evento</span>
           </button>
         )}
 
         <button
           type="button"
-          className={`${estilos.botonAccion} ${estilos.botonEliminar}`}
+          className={`${estilos.botonIcono} ${estilos.botonEliminar}`}
           onClick={() => onEliminar?.(evento)}
           aria-label="Eliminar evento"
         >
