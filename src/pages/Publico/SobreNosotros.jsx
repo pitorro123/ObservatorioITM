@@ -1,4 +1,5 @@
 import { Building2, Target, Eye, Telescope } from "lucide-react";
+import Button from "../../components/common/Button/Button.jsx";
 import { useContenido } from "../../context/ContenidoContext.jsx";
 import estilos from "./SobreNosotros.module.css";
 
@@ -8,13 +9,18 @@ export default function SobreNosotros() {
   return (
     <>
       <section className={estilos.hero}>
-        <div className={estilos.heroInner}>
+        <article className={estilos.heroCard}>
           <span className={estilos.heroIconWrap}>
             <Building2 className={estilos.heroIcon} aria-hidden="true" />
           </span>
-          <h1 className={estilos.heroTitle}>{observatorio.titulo}</h1>
-          <p className={estilos.heroDescription}>{observatorio.descripcion}</p>
-        </div>
+          <div className={estilos.heroContent}>
+            <h1 className={estilos.heroTitle}>{observatorio.titulo}</h1>
+            <p className={estilos.heroDescription}>{observatorio.descripcion}</p>
+            <Button to="/eventos" variant="ghost" className={estilos.heroBtn}>
+              Ver próximas actividades
+            </Button>
+          </div>
+        </article>
       </section>
 
       <section className={estilos.trayectoriaSection}>

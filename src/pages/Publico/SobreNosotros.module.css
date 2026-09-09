@@ -1,63 +1,77 @@
-/* ── Hero Banner ── */
+/* ── Hero (tarjeta estilo landing) ── */
 .hero {
-  background: linear-gradient(to bottom right, var(--obs-blue), var(--obs-bluemed));
-  color: white;
-}
-
-.heroInner {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 64px 16px;
+  padding: 24px 16px 8px;
 }
 
 @media (min-width: 640px) {
-  .heroInner {
-    padding: 64px 24px;
+  .hero {
+    padding: 24px 24px 8px;
   }
 }
 
 @media (min-width: 1024px) {
-  .heroInner {
-    padding: 64px 32px;
+  .hero {
+    padding: 24px 32px 8px;
   }
+}
+
+.heroCard {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-radius: var(--radius-2xl);
+  padding: 32px;
+  background: linear-gradient(to bottom right, var(--obs-blue), var(--obs-bluemed));
+  color: white;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-base);
+}
+
+.heroCard:hover {
+  transform: translateY(-4px);
 }
 
 .heroIconWrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
   border-radius: var(--radius-xl);
   background-color: rgba(255, 255, 255, 0.15);
 }
 
 .heroIcon {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   color: white;
+}
+
+.heroContent {
+  flex: 1;
+  min-width: 0;
 }
 
 .heroTitle {
-  margin-top: 24px;
-  max-width: 640px;
-  font-size: 1.875rem;
-  font-weight: 800;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: white;
 }
 
-@media (min-width: 640px) {
-  .heroTitle {
-    font-size: 2.25rem;
-  }
-}
-
 .heroDescription {
-  margin-top: 16px;
-  max-width: 640px;
-  font-size: 1rem;
+  margin-top: 12px;
+  font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
+}
+
+.heroBtn {
+  margin-top: 24px;
+  align-self: flex-start;
 }
 
 /* ── Content ── */
@@ -132,18 +146,18 @@
 .trayectoriaSection {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 56px 16px 0;
+  padding: 16px 16px 0;
 }
 
 @media (min-width: 640px) {
   .trayectoriaSection {
-    padding: 56px 24px 0;
+    padding: 16px 24px 0;
   }
 }
 
 @media (min-width: 1024px) {
   .trayectoriaSection {
-    padding: 56px 32px 0;
+    padding: 16px 32px 0;
   }
 }
 
