@@ -29,30 +29,34 @@ export default function Semillero() {
 
   return (
     <>
-      <section className={estilos.hero}>
-        <div className={estilos.heroInner}>
+      <section className={estilos.primeraFila}>
+        <article className={estilos.heroCard}>
           <span className={estilos.heroIconWrap}>
             <GraduationCap className={estilos.heroIcon} aria-hidden="true" />
           </span>
-          <h1 className={estilos.heroTitle}>{semillero.titulo}</h1>
-          <p className={estilos.heroDescription}>{semillero.descripcion}</p>
-          <Button to="/eventos" variant="ghost" className={estilos.heroBtn}>
-            Ver próximas actividades
-          </Button>
-        </div>
-      </section>
+          <div className={estilos.heroContent}>
+            <h1 className={estilos.heroTitle}>{semillero.titulo}</h1>
+            <p className={estilos.heroDescription}>{semillero.descripcion}</p>
+            <Button to="/eventos?tipo=semillero" variant="ghost" className={estilos.heroBtn}>
+              Ver próximas actividades
+            </Button>
+          </div>
+        </article>
 
-      <section className={estilos.pilaresSection}>
-        <div className={estilos.pilaresGrid}>
-          {pilares.map((pilar) => (
-            <div key={pilar.titulo} className={estilos.pilarCard}>
-              <span className={estilos.pilarIconWrap}>
-                <pilar.icon className={estilos.pilarIcon} aria-hidden="true" />
-              </span>
-              <h2 className={estilos.pilarTitle}>{pilar.titulo}</h2>
-              <p className={estilos.pilarDescription}>{pilar.descripcion}</p>
-            </div>
-          ))}
+        <div className={estilos.pilaresBox}>
+          <div className={estilos.pilaresGrid}>
+            {pilares.map((pilar) => (
+              <div key={pilar.titulo} className={estilos.pilarCard}>
+                <span className={estilos.pilarIconWrap}>
+                  <pilar.icon className={estilos.pilarIcon} aria-hidden="true" />
+                </span>
+                <div className={estilos.pilarContent}>
+                  <h2 className={estilos.pilarTitle}>{pilar.titulo}</h2>
+                  <p className={estilos.pilarDescription}>{pilar.descripcion}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

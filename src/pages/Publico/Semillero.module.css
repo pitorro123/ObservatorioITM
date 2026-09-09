@@ -1,105 +1,120 @@
-/* ── Hero Banner ── */
-.hero {
-  background: linear-gradient(to bottom right, var(--obs-purple), var(--obs-purple2));
-  color: white;
-}
-
-.heroInner {
+/* ── Primera fila: hero + pilares ── */
+.primeraFila {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 64px 16px;
+  display: grid;
+  gap: 24px;
+  padding: 24px 16px;
 }
 
 @media (min-width: 640px) {
-  .heroInner {
-    padding: 64px 24px;
+  .primeraFila {
+    padding: 24px 24px;
   }
 }
 
 @media (min-width: 1024px) {
-  .heroInner {
-    padding: 64px 32px;
+  .primeraFila {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    padding: 24px 32px;
   }
+}
+
+.heroCard {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  align-self: start;
+  border-radius: var(--radius-2xl);
+  padding: 32px;
+  background: linear-gradient(to bottom right, var(--obs-purple), var(--obs-purple2));
+  color: white;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-base);
+}
+
+.heroCard:hover {
+  transform: translateY(-4px);
 }
 
 .heroIconWrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
   border-radius: var(--radius-xl);
   background-color: rgba(255, 255, 255, 0.15);
 }
 
 .heroIcon {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   color: white;
+}
+
+.heroContent {
+  flex: 1;
+  min-width: 0;
 }
 
 .heroTitle {
-  margin-top: 24px;
-  max-width: 560px;
-  font-size: 1.875rem;
-  font-weight: 800;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: white;
 }
 
-@media (min-width: 640px) {
-  .heroTitle {
-    font-size: 2.25rem;
-  }
-}
-
 .heroDescription {
-  margin-top: 16px;
-  max-width: 560px;
-  font-size: 1rem;
+  margin-top: 12px;
+  font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
 }
 
 .heroBtn {
-  margin-top: 32px;
+  margin-top: 24px;
+  align-self: flex-start;
 }
 
 /* ── Pilares ── */
-.pilaresSection {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 56px 16px;
-}
-
-@media (min-width: 640px) {
-  .pilaresSection {
-    padding: 56px 24px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .pilaresSection {
-    padding: 56px 32px;
-  }
+.pilaresBox {
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-2xl);
+  background-color: white;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
 }
 
 .pilaresGrid {
   display: grid;
-  gap: 24px;
-}
-
-@media (min-width: 768px) {
-  .pilaresGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 .pilarCard {
-  border-radius: var(--radius-2xl);
-  border: 1px solid var(--slate-200);
-  background-color: white;
-  padding: 24px;
-  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.pilarCard:first-child {
+  padding-top: 0;
+}
+
+.pilarCard:last-child {
+  padding-bottom: 0;
+}
+
+.pilarCard:not(:first-child) {
+  border-top: 1px solid var(--slate-200);
+  padding-top: 20px;
+}
+
+.pilarContent {
+  flex: 1;
+  min-width: 0;
 }
 
 .pilarIconWrap {
@@ -108,6 +123,7 @@
   justify-content: center;
   width: 44px;
   height: 44px;
+  flex-shrink: 0;
   border-radius: var(--radius-full);
   background-color: var(--obs-skyLight);
 }
@@ -119,14 +135,14 @@
 }
 
 .pilarTitle {
-  margin-top: 16px;
+  margin: 0;
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--obs-navy);
 }
 
 .pilarDescription {
-  margin-top: 8px;
+  margin-top: 6px;
   font-size: 0.875rem;
   color: var(--slate-600);
   line-height: 1.5;
