@@ -8,15 +8,37 @@ export default function SobreNosotros() {
   return (
     <>
       <section className={estilos.hero}>
-        <article className={estilos.heroCard}>
-          <span className={estilos.heroIconWrap}>
-            <Building2 className={estilos.heroIcon} aria-hidden="true" />
-          </span>
-          <div className={estilos.heroContent}>
-            <h1 className={estilos.heroTitle}>{observatorio.titulo}</h1>
-            <p className={estilos.heroDescription}>{observatorio.descripcion}</p>
+        <div className={estilos.colIzquierda}>
+          <article className={estilos.heroCard}>
+            <span className={estilos.heroIconWrap}>
+              <Building2 className={estilos.heroIcon} aria-hidden="true" />
+            </span>
+            <div className={estilos.heroContent}>
+              <h1 className={estilos.heroTitle}>{observatorio.titulo}</h1>
+              <p className={estilos.heroDescription}>
+                {observatorio.descripcion}
+              </p>
+            </div>
+          </article>
+
+          <div className={estilos.cardsGrid}>
+            <div className={estilos.card}>
+              <span className={estilos.cardIconWrap}>
+                <Target className={estilos.cardIcon} aria-hidden="true" />
+              </span>
+              <h2 className={estilos.cardTitle}>Misión</h2>
+              <p className={estilos.cardDescription}>{observatorio.mision}</p>
+            </div>
+
+            <div className={estilos.card}>
+              <span className={estilos.cardIconWrap}>
+                <Eye className={estilos.cardIcon} aria-hidden="true" />
+              </span>
+              <h2 className={estilos.cardTitle}>Visión</h2>
+              <p className={estilos.cardDescription}>{observatorio.vision}</p>
+            </div>
           </div>
-        </article>
+        </div>
 
         <div className={estilos.trayectoriaBox}>
           <h2 className={estilos.trayectoriaTitle}>Nuestra trayectoria</h2>
@@ -45,26 +67,6 @@ export default function SobreNosotros() {
                 semilleros de investigación.
               </li>
             </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className={estilos.contentSection}>
-        <div className={estilos.cardsGrid}>
-          <div className={estilos.card}>
-            <span className={estilos.cardIconWrap}>
-              <Target className={estilos.cardIcon} aria-hidden="true" />
-            </span>
-            <h2 className={estilos.cardTitle}>Misión</h2>
-            <p className={estilos.cardDescription}>{observatorio.mision}</p>
-          </div>
-
-          <div className={estilos.card}>
-            <span className={estilos.cardIconWrap}>
-              <Eye className={estilos.cardIcon} aria-hidden="true" />
-            </span>
-            <h2 className={estilos.cardTitle}>Visión</h2>
-            <p className={estilos.cardDescription}>{observatorio.vision}</p>
           </div>
         </div>
       </section>

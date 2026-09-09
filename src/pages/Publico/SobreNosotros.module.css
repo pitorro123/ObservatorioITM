@@ -79,22 +79,10 @@
 }
 
 /* ── Content ── */
-.contentSection {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 56px 16px;
-}
-
-@media (min-width: 640px) {
-  .contentSection {
-    padding: 56px 24px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .contentSection {
-    padding: 56px 32px;
-  }
+.colIzquierda {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .cardsGrid {
@@ -102,7 +90,7 @@
   gap: 24px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .cardsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
