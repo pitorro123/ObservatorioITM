@@ -57,11 +57,7 @@ export default function Semillero() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      <section className={estilos.objetivosSection}>
-        <div className={estilos.objetivosGrid}>
           <div className={estilos.objetivosCard}>
             <h2 className={estilos.objetivosTitle}>Objetivos del semillero</h2>
             <ul className={estilos.objetivosList}>
