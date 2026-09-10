@@ -191,6 +191,12 @@
   color: var(--color-texto-secundario);
 }
 
+@media (max-width: 768px) {
+  .bloqueAcciones {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .titulo {
     font-size: var(--texto-xl);
