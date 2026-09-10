@@ -95,4 +95,13 @@
   .botonFlotante {
     left: 16px;
   }
+
+  .botonFlotante .tooltip {
+    left: 0;
+    transform: translateY(4px);
+  }
+
+  .botonFlotante:hover .tooltip {
+    transform: translateY(0);
+  }
 }
