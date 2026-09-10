@@ -34,7 +34,7 @@
 
 @media (min-width: 1024px) {
   .inner {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1.3fr repeat(3, 1fr);
     align-items: center;
     padding: 40px 16px;
   }
@@ -51,18 +51,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 68px;
-  height: 68px;
+  width: 100px;
+  height: 100px;
   flex-shrink: 0;
   border-radius: var(--radius-2xl);
   background-color: var(--obs-navy);
 }
 
 .telescopioImg {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(76, 197, 250, 0.4));
+  filter: drop-shadow(0 0 10px rgba(76, 197, 250, 0.45));
 }
 
 .headerText {
