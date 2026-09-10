@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { KeyRound, CheckCircle2, AlertCircle, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
+import Navbar from "../../components/layout/Navbar/Navbar.jsx";
 import logo from "../../assets/images/observatorio/logo/logo.png";
 import estilos from "./CambiarPassword.module.css";
 
@@ -39,107 +40,110 @@ export default function CambiarPassword() {
   };
 
   return (
-    <main className={estilos.raiz}>
-      <div className={estilos.tarjeta}>
-        <img src={logo} alt="Logo del Observatorio Astronómico ITM" className={estilos.logo} />
+    <div className={estilos.pagina}>
+      <Navbar simple />
+      <main className={estilos.raiz}>
+        <Link to="/login" className={estilos.volver}>
+          <ArrowLeft className={estilos.iconoVolver} aria-hidden="true" />
+          Volver a iniciar sesión
+        </Link>
 
-        {completado ? (
-          <div className={estilos.exito} role="status">
-            <CheckCircle2 className={estilos.iconoExito} aria-hidden="true" />
-            <h1 className={estilos.titulo}>¡Contraseña configurada!</h1>
-            <p className={estilos.texto}>
-              Tu cuenta ahora está activa. Ya puedes iniciar sesión en el panel.
-            </p>
-            <button
-              type="button"
-              className={estilos.boton}
-              onClick={() => navegar("/login", { replace: true })}
-            >
-              Ir a iniciar sesión
-            </button>
-          </div>
-        ) : (
-          <>
-            <h1 className={estilos.titulo}>Configura tu contraseña</h1>
-            <p className={estilos.subtitulo}>
-              Usa el enlace recibido en tu correo para establecer la contraseña de tu
-              cuenta de docente.
-            </p>
+        <div className={estilos.tarjeta}>
+          <img src={logo} alt="Logo del Observatorio Astronómico ITM" className={estilos.logo} />
 
-            {!token && (
-              <div className={estilos.error} role="alert">
-                <AlertCircle className={estilos.iconoError} aria-hidden="true" />
-                <p>El enlace es inválido. Pide a la administración un enlace nuevo.</p>
-              </div>
-            )}
+          {completado ? (
+            <div className={estilos.exito} role="status">
+              <CheckCircle2 className={estilos.iconoExito} aria-hidden="true" />
+              <h1 className={estilos.titulo}>¡Contraseña configurada!</h1>
+              <p className={estilos.texto}>
+                Tu cuenta ahora está activa. Ya puedes iniciar sesión en el panel.
+              </p>
+              <button
+                type="button"
+                className={estilos.boton}
+                onClick={() => navegar("/login", { replace: true })}
+              >
+                Ir a iniciar sesión
+              </button>
+            </div>
+          ) : (
+            <>
+              <h1 className={estilos.titulo}>Configura tu contraseña</h1>
+              <p className={estilos.subtitulo}>
+                Usa el enlace recibido en tu correo para establecer la contraseña de tu
+                cuenta de docente.
+              </p>
 
-            {token && (
-              <form className={estilos.formulario} onSubmit={manejarEnvio} noValidate>
-                {error && (
-                  <div className={estilos.error} role="alert">
-                    <AlertCircle className={estilos.iconoError} aria-hidden="true" />
-                    <p>{error}</p>
+              {!token && (
+                <div className={estilos.error} role="alert">
+                  <AlertCircle className={estilos.iconoError} aria-hidden="true" />
+                  <p>El enlace es inválido. Pide a la administración un enlace nuevo.</p>
+                </div>
+              )}
+
+              {token && (
+                <form className={estilos.formulario} onSubmit={manejarEnvio} noValidate>
+                  {error && (
+                    <div className={estilos.error} role="alert">
+                      <AlertCircle className={estilos.iconoError} aria-hidden="true" />
+                      <p>{error}</p>
+                    </div>
+                  )}
+
+                  <div className={estilos.campo}>
+                    <label className={estilos.etiqueta} htmlFor="password">
+                      Nueva contraseña
+                    </label>
+                    <div className={estilos.contraWrapper}>
+                      <input
+                        id="password"
+                        type={verPassword ? "text" : "password"}
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className={estilos.input}
+                        placeholder="Mínimo 6 caracteres"
+                      />
+                      <button
+                        type="button"
+                        className={estilos.botonVer}
+                        onClick={() => setVerPassword((prev) => !prev)}
+                        aria-label={verPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                      >
+                        {verPassword ? (
+                          <EyeOff className={estilos.iconoOjo} aria-hidden="true" />
+                        ) : (
+                          <Eye className={estilos.iconoOjo} aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                )}
 
-                <div className={estilos.campo}>
-                  <label className={estilos.etiqueta} htmlFor="password">
-                    Nueva contraseña
-                  </label>
-                  <div className={estilos.contraWrapper}>
+                  <div className={estilos.campo}>
+                    <label className={estilos.etiqueta} htmlFor="confirmar">
+                      Confirmar contraseña
+                    </label>
                     <input
-                      id="password"
+                      id="confirmar"
                       type={verPassword ? "text" : "password"}
                       required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={confirmar}
+                      onChange={(e) => setConfirmar(e.target.value)}
                       className={estilos.input}
-                      placeholder="Mínimo 6 caracteres"
+                      placeholder="Repite tu contraseña"
                     />
-                    <button
-                      type="button"
-                      className={estilos.botonVer}
-                      onClick={() => setVerPassword((prev) => !prev)}
-                      aria-label={verPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                    >
-                      {verPassword ? (
-                        <EyeOff className={estilos.iconoOjo} aria-hidden="true" />
-                      ) : (
-                        <Eye className={estilos.iconoOjo} aria-hidden="true" />
-                      )}
-                    </button>
                   </div>
-                </div>
 
-                <div className={estilos.campo}>
-                  <label className={estilos.etiqueta} htmlFor="confirmar">
-                    Confirmar contraseña
-                  </label>
-                  <input
-                    id="confirmar"
-                    type={verPassword ? "text" : "password"}
-                    required
-                    value={confirmar}
-                    onChange={(e) => setConfirmar(e.target.value)}
-                    className={estilos.input}
-                    placeholder="Repite tu contraseña"
-                  />
-                </div>
-
-                <button type="submit" className={estilos.boton}>
-                  <KeyRound className={estilos.iconoBoton} aria-hidden="true" />
-                  Guardar contraseña
-                </button>
-              </form>
-            )}
-
-            <Link to="/login" className={estilos.volver}>
-              <ArrowLeft className={estilos.iconoVolver} aria-hidden="true" />
-              Volver a iniciar sesión
-            </Link>
-          </>
-        )}
-      </div>
-    </main>
+                  <button type="submit" className={estilos.boton}>
+                    <KeyRound className={estilos.iconoBoton} aria-hidden="true" />
+                    Guardar contraseña
+                  </button>
+                </form>
+              )}
+            </>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }

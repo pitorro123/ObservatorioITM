@@ -5,6 +5,7 @@
 }
 
 .raiz {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -32,7 +33,9 @@
 }
 
 .volver {
-  align-self: flex-start;
+  position: absolute;
+  top: 8px;
+  left: 16px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
