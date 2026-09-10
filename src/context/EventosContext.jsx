@@ -1,5 +1,9 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { eventosIniciales } from "../data/eventos.js";
+import {
+  leerAlmacenamiento,
+  escribirAlmacenamiento,
+} from "../utils/almacenamiento.js";
 
 const EventosContext = createContext(null);
 
@@ -9,9 +13,27 @@ function generarCodigoInscripcion() {
 }
 
 export function EventosProvider({ children }) {
-  const [eventos, setEventos] = useState(eventosIniciales);
-  const [inscripciones, setInscripciones] = useState([]);
-  const [feedback, setFeedback] = useState([]);
+  const [eventos, setEventos] = useState(() =>
+    leerAlmacenamiento("itm_eventos", eventosIniciales)
+  );
+  const [inscripciones, setInscripciones] = useState(() =>
+    leerAlmacenamiento("itm_inscripciones", [])
+  );
+  const [feedback, setFeedback] = useState(() =>
+    leerAlmacenamiento("itm_feedback", [])
+  );
+
+  useEffect(() => {
+    escribirAlmacenamiento("itm_eventos", eventos);
+  }, [eventos]);
+
+  useEffect(() => {
+    escribirAlmacenamiento("itm_inscripciones", inscripciones);
+  }, [inscripciones]);
+
+  useEffect(() => {
+    escribirAlmacenamiento("itm_feedback", feedback);
+  }, [feedback]);
 
   const crearEvento = (datos) => {
     const nuevoId =

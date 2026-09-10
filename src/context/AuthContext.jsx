@@ -1,4 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  leerAlmacenamiento,
+  escribirAlmacenamiento,
+} from "../utils/almacenamiento.js";
 
 const AuthContext = createContext(null);
 
@@ -41,8 +45,27 @@ function generarPasswordTemporal() {
 }
 
 export function AuthProvider({ children }) {
-  const [usuarios, setUsuarios] = useState(usuariosIniciales);
-  const [usuarioActual, setUsuarioActual] = useState(null);
+  const [usuarios, setUsuarios] = useState(() =>
+    leerAlmacenamiento("itm_usuarios", usuariosIniciales)
+  );
+  const [usuarioIdActual, setUsuarioIdActual] = useState(() =>
+    leerAlmacenamiento("itm_usuario_actual_id", null)
+  );
+
+  useEffect(() => {
+    escribirAlmacenamiento("itm_usuarios", usuarios);
+  }, [usuarios]);
+
+  useEffect(() => {
+    escribirAlmacenamiento("itm_usuario_actual_id", usuarioIdActual);
+  }, [usuarioIdActual]);
+
+  const usuarioActual = useMemo(() => {
+    if (usuarioIdActual === null || usuarioIdActual === undefined) return null;
+    return (
+      usuarios.find((usuario) => usuario.id === usuarioIdActual) ?? null
+    );
+  }, [usuarios, usuarioIdActual]);
 
   const login = (correo, password) => {
     const usuario = usuarios.find(
@@ -69,12 +92,12 @@ export function AuthProvider({ children }) {
       return { exito: false, error: "Correo o contraseña incorrectos." };
     }
 
-    setUsuarioActual(usuario);
+    setUsuarioIdActual(usuario.id);
     return { exito: true };
   };
 
   const logout = () => {
-    setUsuarioActual(null);
+    setUsuarioIdActual(null);
   };
 
   const actualizarPerfil = ({ nombre, correo, nuevaPassword }) => {
@@ -95,7 +118,6 @@ export function AuthProvider({ children }) {
     setUsuarios((prev) =>
       prev.map((u) => (u.id === usuarioActual?.id ? { ...u, ...cambios } : u))
     );
-    setUsuarioActual((prev) => (prev ? { ...prev, ...cambios } : prev));
 
     return { exito: true };
   };
@@ -142,11 +164,6 @@ export function AuthProvider({ children }) {
     setUsuarios((prev) =>
       prev.map((u) => (u.id === id ? { ...u, ...cambios } : u))
     );
-
-    if (usuarioActual && usuarioActual.id === id) {
-      const actualizado = usuarios.find((u) => u.id === id);
-      setUsuarioActual({ ...actualizado, ...cambios });
-    }
 
     return { exito: true };
   };

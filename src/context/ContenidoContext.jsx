@@ -1,11 +1,27 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { contenidoSemillero, contenidoObservatorio } from "../data/observatorio.js";
+import {
+  leerAlmacenamiento,
+  escribirAlmacenamiento,
+} from "../utils/almacenamiento.js";
 
 const ContenidoContext = createContext(null);
 
 export function ContenidoProvider({ children }) {
-  const [semillero, setSemillero] = useState(contenidoSemillero);
-  const [observatorio, setObservatorio] = useState(contenidoObservatorio);
+  const [semillero, setSemillero] = useState(() =>
+    leerAlmacenamiento("itm_semillero", contenidoSemillero)
+  );
+  const [observatorio, setObservatorio] = useState(() =>
+    leerAlmacenamiento("itm_observatorio", contenidoObservatorio)
+  );
+
+  useEffect(() => {
+    escribirAlmacenamiento("itm_semillero", semillero);
+  }, [semillero]);
+
+  useEffect(() => {
+    escribirAlmacenamiento("itm_observatorio", observatorio);
+  }, [observatorio]);
 
   const guardarSemillero = ({ titulo, descripcion, objetivos, comoParticipar }) => {
     setSemillero({
