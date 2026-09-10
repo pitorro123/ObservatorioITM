@@ -1,3 +1,4 @@
+import { CalendarDays, CalendarCheck, Users, UserCheck } from "lucide-react";
 import Header from "../../components/layout/Header/Header.jsx";
 import { useEventosContext } from "../../context/EventosContext.jsx";
 import estilos from "./Dashboard.module.css";
@@ -10,8 +11,15 @@ const etiquetasEstado = {
   cancelado: "Cancelado",
 };
 
+const tarjetasResumen = [
+  { clave: "eventosActivos", etiqueta: "Eventos Activos", icono: CalendarDays },
+  { clave: "eventosFinalizados", etiqueta: "Eventos Finalizados", icono: CalendarCheck },
+  { clave: "totalInscritos", etiqueta: "Personas Inscritas", icono: Users },
+  { clave: "totalAsistentes", etiqueta: "Asistentes", icono: UserCheck },
+];
+
 export default function Dashboard() {
-  const { eventos } = useEventosContext();
+  const { eventos, resumenDashboard } = useEventosContext();
 
   const eventosOrdenados = [...eventos].sort((a, b) => a.fecha.localeCompare(b.fecha));
 
@@ -27,6 +35,25 @@ export default function Dashboard() {
             Aquí puedes consultar el estado de cada evento y la participación de la
             comunidad.
           </p>
+        </div>
+
+        <div className={estilos.grillaResumen}>
+          {tarjetasResumen.map((tarjeta) => {
+            const Icono = tarjeta.icono;
+            return (
+              <div key={tarjeta.clave} className={estilos.resumenCard}>
+                <span className={estilos.resumenIconoWrap}>
+                  <Icono className={estilos.resumenIcono} aria-hidden="true" />
+                </span>
+                <div>
+                  <p className={estilos.resumenValor}>
+                    {resumenDashboard[tarjeta.clave] ?? 0}
+                  </p>
+                  <p className={estilos.resumenEtiqueta}>{tarjeta.etiqueta}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
