@@ -4,9 +4,14 @@ import estilos from "./Feedback.module.css";
 export default function Feedback() {
   return (
     <div className={estilos.pagina}>
-      <Header rutaBreadcrumb={["Dashboard", "Feedback"]} titulo="Feedback" />
-      <div className={estilos.tarjetaResumen}>
-        <p>Aquí se mostrarán los comentarios y calificaciones de los eventos.</p>
+      <div className={estilos.seccionSuperior}>
+        <Header rutaBreadcrumb={["Dashboard", "Feedback"]} titulo="Feedback" />
+      </div>
+
+      <div className={estilos.contenedor}>
+        <div className={estilos.tarjetaResumen}>
+          <p>Aquí se mostrarán los comentarios y calificaciones de los eventos.</p>
+        </div>
       </div>
     </div>
   );
