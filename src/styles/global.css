@@ -14,9 +14,21 @@ html {
   }
 }
 
-@media (min-width: 2560px) {
+@media (min-width: 2400px) {
   html {
     font-size: 20px;
+  }
+}
+
+@media (min-width: 2800px) {
+  html {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 3600px) {
+  html {
+    font-size: 24px;
   }
 }
 

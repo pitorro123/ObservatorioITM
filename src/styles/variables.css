@@ -128,12 +128,24 @@
 
 @media (min-width: 1920px) {
   :root {
-    --max-width: 1600px;
+    --max-width: 1680px;
   }
 }
 
-@media (min-width: 2560px) {
+@media (min-width: 2400px) {
   :root {
-    --max-width: 1800px;
+    --max-width: 2100px;
+  }
+}
+
+@media (min-width: 2800px) {
+  :root {
+    --max-width: 2500px;
+  }
+}
+
+@media (min-width: 3600px) {
+  :root {
+    --max-width: 3200px;
   }
 }

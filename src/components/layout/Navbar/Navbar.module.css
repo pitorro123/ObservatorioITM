@@ -12,22 +12,12 @@
 .topBarInner {
   display: flex;
   align-items: center;
-  gap: 12px;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 4px 16px;
-}
-
-@media (min-width: 640px) {
-  .topBarInner {
-    padding: 4px 24px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .topBarInner {
-    padding: 4px 32px;
-  }
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 4px clamp(16px, 3.5vw, 72px);
+  box-sizing: border-box;
 }
 
 .logoLink {

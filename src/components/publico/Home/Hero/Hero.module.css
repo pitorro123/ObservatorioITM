@@ -104,6 +104,12 @@
   }
 }
 
+@media (min-width: 2400px) {
+  .textBlock {
+    max-width: 1600px;
+  }
+}
+
 .description {
   margin-top: 20px;
   max-width: 560px;
