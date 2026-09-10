@@ -9,4 +9,10 @@
   min-width: 0;
 }
 
+@media (max-width: 768px) {
+  .areaContenido {
+    padding-top: 56px;
+  }
+}
+
 

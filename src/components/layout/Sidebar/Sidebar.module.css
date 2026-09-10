@@ -9,6 +9,9 @@
 }
 
 .encabezadoLogo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: var(--espacio-sm) var(--espacio-xs) var(--espacio-xl);
 }
 
@@ -16,6 +19,37 @@
   width: 100%;
   max-width: 170px;
   height: auto;
+}
+
+.botonCerrarMenu {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  border-radius: var(--radio-md);
+  background: none;
+  color: var(--obs-navy);
+  cursor: pointer;
+  transition: background-color var(--transicion-rapida);
+}
+
+.botonCerrarMenu:hover {
+  background-color: rgba(84, 132, 214, 0.15);
+}
+
+.iconoCerrarMenu {
+  width: 22px;
+  height: 22px;
+}
+
+/* ── Barra superior móvil (hamburguesa + logo) ── */
+.barraMovil {
+  display: none;
+}
+
+.overlayMovil {
+  display: none;
 }
 
 .navegacion {
@@ -85,7 +119,79 @@
 }
 
 @media (max-width: 768px) {
+  .barraMovil {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-sm);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 70;
+    padding: var(--espacio-xs) var(--espacio-sm);
+    background-color: var(--color-fondo-sidebar);
+    border-bottom: 1px solid var(--color-borde);
+    box-shadow: var(--sombra-suave);
+  }
+
+  .botonMenu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: var(--radio-md);
+    background-color: white;
+    color: var(--obs-navy);
+    cursor: pointer;
+    box-shadow: var(--sombra-suave);
+  }
+
+  .iconoMenu {
+    width: 24px;
+    height: 24px;
+  }
+
+  .logoMovil {
+    height: 40px;
+    width: auto;
+  }
+
+  .overlayMovil {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background-color: var(--color-overlay-oscuro);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transicion-media), visibility var(--transicion-media);
+  }
+
+  .overlayMovilVisible {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .barraLateral {
-    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 90;
+    width: var(--ancho-sidebar);
+    min-height: 0;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform var(--transicion-media);
+  }
+
+  .barraLateralAbierta {
+    transform: translateX(0);
+  }
+
+  .botonCerrarMenu {
+    display: flex;
   }
 }

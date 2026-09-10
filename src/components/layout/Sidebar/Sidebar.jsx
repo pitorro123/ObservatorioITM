@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   LayoutGrid,
@@ -8,6 +9,8 @@ import {
   FileEdit,
   Grid3x3,
   LogOut,
+  Menu,
+  X,
 } from "lucide-react";
 import { ENLACES_NAVEGACION } from "../../../constants/navegacion.js";
 import { useAuth } from "../../../context/AuthContext.jsx";
@@ -25,6 +28,7 @@ const mapaIconos = {
 
 export default function Sidebar() {
   const { usuarioActual, logout, esAdmin } = useAuth();
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   const enlacesAccesibles = ENLACES_NAVEGACION.filter((enlace) => {
     if (!enlace.roles) return true;
@@ -34,49 +38,88 @@ export default function Sidebar() {
   });
 
   return (
-    <aside className={estilos.barraLateral}>
-      <div className={estilos.encabezadoLogo}>
+    <>
+      <div className={estilos.barraMovil}>
+        <button
+          type="button"
+          className={estilos.botonMenu}
+          onClick={() => setMenuAbierto(true)}
+          aria-label="Abrir menú de navegación"
+        >
+          <Menu className={estilos.iconoMenu} aria-hidden="true" />
+        </button>
         <img
           src="/images/LogoItm.png"
           alt="Logo ITM Institución Universitaria"
-          className={estilos.logo}
+          className={estilos.logoMovil}
         />
       </div>
 
-      <nav className={estilos.navegacion} aria-label="Navegación principal">
-        <ul className={estilos.listaEnlaces}>
-          {enlacesAccesibles.map((enlace) => {
-            const IconoEnlace = mapaIconos[enlace.icono];
-            return (
-              <li key={enlace.ruta}>
-                <NavLink
-                  to={enlace.ruta}
-                  end={enlace.ruta === "/"}
-                  className={({ isActive }) =>
-                    isActive
-                      ? `${estilos.enlace} ${estilos.enlaceActivo}`
-                      : estilos.enlace
-                  }
-                >
-                  {IconoEnlace && (
-                    <IconoEnlace className={estilos.icono} aria-hidden="true" />
-                  )}
-                  <span>{enlace.etiqueta}</span>
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+      <div
+        className={`${estilos.overlayMovil} ${
+          menuAbierto ? estilos.overlayMovilVisible : ""
+        }`}
+        onClick={() => setMenuAbierto(false)}
+        aria-hidden="true"
+      />
 
-      <button
-        type="button"
-        className={estilos.botonCerrarSesion}
-        onClick={logout}
+      <aside
+        className={`${estilos.barraLateral} ${
+          menuAbierto ? estilos.barraLateralAbierta : ""
+        }`}
       >
-        <LogOut className={estilos.icono} aria-hidden="true" />
-        <span>Cerrar Sesión</span>
-      </button>
-    </aside>
+        <div className={estilos.encabezadoLogo}>
+          <img
+            src="/images/LogoItm.png"
+            alt="Logo ITM Institución Universitaria"
+            className={estilos.logo}
+          />
+          <button
+            type="button"
+            className={estilos.botonCerrarMenu}
+            onClick={() => setMenuAbierto(false)}
+            aria-label="Cerrar menú de navegación"
+          >
+            <X className={estilos.iconoCerrarMenu} aria-hidden="true" />
+          </button>
+        </div>
+
+        <nav className={estilos.navegacion} aria-label="Navegación principal">
+          <ul className={estilos.listaEnlaces}>
+            {enlacesAccesibles.map((enlace) => {
+              const IconoEnlace = mapaIconos[enlace.icono];
+              return (
+                <li key={enlace.ruta}>
+                  <NavLink
+                    to={enlace.ruta}
+                    end={enlace.ruta === "/"}
+                    onClick={() => setMenuAbierto(false)}
+                    className={({ isActive }) =>
+                      isActive
+                        ? `${estilos.enlace} ${estilos.enlaceActivo}`
+                        : estilos.enlace
+                    }
+                  >
+                    {IconoEnlace && (
+                      <IconoEnlace className={estilos.icono} aria-hidden="true" />
+                    )}
+                    <span>{enlace.etiqueta}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        <button
+          type="button"
+          className={estilos.botonCerrarSesion}
+          onClick={logout}
+        >
+          <LogOut className={estilos.icono} aria-hidden="true" />
+          <span>Cerrar Sesión</span>
+        </button>
+      </aside>
+    </>
   );
 }
