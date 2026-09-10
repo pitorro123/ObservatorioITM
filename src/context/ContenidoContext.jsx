@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { contenidoSemillero, contenidoObservatorio, informacionContacto } from "../data/observatorio.js";
+import { contenidoSemillero, contenidoObservatorio } from "../data/observatorio.js";
 
 const ContenidoContext = createContext(null);
 
@@ -37,7 +37,6 @@ export function ContenidoProvider({ children }) {
   const value = {
     semillero,
     observatorio,
-    informacionContacto,
     guardarSemillero,
     guardarObservatorio,
   };
