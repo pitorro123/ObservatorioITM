@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import {
   CalendarDays,
@@ -51,6 +51,12 @@ export default function DetalleEvento() {
   const [opinion, setOpinion] = useState({ nombre: "", calificacion: 0, comentario: "" });
   const [errorOpinion, setErrorOpinion] = useState("");
   const [opinionEnviada, setOpinionEnviada] = useState(null);
+
+  const inscripcionRef = useRef(null);
+
+  useEffect(() => {
+    inscripcionRef.current?.scrollIntoView({ block: "start" });
+  }, []);
 
   if (!evento || evento.estado !== "publicado") {
     return <Navigate to="/eventos" replace />;
@@ -190,7 +196,7 @@ export default function DetalleEvento() {
           </div>
         </div>
 
-        <div className={estilos.inscripcion}>
+        <div className={estilos.inscripcion} ref={inscripcionRef}>
         {confirmada && inscripcion ? (
           <div className={estilos.confirmacion} role="status">
             <CheckCircle2 className={estilos.iconoExito} aria-hidden="true" />
