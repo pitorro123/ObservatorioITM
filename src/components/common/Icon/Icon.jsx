@@ -1,12 +1,19 @@
-import * as LucideIcons from "lucide-react";
+import { Telescope, Presentation, Users, GraduationCap } from "lucide-react";
 import styles from "./Icon.module.css";
+
+const iconos = {
+  Telescope,
+  Presentation,
+  Users,
+  GraduationCap,
+};
 
 export default function Icon({
   name,
   className = "",
   ...props
 }) {
-  const LucideIcon = LucideIcons[name];
+  const LucideIcon = iconos[name];
 
   if (!LucideIcon) {
     return null;
