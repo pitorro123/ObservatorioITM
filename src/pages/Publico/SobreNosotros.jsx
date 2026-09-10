@@ -1,5 +1,6 @@
-import { Building2, Target, Eye, Telescope } from "lucide-react";
+import { Building2, Target, Eye } from "lucide-react";
 import { useContenido } from "../../context/ContenidoContext.jsx";
+import telescopioImg from "../../assets/images/observatorio/icons/telescopio.jpg";
 import estilos from "./SobreNosotros.module.css";
 
 export default function SobreNosotros() {
@@ -76,7 +77,11 @@ export default function SobreNosotros() {
 
       <section className={estilos.bannerTelescopios}>
         <span className={estilos.bannerIconWrap}>
-          <Telescope className={estilos.bannerIcon} aria-hidden="true" />
+          <img
+            src={telescopioImg}
+            alt="Telescopio del Observatorio"
+            className={estilos.bannerImg}
+          />
         </span>
         <p className={estilos.bannerText}>
           ¿Listo para mirar el cielo con nosotros? Visita la sección de{" "}
