@@ -1,36 +1,10 @@
-import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useState } from "react";
 import { imagenesGaleria } from "../../data/galeria.js";
+import GalleryLightbox from "../../components/publico/GalleryLightbox/GalleryLightbox.jsx";
 import styles from "./Galeria.module.css";
 
 export default function Galeria() {
   const [indiceActiva, setIndiceActiva] = useState(null);
-
-  useEffect(() => {
-    if (indiceActiva === null) return;
-
-    const manejarTeclado = (evento) => {
-      if (evento.key === "Escape") setIndiceActiva(null);
-      if (evento.key === "ArrowRight") siguiente();
-      if (evento.key === "ArrowLeft") anterior();
-    };
-
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", manejarTeclado);
-
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", manejarTeclado);
-    };
-  }, [indiceActiva]);
-
-  const anterior = () =>
-    setIndiceActiva(
-      (actual) => (actual - 1 + imagenesGaleria.length) % imagenesGaleria.length
-    );
-
-  const siguiente = () =>
-    setIndiceActiva((actual) => (actual + 1) % imagenesGaleria.length);
 
   return (
     <section className={styles.raiz}>
@@ -59,59 +33,12 @@ export default function Galeria() {
         ))}
       </div>
 
-      {indiceActiva !== null && (
-        <div
-          className={styles.overlay}
-          onClick={() => setIndiceActiva(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Visor de galería"
-        >
-          <div
-            className={styles.lightbox}
-            onClick={(evento) => evento.stopPropagation()}
-          >
-            <button
-              type="button"
-              className={styles.cerrar}
-              onClick={() => setIndiceActiva(null)}
-              aria-label="Cerrar visor"
-            >
-              <X className={styles.botonIcono} aria-hidden="true" />
-            </button>
-
-            <button
-              type="button"
-              className={styles.flecha}
-              onClick={anterior}
-              aria-label="Imagen anterior"
-            >
-              <ChevronLeft className={styles.botonIcono} aria-hidden="true" />
-            </button>
-
-            <figure className={styles.figura}>
-              <img
-                src={imagenesGaleria[indiceActiva].ruta}
-                alt={imagenesGaleria[indiceActiva].titulo}
-                className={styles.imagen}
-              />
-              <figcaption className={styles.caption}>
-                <strong>{imagenesGaleria[indiceActiva].titulo}</strong>
-                <span>{imagenesGaleria[indiceActiva].descripcion}</span>
-              </figcaption>
-            </figure>
-
-            <button
-              type="button"
-              className={styles.flecha}
-              onClick={siguiente}
-              aria-label="Imagen siguiente"
-            >
-              <ChevronRight className={styles.botonIcono} aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-      )}
+      <GalleryLightbox
+        imagenes={imagenesGaleria}
+        indiceActiva={indiceActiva}
+        onCerrar={() => setIndiceActiva(null)}
+        onCambiarIndice={setIndiceActiva}
+      />
     </section>
   );
 }
