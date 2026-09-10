@@ -16,162 +16,163 @@
   }
 }
 
-/* ── Carrusel Superior de Fotos de Galería ── */
+/* ── Carrusel Continuo de Eventos (Movimiento de Izquierda a Derecha) ── */
 .carruselHero {
   position: relative;
   width: 100%;
-  height: 240px;
+  overflow: hidden;
+  margin-bottom: 32px;
+  padding: 8px 0;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+}
+
+.carruselPista {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: carruselIzquierdaADerecha 45s linear infinite;
+  will-change: transform;
+}
+
+.carruselPista:hover {
+  animation-play-state: paused;
+}
+
+@keyframes carruselIzquierdaADerecha {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.carruselCard {
+  position: relative;
+  flex: 0 0 310px;
+  height: 220px;
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  margin-bottom: 28px;
   box-shadow: var(--shadow-card);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
   background-color: var(--obs-navy);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  user-select: none;
 }
 
 @media (min-width: 640px) {
-  .carruselHero {
-    height: 320px;
+  .carruselCard {
+    flex: 0 0 340px;
+    height: 230px;
+    padding: 18px;
   }
 }
 
-@media (min-width: 1024px) {
-  .carruselHero {
-    height: 380px;
-  }
+.carruselCard:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-floating);
 }
 
-.carruselSlides {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.carruselSlide {
+.carruselCardImg {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: none;
-}
-
-.carruselSlideActivo {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.carruselImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  transition: transform 0.4s ease;
 }
 
-.carruselOverlay {
+.carruselCard:hover .carruselCardImg {
+  transform: scale(1.06);
+}
+
+.carruselCardOverlay {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 32px 24px 20px;
+  inset: 0;
   background: linear-gradient(
     to top,
-    rgba(11, 30, 77, 0.85) 0%,
-    rgba(11, 30, 77, 0.4) 60%,
-    transparent 100%
+    rgba(11, 30, 77, 0.95) 0%,
+    rgba(11, 30, 77, 0.6) 45%,
+    rgba(11, 30, 77, 0.15) 100%
   );
-  color: white;
+  z-index: 1;
+}
+
+.carruselCardBadges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+}
+
+.carruselCardBody {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
+  gap: 6px;
+}
+
+.carruselCardTitulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  line-height: 1.3;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.carruselCardMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.carruselCardMetaItem {
+  display: inline-flex;
+  align-items: center;
   gap: 4px;
 }
 
-@media (min-width: 640px) {
-  .carruselOverlay {
-    padding: 40px 32px 24px;
+.carruselCardIcono {
+  width: 13px;
+  height: 13px;
+  color: var(--obs-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carruselPista {
+    animation: none;
+    overflow-x: auto;
   }
-}
-
-.carruselTitulo {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-@media (min-width: 640px) {
-  .carruselTitulo {
-    font-size: 1.5rem;
-  }
-}
-
-.carruselDesc {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0;
-  max-width: 600px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-}
-
-.carruselFlecha {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  background-color: rgba(11, 30, 77, 0.6);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: background-color 0.2s, transform 0.2s;
-}
-
-.carruselFlecha:hover {
-  background-color: rgba(11, 30, 77, 0.9);
-  transform: translateY(-50%) scale(1.05);
-}
-
-.carruselFlechaIzq {
-  left: 16px;
-}
-
-.carruselFlechaDer {
-  right: 16px;
-}
-
-.carruselIcono {
-  width: 22px;
-  height: 22px;
-}
-
-.carruselDots {
-  position: absolute;
-  bottom: 12px;
-  right: 24px;
-  display: flex;
-  gap: 8px;
-  z-index: 10;
-}
-
-.carruselDot {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-full);
-  background-color: rgba(255, 255, 255, 0.45);
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.25s ease;
-}
-
-.carruselDotActivo {
-  width: 28px;
-  background-color: var(--obs-gold);
 }
 
 /* ── Encabezado ── */

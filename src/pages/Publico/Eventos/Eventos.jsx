@@ -1,92 +1,92 @@
-import { useState, useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState, useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   Clock,
   CalendarDays,
   MapPin,
   Calendar,
   RotateCcw,
-  ChevronLeft,
-  ChevronRight,
   ChevronDown,
 } from "lucide-react";
 import Button from "../../../components/common/Button/Button.jsx";
 import BuscadorSelect from "../../../components/common/BuscadorSelect/BuscadorSelect.jsx";
 import { useEventosContext } from "../../../context/EventosContext.jsx";
-import { imagenesGaleria } from "../../../data/galeria.js";
 import { formatearFecha, formatearHora } from "../../../utils/formato.js";
 import estilos from "./Eventos.module.css";
 
-/* ── Carrusel Superior de Fotos de Galería ── */
-function CarruselSuperior() {
-  const [actual, setActual] = useState(0);
-  const total = imagenesGaleria.length;
+/* ── Carrusel Continuo de Eventos (Movimiento de Izquierda a Derecha) ── */
+function CarruselSuperior({ eventos }) {
+  const eventosCarrusel = useMemo(() => {
+    return eventos.filter((e) => e.imagen && e.estado !== "borrador");
+  }, [eventos]);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActual((prev) => (prev + 1) % total);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [total]);
+  const itemsDuplicados = useMemo(() => {
+    if (eventosCarrusel.length === 0) return [];
+    let base = [...eventosCarrusel];
+    while (base.length < 10) {
+      base = [...base, ...eventosCarrusel];
+    }
+    return [...base, ...base];
+  }, [eventosCarrusel]);
 
-  const anterior = () => setActual((prev) => (prev - 1 + total) % total);
-  const siguiente = () => setActual((prev) => (prev + 1) % total);
-
-  if (total === 0) return null;
+  if (eventosCarrusel.length === 0) return null;
 
   return (
-    <div className={estilos.carruselHero} aria-roledescription="carousel" aria-label="Fotos del Observatorio">
-      <div className={estilos.carruselSlides}>
-        {imagenesGaleria.map((img, index) => (
-          <div
-            key={img.id}
-            className={`${estilos.carruselSlide} ${
-              index === actual ? estilos.carruselSlideActivo : ""
-            }`}
+    <div
+      className={estilos.carruselHero}
+      aria-label="Eventos del Observatorio en movimiento continuo de izquierda a derecha"
+    >
+      <div className={estilos.carruselPista}>
+        {itemsDuplicados.map((evento, index) => (
+          <Link
+            key={`${evento.id}-${index}`}
+            to={`/eventos/${evento.id}`}
+            className={estilos.carruselCard}
+            title={`Ver detalles de ${evento.titulo}`}
           >
             <img
-              src={img.ruta}
-              alt={img.titulo}
-              className={estilos.carruselImg}
-              loading={index === 0 ? "eager" : "lazy"}
+              src={evento.imagen}
+              alt={evento.titulo}
+              className={estilos.carruselCardImg}
+              loading="lazy"
             />
-            <div className={estilos.carruselOverlay}>
-              <h3 className={estilos.carruselTitulo}>{img.titulo}</h3>
-              <p className={estilos.carruselDesc}>{img.descripcion}</p>
+            <div className={estilos.carruselCardOverlay} />
+
+            <div className={estilos.carruselCardBadges}>
+              <span
+                className={
+                  evento.estado === "publicado"
+                    ? estilos.badgePublicado
+                    : estilos.badgeCancelado
+                }
+              >
+                {evento.estado === "publicado" ? "Publicado" : "Cancelado"}
+              </span>
+              <span
+                className={
+                  evento.tipo === "semillero"
+                    ? estilos.badgeSemillero
+                    : estilos.badgeAbierto
+                }
+              >
+                {evento.tipo === "semillero" ? "Semillero" : "Abierto"}
+              </span>
             </div>
-          </div>
-        ))}
-      </div>
 
-      <button
-        type="button"
-        className={`${estilos.carruselFlecha} ${estilos.carruselFlechaIzq}`}
-        onClick={anterior}
-        aria-label="Ver foto anterior"
-      >
-        <ChevronLeft className={estilos.carruselIcono} aria-hidden="true" />
-      </button>
-
-      <button
-        type="button"
-        className={`${estilos.carruselFlecha} ${estilos.carruselFlechaDer}`}
-        onClick={siguiente}
-        aria-label="Ver foto siguiente"
-      >
-        <ChevronRight className={estilos.carruselIcono} aria-hidden="true" />
-      </button>
-
-      <div className={estilos.carruselDots}>
-        {imagenesGaleria.map((img, idx) => (
-          <button
-            key={img.id}
-            type="button"
-            className={`${estilos.carruselDot} ${
-              idx === actual ? estilos.carruselDotActivo : ""
-            }`}
-            onClick={() => setActual(idx)}
-            aria-label={`Ir a foto ${idx + 1}: ${img.titulo}`}
-          />
+            <div className={estilos.carruselCardBody}>
+              <h3 className={estilos.carruselCardTitulo}>{evento.titulo}</h3>
+              <div className={estilos.carruselCardMeta}>
+                <span className={estilos.carruselCardMetaItem}>
+                  <Calendar className={estilos.carruselCardIcono} aria-hidden="true" />
+                  {formatearFecha(evento.fecha)}
+                </span>
+                <span className={estilos.carruselCardMetaItem}>
+                  <Clock className={estilos.carruselCardIcono} aria-hidden="true" />
+                  {formatearHora(evento.hora)}
+                </span>
+              </div>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
@@ -196,8 +196,8 @@ export default function Eventos() {
 
   return (
     <section className={estilos.raiz}>
-      {/* 1. Carrusel de fotos de galería encima del encabezado */}
-      <CarruselSuperior />
+      {/* 1. Carrusel continuo de fotos de eventos (movimiento de izquierda a derecha) */}
+      <CarruselSuperior eventos={eventos} />
 
       {/* 2. Encabezado de la sección */}
       <div className={estilos.headerSeccion}>
