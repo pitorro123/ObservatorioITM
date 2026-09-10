@@ -24,7 +24,7 @@
 /* ── Panel lateral ── */
 .panel {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
   display: flex;
   flex-direction: column;
@@ -41,7 +41,7 @@
 }
 
 .panelClosed {
-  transform: translateX(100%);
+  transform: translateX(-100%);
 }
 
 /* ── Cabecera del panel ── */
@@ -98,8 +98,3 @@
   color: var(--obs-blue);
 }
 
-@media (min-width: 1024px) {
-  .overlay {
-    display: none;
-  }
-}
