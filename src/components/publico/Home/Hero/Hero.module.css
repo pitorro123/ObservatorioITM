@@ -110,6 +110,18 @@
   }
 }
 
+@media (min-width: 3600px) {
+  .textBlock {
+    max-width: 2400px;
+  }
+}
+
+@media (min-width: 5000px) {
+  .textBlock {
+    max-width: 3400px;
+  }
+}
+
 .description {
   margin-top: 20px;
   max-width: 560px;

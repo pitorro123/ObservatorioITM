@@ -144,8 +144,23 @@
   }
 }
 
+/* ── Zoom 50% (~3600px - 4800px) ── */
 @media (min-width: 3600px) {
   :root {
-    --max-width: 3200px;
+    --max-width: 3400px;
+  }
+}
+
+/* ── Zoom 33% (~5000px+) ── */
+@media (min-width: 5000px) {
+  :root {
+    --max-width: 4800px;
+  }
+}
+
+/* ── Zoom 25% / 8K (~6800px+) ── */
+@media (min-width: 6800px) {
+  :root {
+    --max-width: 6200px;
   }
 }

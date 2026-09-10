@@ -26,9 +26,24 @@ html {
   }
 }
 
+/* ── Zoom 50% (~3600px - 4800px) ── */
 @media (min-width: 3600px) {
   html {
-    font-size: 24px;
+    font-size: 28px;
+  }
+}
+
+/* ── Zoom 33% (~5000px+) ── */
+@media (min-width: 5000px) {
+  html {
+    font-size: 38px;
+  }
+}
+
+/* ── Zoom 25% / 8K (~6800px+) ── */
+@media (min-width: 6800px) {
+  html {
+    font-size: 48px;
   }
 }
 

@@ -169,3 +169,23 @@
 .navLinkActive::after {
   width: 100%;
 }
+
+@media (min-width: 3600px) {
+  .logoImg {
+    height: 110px;
+  }
+
+  .navDesktop {
+    gap: 60px;
+  }
+}
+
+@media (min-width: 5000px) {
+  .logoImg {
+    height: 140px;
+  }
+
+  .navDesktop {
+    gap: 80px;
+  }
+}
