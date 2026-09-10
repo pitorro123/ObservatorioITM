@@ -8,7 +8,7 @@ export const RUTAS = {
   FEEDBACK: "/admin/feedback",
 };
 
-export const MENU_ADMIN = [
+export const ENLACES_NAVEGACION = [
   { etiqueta: "Dashboard", ruta: RUTAS.DASHBOARD, icono: "LayoutGrid", roles: ["Administrador", "Docente"] },
   { etiqueta: "Eventos", ruta: RUTAS.EVENTOS, icono: "CalendarDays", roles: ["Administrador", "Docente"] },
   { etiqueta: "Asistencia", ruta: RUTAS.ASISTENCIA, icono: "ClipboardCheck", roles: ["Administrador", "Docente"] },
@@ -17,5 +17,3 @@ export const MENU_ADMIN = [
   { etiqueta: "Contenido", ruta: RUTAS.CONTENIDO, icono: "FileEdit", roles: ["Administrador", "Docente"] },
   { etiqueta: "Feedback", ruta: RUTAS.FEEDBACK, icono: "Grid3x3", roles: ["Administrador", "Docente"] },
 ];
-
-export const ENLACES_NAVEGACION = MENU_ADMIN;
