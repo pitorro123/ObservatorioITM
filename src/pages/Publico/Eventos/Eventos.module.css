@@ -36,18 +36,26 @@
   line-height: 1.6;
 }
 
-.sinEventos {
-  margin-top: 32px;
-  padding: 48px 24px;
-  border-radius: var(--radius-2xl);
+/* ── Panel de Filtros ── */
+.panelFiltros {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 20px;
   background-color: var(--obs-skyLight);
-  text-align: center;
-  color: var(--slate-600);
-  font-size: 0.875rem;
+  border-radius: var(--radius-xl);
 }
 
-.filtros {
-  margin-top: 24px;
+@media (min-width: 1024px) {
+  .panelFiltros {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.filtrosCategorias {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -56,7 +64,7 @@
 .filtro {
   padding: 8px 16px;
   border-radius: 999px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   background-color: white;
   color: var(--slate-600);
   font-size: 0.875rem;
@@ -78,6 +86,160 @@
 
 .filtroActivo:hover {
   color: white;
+}
+
+/* ── Filtros por Fecha ── */
+.seccionFechas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.grupoFechas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.campoFecha {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: white;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campoFecha:hover {
+  border-color: var(--obs-navy);
+}
+
+.campoFecha:focus-within {
+  border-color: var(--obs-blue);
+  box-shadow: 0 0 0 3px rgba(30, 79, 217, 0.15);
+}
+
+.labelFecha {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--obs-navy);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.iconoCampo {
+  width: 16px;
+  height: 16px;
+  color: var(--obs-blue);
+  flex-shrink: 0;
+}
+
+.inputFecha {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--color-texto-principal);
+  cursor: pointer;
+}
+
+.inputFecha::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.inputFecha::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* ── Botón Deshacer ── */
+.btnDeshacer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  color: var(--slate-400);
+  cursor: not-allowed;
+  opacity: 0.55;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btnDeshacerActivo {
+  opacity: 1;
+  cursor: pointer;
+  color: var(--obs-navy);
+  border-color: var(--obs-navy);
+}
+
+.btnDeshacerActivo:hover {
+  background-color: var(--obs-navy);
+  color: white;
+  border-color: var(--obs-navy);
+}
+
+.iconoDeshacer {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.25s ease;
+}
+
+.btnDeshacerActivo:hover .iconoDeshacer {
+  transform: rotate(-90deg);
+}
+
+/* ── Estado vacío ── */
+.sinEventos {
+  margin-top: 32px;
+  padding: 48px 24px;
+  border-radius: var(--radius-2xl);
+  background-color: var(--obs-skyLight);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.sinEventosTexto {
+  color: var(--slate-600);
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.btnRestablecerVacio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-lg);
+  background-color: var(--obs-navy);
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnRestablecerVacio:hover {
+  background-color: var(--obs-bluemed);
 }
 
 .grid {
