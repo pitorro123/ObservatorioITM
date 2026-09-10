@@ -1,156 +1,304 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Clock, CalendarDays, MapPin, RotateCcw } from "lucide-react";
+import {
+  Clock,
+  CalendarDays,
+  MapPin,
+  Calendar,
+  RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+} from "lucide-react";
 import Button from "../../../components/common/Button/Button.jsx";
+import BuscadorSelect from "../../../components/common/BuscadorSelect/BuscadorSelect.jsx";
 import { useEventosContext } from "../../../context/EventosContext.jsx";
+import { imagenesGaleria } from "../../../data/galeria.js";
 import { formatearFecha, formatearHora } from "../../../utils/formato.js";
 import estilos from "./Eventos.module.css";
 
-export default function Eventos() {
-  const { eventosPublicados } = useEventosContext();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [filtro, setFiltro] = useState(searchParams.get("tipo") || "todos");
-  const [fechaDesde, setFechaDesde] = useState(searchParams.get("desde") || "");
-  const [fechaHasta, setFechaHasta] = useState(searchParams.get("hasta") || "");
+/* ── Carrusel Superior de Fotos de Galería ── */
+function CarruselSuperior() {
+  const [actual, setActual] = useState(0);
+  const total = imagenesGaleria.length;
 
-  const actualizarParams = (nuevoTipo, nuevaDesde, nuevaHasta) => {
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActual((prev) => (prev + 1) % total);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [total]);
+
+  const anterior = () => setActual((prev) => (prev - 1 + total) % total);
+  const siguiente = () => setActual((prev) => (prev + 1) % total);
+
+  if (total === 0) return null;
+
+  return (
+    <div className={estilos.carruselHero} aria-roledescription="carousel" aria-label="Fotos del Observatorio">
+      <div className={estilos.carruselSlides}>
+        {imagenesGaleria.map((img, index) => (
+          <div
+            key={img.id}
+            className={`${estilos.carruselSlide} ${
+              index === actual ? estilos.carruselSlideActivo : ""
+            }`}
+          >
+            <img
+              src={img.ruta}
+              alt={img.titulo}
+              className={estilos.carruselImg}
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+            <div className={estilos.carruselOverlay}>
+              <h3 className={estilos.carruselTitulo}>{img.titulo}</h3>
+              <p className={estilos.carruselDesc}>{img.descripcion}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        className={`${estilos.carruselFlecha} ${estilos.carruselFlechaIzq}`}
+        onClick={anterior}
+        aria-label="Ver foto anterior"
+      >
+        <ChevronLeft className={estilos.carruselIcono} aria-hidden="true" />
+      </button>
+
+      <button
+        type="button"
+        className={`${estilos.carruselFlecha} ${estilos.carruselFlechaDer}`}
+        onClick={siguiente}
+        aria-label="Ver foto siguiente"
+      >
+        <ChevronRight className={estilos.carruselIcono} aria-hidden="true" />
+      </button>
+
+      <div className={estilos.carruselDots}>
+        {imagenesGaleria.map((img, idx) => (
+          <button
+            key={img.id}
+            type="button"
+            className={`${estilos.carruselDot} ${
+              idx === actual ? estilos.carruselDotActivo : ""
+            }`}
+            onClick={() => setActual(idx)}
+            aria-label={`Ir a foto ${idx + 1}: ${img.titulo}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function Eventos() {
+  const { eventos } = useEventosContext();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Estados de filtros
+  const [eventoSeleccionadoId, setEventoSeleccionadoId] = useState(
+    searchParams.get("evento") || ""
+  );
+  const [tipoSeleccionado, setTipoSeleccionado] = useState(
+    searchParams.get("tipo") || "todos"
+  );
+  const [estadoSeleccionado, setEstadoSeleccionado] = useState(
+    searchParams.get("estado") || "todos"
+  );
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(
+    searchParams.get("fecha") || ""
+  );
+
+  // Sincronizar parámetros con la URL
+  const actualizarParams = (eventoId, tipo, estado, fecha) => {
     const params = {};
-    if (nuevoTipo && nuevoTipo !== "todos") params.tipo = nuevoTipo;
-    if (nuevaDesde) params.desde = nuevaDesde;
-    if (nuevaHasta) params.hasta = nuevaHasta;
+    if (eventoId) params.evento = eventoId;
+    if (tipo && tipo !== "todos") params.tipo = tipo;
+    if (estado && estado !== "todos") params.estado = estado;
+    if (fecha) params.fecha = fecha;
     setSearchParams(params, { replace: true });
   };
 
-  const cambiarFiltro = (clave) => {
-    setFiltro(clave);
-    actualizarParams(clave, fechaDesde, fechaHasta);
+  const cambiarEvento = (valor) => {
+    setEventoSeleccionadoId(valor);
+    actualizarParams(valor, tipoSeleccionado, estadoSeleccionado, fechaSeleccionada);
   };
 
-  const cambiarFechaDesde = (valor) => {
-    setFechaDesde(valor);
-    actualizarParams(filtro, valor, fechaHasta);
+  const cambiarTipo = (valor) => {
+    setTipoSeleccionado(valor);
+    actualizarParams(eventoSeleccionadoId, valor, estadoSeleccionado, fechaSeleccionada);
   };
 
-  const cambiarFechaHasta = (valor) => {
-    setFechaHasta(valor);
-    actualizarParams(filtro, fechaDesde, valor);
+  const cambiarEstado = (valor) => {
+    setEstadoSeleccionado(valor);
+    actualizarParams(eventoSeleccionadoId, tipoSeleccionado, valor, fechaSeleccionada);
   };
 
-  const hayFiltrosActivos = filtro !== "todos" || Boolean(fechaDesde) || Boolean(fechaHasta);
+  const cambiarFecha = (valor) => {
+    setFechaSeleccionada(valor);
+    actualizarParams(eventoSeleccionadoId, tipoSeleccionado, estadoSeleccionado, valor);
+  };
 
-  const deshacerCambios = () => {
-    setFiltro("todos");
-    setFechaDesde("");
-    setFechaHasta("");
+  const hayFiltrosActivos =
+    Boolean(eventoSeleccionadoId) ||
+    tipoSeleccionado !== "todos" ||
+    estadoSeleccionado !== "todos" ||
+    Boolean(fechaSeleccionada);
+
+  const limpiarFiltros = () => {
+    setEventoSeleccionadoId("");
+    setTipoSeleccionado("todos");
+    setEstadoSeleccionado("todos");
+    setFechaSeleccionada("");
     setSearchParams({}, { replace: true });
   };
 
-  // Filtrado por fecha
-  const eventosPorFecha = eventosPublicados.filter((e) => {
-    if (fechaDesde && e.fecha < fechaDesde) return false;
-    if (fechaHasta && e.fecha > fechaHasta) return false;
-    return true;
-  });
+  // Eventos disponibles para el público (por defecto publicados y cancelados)
+  const eventosBase = useMemo(() => {
+    return eventos.filter((e) => e.estado !== "borrador");
+  }, [eventos]);
 
-  const filtros = [
-    { clave: "todos", etiqueta: "Todos", conteo: eventosPorFecha.length },
-    {
-      clave: "semillero",
-      etiqueta: "Semillero",
-      conteo: eventosPorFecha.filter((e) => e.tipo === "semillero").length,
-    },
-    {
-      clave: "abierto",
-      etiqueta: "Abiertos a la comunidad",
-      conteo: eventosPorFecha.filter((e) => e.tipo === "abierto").length,
-    },
-  ];
+  // Opciones para el BuscadorSelect
+  const opcionesEventos = useMemo(() => {
+    return [
+      { valor: "", etiqueta: "Todos los eventos" },
+      ...eventosBase.map((e) => ({
+        valor: String(e.id),
+        etiqueta: e.titulo,
+      })),
+    ];
+  }, [eventosBase]);
 
-  const eventosVisibles = eventosPorFecha.filter((e) => {
-    if (filtro !== "todos" && e.tipo !== filtro) return false;
-    return true;
-  });
+  // Filtrado de eventos
+  const eventosVisibles = useMemo(() => {
+    return eventosBase.filter((e) => {
+      // 1. Filtro por buscador desplegable
+      if (eventoSeleccionadoId && String(e.id) !== String(eventoSeleccionadoId)) {
+        return false;
+      }
+      // 2. Filtro por tipo
+      if (tipoSeleccionado !== "todos" && e.tipo !== tipoSeleccionado) {
+        return false;
+      }
+      // 3. Filtro por estado
+      if (estadoSeleccionado !== "todos" && e.estado !== estadoSeleccionado) {
+        return false;
+      }
+      // 4. Filtro por fecha
+      if (fechaSeleccionada && e.fecha !== fechaSeleccionada) {
+        return false;
+      }
+      return true;
+    });
+  }, [eventosBase, eventoSeleccionadoId, tipoSeleccionado, estadoSeleccionado, fechaSeleccionada]);
 
   return (
     <section className={estilos.raiz}>
-      <h1 className={estilos.title}>Eventos</h1>
-      <p className={estilos.subtitle}>
-        Consulta el calendario de observaciones, conferencias y talleres abiertos a
-        la comunidad.
-      </p>
+      {/* 1. Carrusel de fotos de galería encima del encabezado */}
+      <CarruselSuperior />
 
-      {/* Controles de filtros */}
-      <div className={estilos.panelFiltros}>
-        <div className={estilos.filtrosCategorias} role="tablist" aria-label="Filtrar eventos">
-          {filtros.map((f) => {
-            const activo = filtro === f.clave;
-            return (
-              <button
-                key={f.clave}
-                type="button"
-                role="tab"
-                aria-selected={activo}
-                className={activo ? `${estilos.filtro} ${estilos.filtroActivo}` : estilos.filtro}
-                onClick={() => cambiarFiltro(f.clave)}
-              >
-                {f.etiqueta} ({f.conteo})
-              </button>
-            );
-          })}
+      {/* 2. Encabezado de la sección */}
+      <div className={estilos.headerSeccion}>
+        <h1 className={estilos.title}>Eventos</h1>
+        <p className={estilos.subtitle}>
+          Consulta el calendario de observaciones, conferencias y talleres abiertos a
+          la comunidad.
+        </p>
+      </div>
+
+      {/* 3. Apartado de Filtros Unificado */}
+      <div className={estilos.barraFiltros}>
+        {/* Buscador desplegable escribible */}
+        <div className={estilos.campoFiltroBuscador}>
+          <label className={estilos.labelFiltro}>Buscar evento:</label>
+          <BuscadorSelect
+            opciones={opcionesEventos}
+            valor={eventoSeleccionadoId}
+            onCambio={cambiarEvento}
+            placeholder="Escribe o selecciona..."
+          />
         </div>
 
-        <div className={estilos.seccionFechas}>
-          <div className={estilos.grupoFechas}>
-            <div
-              className={estilos.campoFecha}
-              onClick={(e) => e.currentTarget.querySelector("input")?.showPicker?.()}
+        {/* Tipo de evento */}
+        <div className={estilos.campoFiltro}>
+          <label htmlFor="filtro-tipo" className={estilos.labelFiltro}>
+            Tipo de evento:
+          </label>
+          <div className={estilos.selectWrap}>
+            <select
+              id="filtro-tipo"
+              className={estilos.select}
+              value={tipoSeleccionado}
+              onChange={(e) => cambiarTipo(e.target.value)}
             >
-              <label htmlFor="filtro-desde" className={estilos.labelFecha}>
-                <CalendarDays className={estilos.iconoCampo} aria-hidden="true" />
-                <span>Desde:</span>
-              </label>
-              <input
-                id="filtro-desde"
-                type="date"
-                className={estilos.inputFecha}
-                value={fechaDesde}
-                max={fechaHasta || undefined}
-                onChange={(e) => cambiarFechaDesde(e.target.value)}
-              />
-            </div>
-
-            <div
-              className={estilos.campoFecha}
-              onClick={(e) => e.currentTarget.querySelector("input")?.showPicker?.()}
-            >
-              <label htmlFor="filtro-hasta" className={estilos.labelFecha}>
-                <CalendarDays className={estilos.iconoCampo} aria-hidden="true" />
-                <span>Hasta:</span>
-              </label>
-              <input
-                id="filtro-hasta"
-                type="date"
-                className={estilos.inputFecha}
-                value={fechaHasta}
-                min={fechaDesde || undefined}
-                onChange={(e) => cambiarFechaHasta(e.target.value)}
-              />
-            </div>
+              <option value="todos">Todos los tipos</option>
+              <option value="semillero">Semillero</option>
+              <option value="abierto">Abiertos a la comunidad</option>
+            </select>
+            <ChevronDown className={estilos.selectChevron} aria-hidden="true" />
           </div>
+        </div>
 
+        {/* Estado del evento */}
+        <div className={estilos.campoFiltro}>
+          <label htmlFor="filtro-estado" className={estilos.labelFiltro}>
+            Estado:
+          </label>
+          <div className={estilos.selectWrap}>
+            <select
+              id="filtro-estado"
+              className={estilos.select}
+              value={estadoSeleccionado}
+              onChange={(e) => cambiarEstado(e.target.value)}
+            >
+              <option value="todos">Todos los estados</option>
+              <option value="publicado">Publicado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+            <ChevronDown className={estilos.selectChevron} aria-hidden="true" />
+          </div>
+        </div>
+
+        {/* Fecha con calendario */}
+        <div className={estilos.campoFiltro}>
+          <label htmlFor="filtro-fecha" className={estilos.labelFiltro}>
+            Fecha:
+          </label>
+          <div
+            className={estilos.campoFechaWrap}
+            onClick={(e) => e.currentTarget.querySelector("input")?.showPicker?.()}
+          >
+            <Calendar className={estilos.iconoFecha} aria-hidden="true" />
+            <input
+              id="filtro-fecha"
+              type="date"
+              className={estilos.inputFecha}
+              value={fechaSeleccionada}
+              onChange={(e) => cambiarFecha(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Botón Limpiar filtros */}
+        <div className={estilos.campoFiltroAccion}>
           <button
             type="button"
-            className={`${estilos.btnDeshacer} ${hayFiltrosActivos ? estilos.btnDeshacerActivo : ""}`}
-            onClick={deshacerCambios}
+            className={`${estilos.btnLimpiar} ${
+              hayFiltrosActivos ? estilos.btnLimpiarActivo : ""
+            }`}
+            onClick={limpiarFiltros}
             disabled={!hayFiltrosActivos}
-            title={hayFiltrosActivos ? "Deshacer todos los filtros" : "No hay filtros aplicados"}
+            title={hayFiltrosActivos ? "Limpiar todos los filtros" : "Sin filtros aplicados"}
           >
-            <RotateCcw className={estilos.iconoDeshacer} aria-hidden="true" />
-            <span>Deshacer cambios</span>
+            <RotateCcw className={estilos.iconoLimpiar} aria-hidden="true" />
+            <span>Limpiar filtros</span>
           </button>
         </div>
       </div>
 
+      {/* 4. Listado de eventos o estado vacío */}
       {eventosVisibles.length === 0 ? (
         <div className={estilos.sinEventos}>
           <p className={estilos.sinEventosTexto}>
@@ -160,10 +308,10 @@ export default function Eventos() {
             <button
               type="button"
               className={estilos.btnRestablecerVacio}
-              onClick={deshacerCambios}
+              onClick={limpiarFiltros}
             >
-              <RotateCcw className={estilos.iconoDeshacer} aria-hidden="true" />
-              Restablecer filtros y ver todos
+              <RotateCcw className={estilos.iconoLimpiar} aria-hidden="true" />
+              Limpiar filtros y ver todos
             </button>
           )}
         </div>
@@ -178,12 +326,67 @@ export default function Eventos() {
                     alt={evento.titulo}
                     className={estilos.cardImage}
                   />
-                  {evento.tipo === "semillero" && (
-                    <span className={estilos.badgeSemillero}>Semillero</span>
-                  )}
+                  {/* Badges de estado y tipo sobre la imagen */}
+                  <div className={estilos.cardBadges}>
+                    <span
+                      className={
+                        evento.estado === "publicado"
+                          ? estilos.badgePublicado
+                          : evento.estado === "cancelado"
+                            ? estilos.badgeCancelado
+                            : estilos.badgeBorrador
+                      }
+                    >
+                      {evento.estado === "publicado"
+                        ? "Publicado"
+                        : evento.estado === "cancelado"
+                          ? "Cancelado"
+                          : "Borrador"}
+                    </span>
+                    <span
+                      className={
+                        evento.tipo === "semillero"
+                          ? estilos.badgeSemillero
+                          : estilos.badgeAbierto
+                      }
+                    >
+                      {evento.tipo === "semillero" ? "Semillero" : "Abierto"}
+                    </span>
+                  </div>
                 </div>
               )}
+
               <div className={estilos.cardBody}>
+                {/* Si no hay imagen, mostrar los badges en el encabezado de la tarjeta */}
+                {!evento.imagen && (
+                  <div className={estilos.cardBadgesHeader}>
+                    <span
+                      className={
+                        evento.estado === "publicado"
+                          ? estilos.badgePublicado
+                          : evento.estado === "cancelado"
+                            ? estilos.badgeCancelado
+                            : estilos.badgeBorrador
+                      }
+                    >
+                      {evento.estado === "publicado"
+                        ? "Publicado"
+                        : evento.estado === "cancelado"
+                          ? "Cancelado"
+                          : "Borrador"}
+                    </span>
+                    <span
+                      className={
+                        evento.tipo === "semillero"
+                          ? estilos.badgeSemillero
+                          : estilos.badgeAbierto
+                      }
+                    >
+                      {evento.tipo === "semillero" ? "Semillero" : "Abierto"}
+                    </span>
+                  </div>
+                )}
+
                 <h2 className={estilos.cardTitle}>{evento.titulo}</h2>
                 <p className={estilos.cardDesc}>{evento.descripcion}</p>
 
@@ -202,7 +405,11 @@ export default function Eventos() {
                   </li>
                 </ul>
 
-                <Button to={`/eventos/${evento.id}`} variant="primary" className={estilos.cardBtn}>
+                <Button
+                  to={`/eventos/${evento.id}`}
+                  variant="primary"
+                  className={estilos.cardBtn}
+                >
                   Ver detalle
                 </Button>
               </div>

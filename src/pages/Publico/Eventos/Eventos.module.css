@@ -16,6 +16,169 @@
   }
 }
 
+/* ── Carrusel Superior de Fotos de Galería ── */
+.carruselHero {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-card);
+  background-color: var(--obs-navy);
+}
+
+@media (min-width: 640px) {
+  .carruselHero {
+    height: 320px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .carruselHero {
+    height: 380px;
+  }
+}
+
+.carruselSlides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carruselSlide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.carruselSlideActivo {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.carruselImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carruselOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px 24px 20px;
+  background: linear-gradient(
+    to top,
+    rgba(11, 30, 77, 0.85) 0%,
+    rgba(11, 30, 77, 0.4) 60%,
+    transparent 100%
+  );
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (min-width: 640px) {
+  .carruselOverlay {
+    padding: 40px 32px 24px;
+  }
+}
+
+.carruselTitulo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+@media (min-width: 640px) {
+  .carruselTitulo {
+    font-size: 1.5rem;
+  }
+}
+
+.carruselDesc {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  max-width: 600px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.carruselFlecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: rgba(11, 30, 77, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.carruselFlecha:hover {
+  background-color: rgba(11, 30, 77, 0.9);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.carruselFlechaIzq {
+  left: 16px;
+}
+
+.carruselFlechaDer {
+  right: 16px;
+}
+
+.carruselIcono {
+  width: 22px;
+  height: 22px;
+}
+
+.carruselDots {
+  position: absolute;
+  bottom: 12px;
+  right: 24px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.carruselDot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.45);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s ease;
+}
+
+.carruselDotActivo {
+  width: 28px;
+  background-color: var(--obs-gold);
+}
+
+/* ── Encabezado ── */
+.headerSeccion {
+  margin-bottom: 24px;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -29,116 +192,118 @@
 }
 
 .subtitle {
-  margin-top: 0;
+  margin-top: 4px;
   max-width: 640px;
   font-size: 0.875rem;
   color: var(--slate-600);
   line-height: 1.6;
 }
 
-/* ── Panel de Filtros ── */
-.panelFiltros {
-  margin-top: 24px;
+/* ── Barra de Filtros ── */
+.barraFiltros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 20px;
+  background-color: var(--obs-skyLight);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 32px;
+}
+
+.campoFiltroBuscador {
+  flex: 1 1 260px;
+  min-width: 220px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px 20px;
-  background-color: var(--obs-skyLight);
-  border-radius: var(--radius-xl);
-}
-
-@media (min-width: 1024px) {
-  .panelFiltros {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-.filtrosCategorias {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.filtro {
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: 1px solid #cbd5e1;
-  background-color: white;
-  color: var(--slate-600);
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.filtro:hover {
-  border-color: var(--obs-navy);
-  color: var(--obs-navy);
-}
-
-.filtroActivo {
-  background-color: var(--obs-navy);
-  border-color: var(--obs-navy);
-  color: white;
-}
-
-.filtroActivo:hover {
-  color: white;
-}
-
-/* ── Filtros por Fecha ── */
-.seccionFechas {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-
-.grupoFechas {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
-.campoFecha {
-  display: inline-flex;
-  align-items: center;
   gap: 6px;
+}
+
+.campoFiltro {
+  flex: 1 1 180px;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campoFiltroAccion {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 2px;
+}
+
+.labelFiltro {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--obs-navy);
+  user-select: none;
+}
+
+.selectWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  width: 100%;
+  appearance: none;
   background-color: white;
   border: 1px solid #cbd5e1;
   border-radius: var(--radius-lg);
-  padding: 6px 12px;
+  padding: 10px 36px 10px 14px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--color-texto-principal);
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.campoFecha:hover {
+.select:hover {
   border-color: var(--obs-navy);
 }
 
-.campoFecha:focus-within {
+.select:focus {
+  outline: none;
   border-color: var(--obs-blue);
   box-shadow: 0 0 0 3px rgba(30, 79, 217, 0.15);
 }
 
-.labelFecha {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--obs-navy);
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-}
-
-.iconoCampo {
+.selectChevron {
+  position: absolute;
+  right: 12px;
   width: 16px;
   height: 16px;
+  color: var(--slate-500);
+  pointer-events: none;
+}
+
+.campoFechaWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: white;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campoFechaWrap:hover {
+  border-color: var(--obs-navy);
+}
+
+.campoFechaWrap:focus-within {
+  border-color: var(--obs-blue);
+  box-shadow: 0 0 0 3px rgba(30, 79, 217, 0.15);
+}
+
+.iconoFecha {
+  width: 18px;
+  height: 18px;
   color: var(--obs-blue);
   flex-shrink: 0;
 }
@@ -151,56 +316,59 @@
   font-family: inherit;
   color: var(--color-texto-principal);
   cursor: pointer;
+  width: 100%;
 }
 
 .inputFecha::-webkit-calendar-picker-indicator {
   cursor: pointer;
   opacity: 0.6;
-  transition: opacity 0.2s;
 }
 
 .inputFecha::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
 
-/* ── Botón Deshacer ── */
-.btnDeshacer {
+/* ── Botón Limpiar Filtros ── */
+.btnLimpiar {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
   border-radius: var(--radius-lg);
   font-size: 0.875rem;
   font-weight: 600;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   background-color: white;
   color: var(--slate-400);
   cursor: not-allowed;
   opacity: 0.55;
   transition: all 0.2s ease;
   white-space: nowrap;
+  height: 42px;
 }
 
-.btnDeshacerActivo {
+.btnLimpiarActivo {
   opacity: 1;
   cursor: pointer;
   color: var(--obs-navy);
   border-color: var(--obs-navy);
+  background-color: white;
 }
 
-.btnDeshacerActivo:hover {
+.btnLimpiarActivo:hover {
   background-color: var(--obs-navy);
   color: white;
   border-color: var(--obs-navy);
 }
 
-.iconoDeshacer {
-  width: 15px;
-  height: 15px;
+.iconoLimpiar {
+  width: 16px;
+  height: 16px;
   transition: transform 0.25s ease;
 }
 
-.btnDeshacerActivo:hover .iconoDeshacer {
+.btnLimpiarActivo:hover .iconoLimpiar {
   transform: rotate(-90deg);
 }
 
@@ -266,26 +434,103 @@
   border-radius: var(--radius-2xl);
   background-color: white;
   box-shadow: var(--shadow-card);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-floating);
 }
 
 .cardImageWrap {
   position: relative;
-  height: 176px;
+  height: 180px;
   width: 100%;
 }
 
-.badgeSemillero {
+/* ── Badges de Estado y Tipo ── */
+.cardBadges {
   position: absolute;
   top: 12px;
   left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.cardBadgesHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.badgePublicado {
   padding: 4px 10px;
   border-radius: 999px;
-  background-color: var(--obs-gold);
-  color: var(--obs-navy);
-  font-size: 0.7rem;
+  background-color: rgba(34, 197, 94, 0.95);
+  color: white;
+  font-size: 0.725rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.badgeCancelado {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: rgba(239, 68, 68, 0.95);
+  color: white;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.badgeBorrador {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: rgba(245, 158, 11, 0.95);
+  color: white;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.badgeSemillero {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: rgba(108, 43, 217, 0.95);
+  color: white;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.badgeAbierto {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: rgba(30, 79, 217, 0.95);
+  color: white;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
 }
 
 .cardImage {
