@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Building2, Sparkles, ArrowRight, CloudRain, MapPin, Loader2 } from "lucide-react";
 import { estadoObservatorio } from "../../../../data/observatorio.js";
 import { useClima } from "../../../../hooks/useClima.js";
-import telescopioImg from "../../../../assets/images/observatorio/icons/telescopio.jpg";
+import telescopioImg from "../../../../assets/images/observatorio/icons/telescopio.png";
 import styles from "./ObservatoryStatus.module.css";
 
 export default function ObservatoryStatus() {

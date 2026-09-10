@@ -1,6 +1,6 @@
 import { Building2, Target, Eye } from "lucide-react";
 import { useContenido } from "../../context/ContenidoContext.jsx";
-import telescopioImg from "../../assets/images/observatorio/icons/telescopio.jpg";
+import telescopioImg from "../../assets/images/observatorio/icons/telescopio.png";
 import estilos from "./SobreNosotros.module.css";
 
 export default function SobreNosotros() {

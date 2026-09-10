@@ -43,28 +43,27 @@
 /* ── Header ── */
 .header {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center;
+  gap: 20px;
 }
 
 .iconCircleTelescopio {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 68px;
+  height: 68px;
   flex-shrink: 0;
-  border-radius: var(--radius-full);
-  background-color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  margin-top: 2px;
+  border-radius: var(--radius-2xl);
+  background-color: rgba(30, 79, 217, 0.25);
+  border: 1px solid rgba(76, 197, 250, 0.25);
 }
 
 .telescopioImg {
-  width: 32px;
-  height: 32px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
-  border-radius: var(--radius-full);
+  filter: drop-shadow(0 0 8px rgba(76, 197, 250, 0.4));
 }
 
 .headerText {
