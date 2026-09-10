@@ -98,3 +98,9 @@
   color: var(--obs-blue);
 }
 
+@media (min-width: 1024px) {
+  .overlay {
+    display: none;
+  }
+}
+

@@ -108,3 +108,74 @@
 .menuToggle:active {
   transform: scale(0.95);
 }
+
+@media (min-width: 1024px) {
+  .menuToggle {
+    display: none;
+  }
+}
+
+/* ── Barra blanca inferior (solo escritorio) ── */
+.bottomBar {
+  display: none;
+  border-bottom: 1px solid var(--slate-200);
+  background-color: white;
+}
+
+@media (min-width: 1024px) {
+  .bottomBar {
+    display: block;
+  }
+}
+
+.bottomBarInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 16px 32px;
+}
+
+/* ── Navegación desktop ── */
+.navDesktop {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.navLink {
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  color: var(--slate-700);
+  transition: color var(--transition-base);
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: black;
+  transition: width var(--transition-base);
+}
+
+.navLink:hover {
+  color: var(--obs-blue);
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.navLinkActive {
+  color: var(--obs-blue);
+}
+
+.navLinkActive::after {
+  width: 100%;
+}
