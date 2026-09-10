@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { User, AlertCircle, Check } from "lucide-react";
 import Header from "../../components/layout/Header/Header.jsx";
 import Notificacion from "../../components/pages/Eventos/Notificacion/Notificacion.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { RUTAS } from "../../constants/navegacion.js";
 import estilos from "./Perfil.module.css";
 
 export default function Perfil() {
   const { usuarioActual, actualizarPerfil } = useAuth();
+  const navigate = useNavigate();
 
   const [datos, setDatos] = useState(() => ({
     nombre: usuarioActual?.nombre || "",
@@ -62,6 +65,7 @@ export default function Perfil() {
     setDatos((prev) => ({ ...prev, nuevaPassword: "", confirmarPassword: "" }));
     setError("");
     setNotificacion("Perfil actualizado correctamente.");
+    navigate(RUTAS.DASHBOARD);
   };
 
   return (
