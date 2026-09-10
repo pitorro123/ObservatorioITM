@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, AlertCircle, Check } from "lucide-react";
 import Header from "../../components/layout/Header/Header.jsx";
@@ -10,6 +10,9 @@ import estilos from "./Perfil.module.css";
 export default function Perfil() {
   const { usuarioActual, actualizarPerfil } = useAuth();
   const navigate = useNavigate();
+  const temporizadorRedireccion = useRef(null);
+
+  useEffect(() => () => clearTimeout(temporizadorRedireccion.current), []);
 
   const [datos, setDatos] = useState(() => ({
     nombre: usuarioActual?.nombre || "",
@@ -65,7 +68,8 @@ export default function Perfil() {
     setDatos((prev) => ({ ...prev, nuevaPassword: "", confirmarPassword: "" }));
     setError("");
     setNotificacion("Perfil actualizado correctamente.");
-    navigate(RUTAS.DASHBOARD);
+    clearTimeout(temporizadorRedireccion.current);
+    temporizadorRedireccion.current = setTimeout(() => navigate(RUTAS.DASHBOARD), 1800);
   };
 
   return (
