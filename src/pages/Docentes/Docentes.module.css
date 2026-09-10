@@ -228,6 +228,12 @@
   border-color: #1e1e2f transparent transparent transparent;
 }
 
+@media (max-width: 768px) {
+  .botonFlotante {
+    left: 16px;
+  }
+}
+
 /* ── Modal correo enviado (HU-20) ── */
 .overlay {
   position: fixed;

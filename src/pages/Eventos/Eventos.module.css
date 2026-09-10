@@ -90,3 +90,9 @@
   border-style: solid;
   border-color: #1e1e2f transparent transparent transparent;
 }
+
+@media (max-width: 768px) {
+  .botonFlotante {
+    left: 16px;
+  }
+}
