@@ -61,6 +61,15 @@
   padding: var(--espacio-lg);
 }
 
+.errorForm {
+  padding: 10px 14px;
+  border-radius: var(--radio-md);
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: var(--texto-sm);
+}
+
 .campo {
   display: flex;
   flex-direction: column;

@@ -15,10 +15,12 @@ const formularioVacio = {
 
 export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar }) {
   const [formulario, setFormulario] = useState(formularioVacio);
+  const [error, setError] = useState("");
   const esEdicion = Boolean(evento);
 
   useEffect(() => {
     if (!abierto) return;
+    setError("");
     if (evento) {
       setFormulario({
         titulo: evento.titulo,
@@ -43,6 +45,7 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
         ? eventoInput.target.checked
         : eventoInput.target.value;
     setFormulario((prev) => ({ ...prev, [clave]: valor }));
+    if (error) setError("");
   };
 
   const manejarImagen = (eventoInput) => {
@@ -58,12 +61,37 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
   const manejarEnvio = (eventoForm) => {
     eventoForm.preventDefault();
 
+    const titulo = formulario.titulo.trim();
+    const descripcion = formulario.descripcion.trim();
+    const lugar = formulario.lugar.trim();
+
+    if (titulo.length < 3) {
+      setError("Escribe el nombre del evento (mínimo 3 caracteres).");
+      return;
+    }
+    if (descripcion.length < 10) {
+      setError("Describe la actividad del evento (mínimo 10 caracteres).");
+      return;
+    }
+    if (!formulario.fecha) {
+      setError("Selecciona la fecha del evento.");
+      return;
+    }
+    if (!formulario.hora) {
+      setError("Selecciona la hora del evento.");
+      return;
+    }
+    if (lugar.length < 3) {
+      setError("Escribe el lugar del evento.");
+      return;
+    }
+
     const datos = {
-      titulo: formulario.titulo,
-      descripcion: formulario.descripcion,
+      titulo,
+      descripcion,
       fecha: formulario.fecha,
       hora: formulario.hora,
-      lugar: formulario.lugar,
+      lugar,
       imagen: formulario.imagen,
       tipo: formulario.tipo,
       estado: formulario.publicarDirectamente ? "publicado" : "borrador",
@@ -89,7 +117,12 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
           </button>
         </div>
 
-        <form className={estilos.formulario} onSubmit={manejarEnvio}>
+        <form className={estilos.formulario} onSubmit={manejarEnvio} noValidate>
+          {error && (
+            <p className={estilos.errorForm} role="alert">
+              {error}
+            </p>
+          )}
           <div className={estilos.campo}>
             <label className={estilos.etiqueta} htmlFor="ev-titulo">
               Nombre
