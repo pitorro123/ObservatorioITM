@@ -1,5 +1,7 @@
 import fondoPortada from "../assets/images/observatorio/hero/fondo-portada.png";
 import telescopioIcon from "../assets/images/observatorio/icons/telescopio-observaciones.png";
+import talleresIcon from "../assets/images/observatorio/icons/talleres-charlas.png";
+import comunidadIcon from "../assets/images/observatorio/icons/comunidad-cientifica.png";
 
 export const contenidoPortada = {
   tituloLinea1: "Explora el universo desde",
@@ -42,6 +44,7 @@ export const porQueAsistir = {
     {
       id: 2,
       icono: "Presentation",
+      imagen: talleresIcon,
       titulo: "Charlas y Talleres",
       descripcion:
         "Participa en actividades dirigidas por docentes e investigadores.",
@@ -49,6 +52,7 @@ export const porQueAsistir = {
     {
       id: 3,
       icono: "Users",
+      imagen: comunidadIcon,
       titulo: "Comunidad Científica",
       descripcion:
         "Conecta con estudiantes interesados en la astronomía y comparte experiencias únicas.",
