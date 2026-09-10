@@ -11,6 +11,7 @@ function generarCodigoInscripcion() {
 export function EventosProvider({ children }) {
   const [eventos, setEventos] = useState(eventosIniciales);
   const [inscripciones, setInscripciones] = useState([]);
+  const [feedback, setFeedback] = useState([]);
 
   const crearEvento = (datos) => {
     const nuevoId =
@@ -172,6 +173,38 @@ export function EventosProvider({ children }) {
   const inscripcionesPorEvento = (eventoId) =>
     inscripciones.filter((i) => i.eventoId === Number(eventoId));
 
+  const agregarFeedback = ({ eventoId, nombre, calificacion, comentario }) => {
+    const nombreLimpio = (nombre || "").trim();
+
+    if (!calificacion || calificacion < 1 || calificacion > 5) {
+      return { exito: false, error: "Selecciona una calificación de 1 a 5 estrellas." };
+    }
+
+    const yaComento = feedback.some(
+      (f) =>
+        f.eventoId === Number(eventoId) &&
+        (f.nombre || "").toLowerCase() === nombreLimpio.toLowerCase()
+    );
+    if (nombreLimpio && yaComento) {
+      return { exito: false, error: "Ya enviaste tu opinión para este evento." };
+    }
+
+    const resena = {
+      id: feedback.reduce((max, f) => Math.max(max, f.id), 0) + 1,
+      eventoId: Number(eventoId),
+      nombre: nombreLimpio || "Anónimo",
+      calificacion: Number(calificacion),
+      comentario: (comentario || "").trim(),
+      fecha: new Date().toISOString(),
+    };
+
+    setFeedback((prev) => [...prev, resena]);
+    return { exito: true, resena };
+  };
+
+  const feedbackPorEvento = (eventoId) =>
+    feedback.filter((f) => f.eventoId === Number(eventoId));
+
   const value = {
     eventos,
     eventosPublicados,
@@ -188,6 +221,9 @@ export function EventosProvider({ children }) {
     obtenerInscripcion,
     marcarAsistencia,
     inscripcionesPorEvento,
+    feedback,
+    agregarFeedback,
+    feedbackPorEvento,
   };
 
   return <EventosContext.Provider value={value}>{children}</EventosContext.Provider>;

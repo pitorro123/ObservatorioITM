@@ -8,6 +8,8 @@ import {
   ChevronLeft,
   Navigation,
   Download,
+  Star,
+  MessageSquareHeart,
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useEventosContext } from "../../../context/EventosContext.jsx";
@@ -36,13 +38,19 @@ const enlaceRuta = `https://www.google.com/maps/dir/?api=1&destination=${encodeU
 
 export default function DetalleEvento() {
   const { id } = useParams();
-  const { obtenerEvento, inscribir } = useEventosContext();
+  const { obtenerEvento, inscribir, agregarFeedback, feedbackPorEvento } =
+    useEventosContext();
   const evento = obtenerEvento(id);
+  const reseñas = evento ? feedbackPorEvento(evento.id) : [];
 
   const [confirmada, setConfirmada] = useState(false);
   const [datos, setDatos] = useState({ nombre: "", correo: "", telefono: "" });
   const [inscripcion, setInscripcion] = useState(null);
   const [error, setError] = useState("");
+
+  const [opinion, setOpinion] = useState({ nombre: "", calificacion: 0, comentario: "" });
+  const [errorOpinion, setErrorOpinion] = useState("");
+  const [opinionEnviada, setOpinionEnviada] = useState(null);
 
   if (!evento || evento.estado !== "publicado") {
     return <Navigate to="/eventos" replace />;
@@ -115,6 +123,29 @@ export default function DetalleEvento() {
     enlaceDescarga.href = enlace;
     enlaceDescarga.download = `QR-${inscripcion.codigo}.png`;
     enlaceDescarga.click();
+  };
+
+  const promedio = reseñas.reduce((acc, r) => acc + r.calificacion, 0) / reseñas.length;
+
+  const manejarEnvioOpinion = (e) => {
+    e.preventDefault();
+    setErrorOpinion("");
+
+    if (!opinion.calificacion) {
+      setErrorOpinion("Selecciona una calificación de 1 a 5 estrellas.");
+      return;
+    }
+    if (opinion.comentario.trim().length > 0 && opinion.comentario.trim().length < 3) {
+      setErrorOpinion("El comentario debe tener al menos 3 caracteres.");
+      return;
+    }
+
+    const resultado = agregarFeedback({ eventoId: evento.id, ...opinion });
+    if (!resultado.exito) {
+      setErrorOpinion(resultado.error);
+      return;
+    }
+    setOpinionEnviada(resultado.resena);
   };
 
   return (
@@ -295,6 +326,133 @@ export default function DetalleEvento() {
         </div>
         </div>
       </div>
+
+      <section className={estilos.reseñas} aria-label="Opiniones sobre el evento">
+        <div className={estilos.reseñasResumen}>
+          <p className={estilos.etiquetaReseñas}>Opiniones de los asistentes</p>
+          <h2 className={estilos.tituloReseñas}>¿Qué te pareció este evento?</h2>
+          <p className={estilos.textoReseñas}>
+            Comparte tu experiencia con la comunidad del observatorio.
+          </p>
+
+          {reseñas.length > 0 && (
+            <span className={estilos.resumenEstrellas}>
+              <span className={estilos.estrellasMostrar} aria-label={`${promedio.toFixed(1)} de 5`}>
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <Star
+                    key={n}
+                    className={estilos.estrellaMostrar}
+                    fill={n <= Math.round(promedio) ? "currentColor" : "none"}
+                    aria-hidden="true"
+                  />
+                ))}
+              </span>
+              <strong>{promedio.toFixed(1)}</strong>
+              <span>· {reseñas.length} {reseñas.length === 1 ? "reseña" : "reseñas"}</span>
+            </span>
+          )}
+        </div>
+
+        {opinionEnviada ? (
+          <div className={estilos.opinionExito} role="status">
+            <CheckCircle2 className={estilos.iconoExito} aria-hidden="true" />
+            <p className={estilos.confirmacionTitulo}>¡Gracias por tu opinión!</p>
+            <p className={estilos.confirmacionTexto}>
+              Tu calificación y comentario ya están visibles en esta página.
+            </p>
+          </div>
+        ) : (
+          <form className={estilos.formularioResenas} onSubmit={manejarEnvioOpinion} noValidate>
+            {errorOpinion && (
+              <p className={estilos.errorForm} role="alert">
+                {errorOpinion}
+              </p>
+            )}
+
+            <div className={estilos.campo}>
+              <span className={estilos.etiqueta}>Tu calificación</span>
+              <div className={estilos.estrellas}>
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    className={estilos.botonEstrella}
+                    onClick={() => setOpinion((prev) => ({ ...prev, calificacion: n }))}
+                    aria-label={`${n} estrellas`}
+                  >
+                    <Star
+                      className={estilos.estrella}
+                      fill={n <= opinion.calificacion ? "currentColor" : "none"}
+                      aria-hidden="true"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className={estilos.campo}>
+              <label className={estilos.etiqueta} htmlFor="opinion-nombre">
+                Tu nombre
+              </label>
+              <input
+                id="opinion-nombre"
+                type="text"
+                value={opinion.nombre}
+                onChange={(e) => setOpinion((prev) => ({ ...prev, nombre: e.target.value }))}
+                className={estilos.input}
+                placeholder="Ej. Mariana Restrepo"
+              />
+            </div>
+
+            <div className={estilos.campo}>
+              <label className={estilos.etiqueta} htmlFor="opinion-comentario">
+                Tu comentario
+              </label>
+              <textarea
+                id="opinion-comentario"
+                rows={4}
+                value={opinion.comentario}
+                onChange={(e) => setOpinion((prev) => ({ ...prev, comentario: e.target.value }))}
+                className={estilos.textarea}
+                placeholder="Cuéntanos qué te gustó o cómo podríamos mejorar la experiencia."
+              />
+            </div>
+
+            <button type="submit" className={estilos.botonInscribirse}>
+              <MessageSquareHeart className={estilos.iconoBoton} aria-hidden="true" />
+              Enviar opinión
+            </button>
+          </form>
+        )}
+
+        {reseñas.length > 0 && (
+          <div className={estilos.listaResenas}>
+            {reseñas.map((reseña) => (
+              <article key={reseña.id} className={estilos.tarjetaResena}>
+                <div className={estilos.cabeceraResena}>
+                  <div>
+                    <p className={estilos.nombreResena}>{reseña.nombre}</p>
+                    <p className={estilos.fechaResena}>
+                      {new Date(reseña.fecha).toLocaleDateString("es-CO")}
+                    </p>
+                  </div>
+                  <span className={estilos.estrellasMostrar}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <Star
+                        key={n}
+                        className={estilos.estrellaMini}
+                        fill={n <= reseña.calificacion ? "currentColor" : "none"}
+                        aria-hidden="true"
+                      />
+                    ))}
+                  </span>
+                </div>
+                {reseña.comentario && <p className={estilos.comentarioResena}>{reseña.comentario}</p>}
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
     </section>
   );
 }
