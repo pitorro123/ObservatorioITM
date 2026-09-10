@@ -251,6 +251,10 @@
   .botonFlotante:hover .tooltip.tooltipOculto {
     transform: translateY(4px);
   }
+
+  .botonFlotante .tooltip::after {
+    left: 28px;
+  }
 }
 
 /* ── Modal correo enviado (HU-20) ── */
