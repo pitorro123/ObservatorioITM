@@ -23,20 +23,6 @@
   overflow: hidden;
   margin-bottom: 32px;
   padding: 8px 0;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 3%,
-    black 97%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 3%,
-    black 97%,
-    transparent 100%
-  );
 }
 
 .carruselPista {
