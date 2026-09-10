@@ -43,7 +43,7 @@
 }
 
 .gradientBlue {
-  background: linear-gradient(to bottom right, var(--obs-blue), var(--obs-bluemed));
+  background: linear-gradient(to bottom right, #181E5E, #266DBE);
 }
 
 .gradientPurple {

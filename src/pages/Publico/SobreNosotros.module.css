@@ -27,7 +27,7 @@
   gap: 24px;
   border-radius: var(--radius-2xl);
   padding: 32px;
-  background: linear-gradient(to bottom right, var(--obs-blue), var(--obs-bluemed));
+  background: linear-gradient(to bottom right, #181E5E, #266DBE);
   color: white;
   box-shadow: var(--shadow-card);
   transition: transform var(--transition-base);
