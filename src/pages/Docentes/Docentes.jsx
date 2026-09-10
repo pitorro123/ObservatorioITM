@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Plus,
   Pencil,
@@ -90,6 +90,20 @@ export default function Docentes() {
   const [docenteEliminar, setDocenteEliminar] = useState(null);
   const [correoEnviado, setCorreoEnviado] = useState(null);
   const [notificacion, setNotificacion] = useState("");
+
+  const [tooltipOculto, setTooltipOculto] = useState(false);
+  const temporizadorTooltip = useRef(null);
+
+  const mostrarTooltip = () => {
+    clearTimeout(temporizadorTooltip.current);
+    setTooltipOculto(false);
+    temporizadorTooltip.current = setTimeout(() => setTooltipOculto(true), 2000);
+  };
+
+  const ocultarTooltip = () => {
+    clearTimeout(temporizadorTooltip.current);
+    setTooltipOculto(false);
+  };
 
   const abrirCrear = () => {
     setDocenteEditando(null);
@@ -193,9 +207,17 @@ export default function Docentes() {
         className={estilos.botonFlotante}
         aria-label="Crear cuenta de docente"
         onClick={abrirCrear}
+        onMouseEnter={mostrarTooltip}
+        onMouseLeave={ocultarTooltip}
+        onFocus={mostrarTooltip}
+        onBlur={ocultarTooltip}
       >
         <Plus className={estilos.iconoPlus} aria-hidden="true" />
-        <span className={estilos.tooltip}>Agregar un nuevo docente</span>
+        <span
+          className={`${estilos.tooltip} ${tooltipOculto ? estilos.tooltipOculto : ""}`}
+        >
+          Agregar un nuevo docente
+        </span>
       </button>
 
       <FormularioDocente

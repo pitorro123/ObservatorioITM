@@ -194,6 +194,12 @@
   transform: translateX(-50%) translateY(0);
 }
 
+.botonFlotante:hover .tooltip.tooltipOculto {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(4px);
+}
+
 .iconoPlus {
   width: 24px;
   height: 24px;
@@ -240,6 +246,10 @@
 
   .botonFlotante:hover .tooltip {
     transform: translateY(0);
+  }
+
+  .botonFlotante:hover .tooltip.tooltipOculto {
+    transform: translateY(4px);
   }
 }
 

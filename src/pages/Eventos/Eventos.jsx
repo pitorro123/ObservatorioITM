@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Header from "../../components/layout/Header/Header.jsx";
 import BarraFiltros from "../../components/pages/Eventos/BarraFiltros/BarraFiltros.jsx";
 import GridEventos from "../../components/pages/Eventos/GridEventos/GridEventos.jsx";
@@ -33,6 +33,20 @@ export default function Eventos() {
   const [eventoEliminar, setEventoEliminar] = useState(null);
   const [eventoCancelar, setEventoCancelar] = useState(null);
   const [notificacion, setNotificacion] = useState("");
+
+  const [tooltipOculto, setTooltipOculto] = useState(false);
+  const temporizadorTooltip = useRef(null);
+
+  const mostrarTooltip = () => {
+    clearTimeout(temporizadorTooltip.current);
+    setTooltipOculto(false);
+    temporizadorTooltip.current = setTimeout(() => setTooltipOculto(true), 2000);
+  };
+
+  const ocultarTooltip = () => {
+    clearTimeout(temporizadorTooltip.current);
+    setTooltipOculto(false);
+  };
 
   const abrirCrear = () => {
     setEventoEditando(null);
@@ -114,9 +128,17 @@ export default function Eventos() {
         className={estilos.botonFlotante}
         aria-label="Crear evento"
         onClick={abrirCrear}
+        onMouseEnter={mostrarTooltip}
+        onMouseLeave={ocultarTooltip}
+        onFocus={mostrarTooltip}
+        onBlur={ocultarTooltip}
       >
         <Plus className={estilos.iconoPlus} aria-hidden="true" />
-        <span className={estilos.tooltip}>Agregar un nuevo evento</span>
+        <span
+          className={`${estilos.tooltip} ${tooltipOculto ? estilos.tooltipOculto : ""}`}
+        >
+          Agregar un nuevo evento
+        </span>
       </button>
 
       <FormularioEvento
