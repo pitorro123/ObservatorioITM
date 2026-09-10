@@ -13,12 +13,6 @@ export default function ObservatoryStatus() {
       ? "SIN CONSULTA"
       : estado.observatorio.estadoValor;
 
-  const estadoConfig = {
-    ABIERTO: { clase: "verde", texto: "ABIERTO" },
-    CONSULTANDO: { clase: "gris", texto: "CONSULTANDO" },
-    SIN_CONSULTA: { clase: "gris", texto: "SIN CONSULTA" },
-  };
-
   return (
     <section className={styles.raiz}>
       <div className={styles.inner}>
@@ -44,7 +38,7 @@ export default function ObservatoryStatus() {
             </span>
             <div>
               <p className={styles.statusLabel}>{estadoObservatorio.estado.etiqueta}</p>
-              <p className={styles.statusValue}>{estadoConfig.CONSULTANDO.texto}</p>
+              <p className={styles.statusValue}>CONSULTANDO</p>
               <p className={styles.statusDesc}>Obteniendo datos del clima en Medellín…</p>
             </div>
           </div>
