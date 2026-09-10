@@ -45,22 +45,6 @@
   color: var(--color-primario);
 }
 
-.select {
-  padding: 12px 14px;
-  border-radius: var(--radio-md);
-  border: 1px solid var(--color-borde);
-  background-color: #ffffff;
-  font-size: var(--texto-sm);
-  color: var(--color-texto-principal);
-  cursor: pointer;
-  transition: border-color var(--transicion-rapida);
-}
-
-.select:focus {
-  outline: none;
-  border-color: var(--color-primario);
-}
-
 .resumenEvento {
   display: flex;
   align-items: center;

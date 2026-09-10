@@ -47,15 +47,3 @@
 .ghost:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
-
-.outline {
-  border: 1px solid var(--slate-200);
-  background-color: white;
-  color: var(--slate-700);
-}
-
-.outline:hover {
-  background-color: var(--slate-50);
-  border-color: var(--obs-blue);
-  color: var(--obs-blue);
-}

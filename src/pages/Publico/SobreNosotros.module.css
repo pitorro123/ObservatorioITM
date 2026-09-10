@@ -73,11 +73,6 @@
   line-height: 1.6;
 }
 
-.heroBtn {
-  margin-top: 24px;
-  align-self: flex-start;
-}
-
 /* ── Content ── */
 .colIzquierda {
   display: flex;
