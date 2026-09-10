@@ -1,4 +1,5 @@
 import fondoPortada from "../assets/images/observatorio/hero/fondo-portada.png";
+import telescopioIcon from "../assets/images/observatorio/icons/telescopio-observaciones.png";
 
 export const contenidoPortada = {
   tituloLinea1: "Explora el universo desde",
@@ -33,6 +34,7 @@ export const porQueAsistir = {
     {
       id: 1,
       icono: "Telescope",
+      imagen: telescopioIcon,
       titulo: "Observaciones Astronómicas",
       descripcion:
         "Aprende utilizando telescopios y equipos especializados completamente gratis.",
