@@ -61,11 +61,14 @@
 }
 
 .botonCerrarSesion {
+  position: fixed;
+  bottom: var(--espacio-lg);
+  left: var(--espacio-md);
+  width: calc(var(--ancho-sidebar) - (var(--espacio-md) * 2));
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--espacio-xs);
-  margin-top: var(--espacio-lg);
   padding: var(--espacio-sm) var(--espacio-md);
   border-radius: var(--radio-md);
   background-color: rgba(255, 255, 255, 0.7);
