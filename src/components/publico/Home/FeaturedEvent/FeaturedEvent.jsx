@@ -1,12 +1,27 @@
+import { useMemo } from "react";
 import { Clock, CalendarDays, MapPin } from "lucide-react";
 import Button from "../../../common/Button/Button.jsx";
 import { useEventosContext } from "../../../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../../../utils/formato.js";
 import styles from "./FeaturedEvent.module.css";
 
+const hoyEnTexto = () => new Date().toISOString().slice(0, 10);
+
 export default function FeaturedEvent() {
   const { eventosPublicados } = useEventosContext();
-  const evento = eventosPublicados[0];
+
+  const evento = useMemo(() => {
+    const hoy = hoyEnTexto();
+    const proximos = eventosPublicados
+      .filter((e) => e.estado === "publicado" && e.fecha >= hoy)
+      .sort((a, b) => a.fecha.localeCompare(b.fecha));
+    if (proximos.length > 0) return proximos[0];
+
+    const pasados = eventosPublicados
+      .filter((e) => e.estado === "publicado")
+      .sort((a, b) => b.fecha.localeCompare(a.fecha));
+    return pasados[0] ?? null;
+  }, [eventosPublicados]);
 
   if (!evento) return null;
 
