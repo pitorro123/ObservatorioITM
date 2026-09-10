@@ -119,3 +119,21 @@
   --radius-2xl: 20px;
   --radius-full: 9999px;
 }
+
+@media (min-width: 1440px) {
+  :root {
+    --max-width: 1400px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --max-width: 1600px;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    --max-width: 1800px;
+  }
+}

@@ -92,6 +92,18 @@
   }
 }
 
+@media (min-width: 1440px) {
+  .textBlock {
+    max-width: 1100px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .textBlock {
+    max-width: 1300px;
+  }
+}
+
 .description {
   margin-top: 20px;
   max-width: 560px;
