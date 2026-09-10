@@ -55,8 +55,7 @@
   height: 68px;
   flex-shrink: 0;
   border-radius: var(--radius-2xl);
-  background-color: rgba(30, 79, 217, 0.25);
-  border: 1px solid rgba(76, 197, 250, 0.25);
+  background-color: var(--obs-navy);
 }
 
 .telescopioImg {
