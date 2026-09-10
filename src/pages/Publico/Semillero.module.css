@@ -28,7 +28,7 @@
   align-self: start;
   border-radius: var(--radius-2xl);
   padding: 32px;
-  background: linear-gradient(to bottom right, var(--obs-purple), var(--obs-purple2));
+  background: linear-gradient(to bottom right, #261557, #7A23A8);
   color: white;
   box-shadow: var(--shadow-card);
   transition: transform var(--transition-base);
