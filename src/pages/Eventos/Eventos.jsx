@@ -5,6 +5,7 @@ import GridEventos from "../../components/pages/Eventos/GridEventos/GridEventos.
 import Paginacion from "../../components/pages/Eventos/Paginacion/Paginacion.jsx";
 import FormularioEvento from "../../components/pages/Eventos/FormularioEvento/FormularioEvento.jsx";
 import ConfirmacionModal from "../../components/pages/Eventos/ConfirmacionModal/ConfirmacionModal.jsx";
+import ModalCancelarEvento from "../../components/pages/Eventos/ModalCancelarEvento/ModalCancelarEvento.jsx";
 import Notificacion from "../../components/pages/Eventos/Notificacion/Notificacion.jsx";
 import { useEventos } from "../../hooks/useEventos.js";
 import { useEventosContext } from "../../context/EventosContext.jsx";
@@ -112,15 +113,19 @@ export default function Eventos() {
     setNotificacion(`"${evento.titulo}" publicado en el portal.`);
   };
 
-  const manejarCancelar = () => {
+  const manejarCancelar = (motivo = "clima") => {
     if (eventoCancelar) {
       if (!puedeGestionar(eventoCancelar)) {
         setNotificacion("No tienes permisos para cancelar este evento.");
         setEventoCancelar(null);
         return;
       }
-      cancelarEvento(eventoCancelar.id);
-      setNotificacion(`"${eventoCancelar.titulo}" cancelado.`);
+      cancelarEvento(eventoCancelar.id, motivo);
+      setNotificacion(
+        `"${eventoCancelar.titulo}" cancelado por ${
+          motivo === "personal" ? "asuntos personales" : "condiciones climáticas"
+        }.`
+      );
     }
     setEventoCancelar(null);
   };
@@ -209,24 +214,11 @@ export default function Eventos() {
         etiquetaConfirmar="Eliminar"
       />
 
-      <ConfirmacionModal
+      <ModalCancelarEvento
         abierto={Boolean(eventoCancelar)}
-        titulo="¿Cancelar este evento?"
-        mensaje={
-          eventoCancelar
-            ? `Estás a punto de cancelar "${eventoCancelar.titulo}". Dejará de mostrarse en el portal público.`
-            : ""
-        }
-        advertencia={
-          <>
-            <strong>¿Deseas cancelar el evento por condiciones climáticas?</strong>
-            <br />
-            Por directriz institucional del Observatorio ITM, <strong>los eventos no se cancelan por lluvia o mal clima</strong>. Te sugerimos mantener el evento activo y trasladar la jornada a aula o auditorio en modalidad bajo techo con talleres y charlas interactivas.
-          </>
-        }
+        evento={eventoCancelar}
         onCerrar={() => setEventoCancelar(null)}
         onConfirmar={manejarCancelar}
-        etiquetaConfirmar="Confirmar cancelación"
       />
 
       <Notificacion mensaje={notificacion} onCerrar={() => setNotificacion("")} />

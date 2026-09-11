@@ -72,6 +72,17 @@
   color: #dc2626;
 }
 
+.iconoWrapPersonal {
+  background: linear-gradient(135deg, #fef3c7 0%, #fee2e2 100%);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
+}
+
+.iconoPersonal {
+  width: 32px;
+  height: 32px;
+  color: #d97706;
+}
+
 .badgeCancelado {
   display: inline-block;
   padding: 4px 12px;

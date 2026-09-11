@@ -87,6 +87,7 @@ export default function FeaturedEvent() {
           abierto={modalCancelado}
           onCerrar={() => setModalCancelado(false)}
           tituloEvento={evento?.titulo}
+          motivo={evento?.motivoCancelacion || "clima"}
         />
       </div>
     </article>

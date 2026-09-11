@@ -172,10 +172,16 @@ export function EventosProvider({ children }) {
     );
   };
 
-  const cancelarEvento = (id) => {
+  const cancelarEvento = (id, motivo = "clima") => {
     setEventos((prev) =>
       prev.map((evento) =>
-        evento.id === id ? { ...evento, estado: "cancelado" } : evento
+        evento.id === id
+          ? {
+              ...evento,
+              estado: "cancelado",
+              motivoCancelacion: motivo,
+            }
+          : evento
       )
     );
   };

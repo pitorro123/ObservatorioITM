@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { CloudRain, X, CalendarX2 } from "lucide-react";
+import { CloudRain, UserX, X, CalendarX2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import estilos from "./ModalEventoCancelado.module.css";
 
@@ -7,6 +7,7 @@ export default function ModalEventoCancelado({
   abierto,
   onCerrar,
   tituloEvento = "",
+  motivo = "clima",
 }) {
   const navigate = useNavigate();
 
@@ -26,6 +27,8 @@ export default function ModalEventoCancelado({
     navigate("/eventos");
   };
 
+  const esPersonal = motivo === "personal";
+
   return (
     <div className={estilos.overlay} role="dialog" aria-modal="true" onClick={onCerrar}>
       <div className={estilos.modal} onClick={(e) => e.stopPropagation()}>
@@ -38,13 +41,21 @@ export default function ModalEventoCancelado({
           <X className={estilos.iconoCerrar} aria-hidden="true" />
         </button>
 
-        <div className={estilos.iconoWrap}>
-          <CloudRain className={estilos.iconoClima} aria-hidden="true" />
+        <div className={`${estilos.iconoWrap} ${esPersonal ? estilos.iconoWrapPersonal : ""}`}>
+          {esPersonal ? (
+            <UserX className={estilos.iconoPersonal} aria-hidden="true" />
+          ) : (
+            <CloudRain className={estilos.iconoClima} aria-hidden="true" />
+          )}
         </div>
 
         <span className={estilos.badgeCancelado}>Inscripción no disponible</span>
 
-        <h2 className={estilos.titulo}>Cancelado por el docente por condiciones climáticas</h2>
+        <h2 className={estilos.titulo}>
+          {esPersonal
+            ? "Cancelado por el docente por asuntos personales"
+            : "Cancelado por el docente por condiciones climáticas"}
+        </h2>
 
         {tituloEvento && (
           <p className={estilos.nombreEvento}>
@@ -54,8 +65,9 @@ export default function ModalEventoCancelado({
 
         <div className={estilos.cajaExplicativa}>
           <p className={estilos.textoExplicativo}>
-            El docente a cargo ha cancelado este evento debido a que las condiciones meteorológicas actuales
-            (nubosidad o lluvia) no son favorables para el desarrollo de la actividad astronómica.
+            {esPersonal
+              ? "El docente a cargo ha cancelado este evento por asuntos personales o motivos de fuerza mayor no previstos, por lo que no se llevará a cabo la sesión programada."
+              : "El docente a cargo ha cancelado este evento debido a que las condiciones meteorológicas actuales (nubosidad o lluvia) no son favorables para el desarrollo de la actividad astronómica."}
           </p>
           <p className={estilos.textoAviso}>
             Te invitamos a consultar la programación de nuestros próximos eventos y actividades en el Observatorio ITM.
