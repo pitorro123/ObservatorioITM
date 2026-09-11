@@ -3,7 +3,6 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { KeyRound, CheckCircle2, AlertCircle, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import Navbar from "../../components/layout/Navbar/Navbar.jsx";
-import logo from "../../assets/images/observatorio/logo/logo.png";
 import estilos from "./CambiarPassword.module.css";
 
 export default function CambiarPassword() {

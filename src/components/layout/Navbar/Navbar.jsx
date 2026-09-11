@@ -3,7 +3,7 @@ import { NavLink, Link } from "react-router-dom";
 import { Menu, UserRound } from "lucide-react";
 import { enlacesNavegacionPublica } from "../../../data/navegacion-publica.js";
 import MobileMenu from "../MobileMenu/MobileMenu.jsx";
-import logo from "../../../assets/images/observatorio/logo/logo.png";
+import logo from "../../../assets/images/observatorio/logo/logo-footer.png";
 import styles from "./Navbar.module.css";
 
 export default function Navbar({ simple = false }) {
