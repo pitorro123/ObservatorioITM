@@ -2,6 +2,8 @@ import fondoPortada from "../assets/images/observatorio/hero/fondo-portada.png";
 import telescopioIcon from "../assets/images/observatorio/icons/telescopio-observaciones.png";
 import talleresIcon from "../assets/images/observatorio/icons/talleres-charlas.png";
 import comunidadIcon from "../assets/images/observatorio/icons/comunidad-cientifica.png";
+import andresTorresImg from "../assets/images/observatorio/profesores/andres-torres.jpg";
+import luisOcampoImg from "../assets/images/observatorio/profesores/luis-ocampo.jpg";
 
 export const contenidoPortada = {
   tituloLinea1: "Explora el universo desde",
@@ -119,3 +121,38 @@ export const contenidoObservatorio = {
   vision:
     "Ser un referente regional en divulgación astronómica, formando nuevas generaciones interesadas en la ciencia y el estudio del universo.",
 };
+
+export const equipoDocente = [
+  {
+    id: 1,
+    nombre: "Andrés David Torres Cañas",
+    cargo: "Coordinador del Observatorio",
+    tituloAcademico: "Físico · M.Sc. en Astronomía",
+    descripcion:
+      "Lidera la gestión académica, formativa y de divulgación en el Campus Fraternidad. Dirige el Semillero de Astronomía y coordina las jornadas de observación abierta para la comunidad.",
+    especialidades: [
+      "Astronomía observacional",
+      "Divulgación científica",
+      "Mecánica celeste",
+    ],
+    correo: "andrestorres@itm.edu.co",
+    imagen: andresTorresImg,
+    badge: "Coordinación & Divulgación",
+  },
+  {
+    id: 2,
+    nombre: "Luis Fernando Ocampo Ochoa",
+    cargo: "Instrumentador Científico",
+    tituloAcademico: "Ingeniero · Especialista en Instrumentación",
+    descripcion:
+      "Especialista en calibración, mantenimiento y operación de los telescopios y sistemas ópticos del observatorio. Asesora a estudiantes e investigadores en astrofotografía y captura de datos astronómicos.",
+    especialidades: [
+      "Telescopios e Instrumentación",
+      "Astrofotografía",
+      "Óptica astronómica",
+    ],
+    correo: "luisocampo@itm.edu.co",
+    imagen: luisOcampoImg,
+    badge: "Instrumentación & Docencia",
+  },
+];
