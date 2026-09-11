@@ -38,28 +38,55 @@ function calcularCondiciones(clima) {
   if (nubosidad < 25 && probabilidadLluvia < 30 && lluvia === 0) {
     return {
       valor: "FAVORABLES",
-      descripcion: "Las condiciones actuales son adecuadas para observar el cielo.",
+      esDesfavorable: false,
+      esParcial: false,
+      descripcion: "Las condiciones actuales son adecuadas para observar el cielo con telescopios.",
       recomendacion:
         "Excelente noche para observar. Lleva ropa abrigada y revisa el horario del evento.",
+      mensajeLanding:
+        "Cielo despejado: condiciones óptimas para la observación astronómica y uso de telescopios.",
+      mensajeDocente:
+        "Condiciones meteorológicas favorables. Los eventos de observación astronómica pueden desarrollarse al aire libre con telescopios según lo programado.",
+      observatorioEstado: "ABIERTO",
+      observatorioEstadoDesc:
+        "Instalaciones abiertas y listas para observación telescópica y recorridos.",
     };
   }
 
   if (nubosidad < 60 && probabilidadLluvia < 60) {
     return {
       valor: "PARCIALES",
+      esDesfavorable: false,
+      esParcial: true,
       descripcion:
         "Hay nubosidad parcial; las observaciones podrían verse interrumpidas.",
       recomendacion:
-        "Sigue las actividades, pero el cielo podría cerrarse en cualquier momento.",
+        "¡El evento sigue en pie! Combinaremos observación con explicaciones y talleres en sala.",
+      mensajeLanding:
+        "Cielo con nubosidad parcial. Los eventos continúan confirmados con actividades de apoyo bajo techo.",
+      mensajeDocente:
+        "Nubosidad parcial detectada en Medellín. Por favor mantén el evento activo y prepara una charla o dinámica de apoyo en sala si el cielo se cierra.",
+      observatorioEstado: "ABIERTO",
+      observatorioEstadoDesc:
+        "Instalaciones abiertas. Actividades combinadas de observación y talleres en sala.",
     };
   }
 
   return {
     valor: "DESFAVORABLES",
+    esDesfavorable: true,
+    esParcial: false,
     descripcion:
-      "El cielo está nublado o con alta probabilidad de lluvia para observar.",
+      "El cielo está nublado o con probabilidad de lluvia para la observación telescópica.",
     recomendacion:
-      "Puedes asistir a charlas y talleres, pero la observación telescópica no estará disponible.",
+      "¡Los eventos no se cancelan! Adaptamos la jornada a charlas interactivas, talleres y experimentos en salas bajo techo.",
+    mensajeLanding:
+      "¡Los eventos no se cancelan por clima! Aunque las nubes no permitan el uso de telescopios, te esperamos para disfrutar de charlas interactivas y talleres astronómicos en nuestras salas.",
+    mensajeDocente:
+      "Aviso meteorológico para docentes: Las condiciones actuales en Medellín no son favorables para observación telescópica exterior (nubosidad o lluvia). Recuerda que la directriz del Observatorio ITM es NO cancelar el evento; te invitamos a dirigir la jornada en modalidad bajo techo (charlas, talleres o simulaciones en aula/auditorio).",
+    observatorioEstado: "ABIERTO (ACTIVIDAD EN SALA)",
+    observatorioEstadoDesc:
+      "Instalaciones abiertas. Todos los eventos se realizan en salas y auditorios protegidos del clima.",
   };
 }
 
@@ -114,6 +141,12 @@ export function useClima() {
       estadoValor: condiciones.valor,
       estadoDescripcion: condiciones.descripcion,
       recomendacion: condiciones.recomendacion,
+      mensajeLanding: condiciones.mensajeLanding,
+      mensajeDocente: condiciones.mensajeDocente,
+      observatorioEstado: condiciones.observatorioEstado,
+      observatorioEstadoDesc: condiciones.observatorioEstadoDesc,
+      esDesfavorable: condiciones.esDesfavorable,
+      esParcial: condiciones.esParcial,
     },
   };
 
