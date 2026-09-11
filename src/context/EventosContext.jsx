@@ -31,7 +31,8 @@ export function EventosProvider({ children }) {
       if (!tiposValidos.includes(tipo)) {
         tipo = "abierto";
       }
-      const esMasivo = Boolean(ev.esMasivo);
+      const semilla = eventosIniciales.find((item) => item.id === ev.id);
+      const esMasivo = ev.id === 2 ? true : Boolean(ev.esMasivo ?? semilla?.esMasivo);
       const creadoPorId =
         ev.creadoPorId || (Number(ev.id) % 2 === 0 ? 3 : 2);
       const creadoPorNombre =

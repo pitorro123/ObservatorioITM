@@ -50,6 +50,11 @@ export default function TarjetaEvento({
               ? "Observación"
               : "Abierto"}
         </span>
+        {evento.esMasivo && (
+          <span className={estilos.insigniaMasivo}>
+            Aforo libre
+          </span>
+        )}
       </div>
 
       <div className={estilos.cuerpo}>
@@ -57,9 +62,20 @@ export default function TarjetaEvento({
           <p className={estilos.fecha}>
             {formatearFechaCorta(evento.fecha)} · {formatearHora(evento.hora)}
           </p>
-          <span className={estilos.capacidadBadge} title="Inscritos / Capacidad total">
+          <span
+            className={`${estilos.capacidadBadge} ${
+              evento.esMasivo ? estilos.capacidadBadgeMasivo : ""
+            }`}
+            title={
+              evento.esMasivo
+                ? "Evento masivo (Aforo libre e ilimitado)"
+                : "Inscritos / Capacidad total"
+            }
+          >
             <Users className={estilos.iconoCapacidad} aria-hidden="true" />
-            {evento.inscritos || 0}/{evento.capacidad || 50}
+            {evento.esMasivo
+              ? `${evento.inscritos || 0} / Ilimitado`
+              : `${evento.inscritos || 0}/${evento.capacidad || 50}`}
           </span>
         </div>
 

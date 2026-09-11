@@ -392,6 +392,11 @@ export default function Eventos() {
                           ? "Observación"
                           : "Abierto al público"}
                     </span>
+                    {evento.esMasivo && (
+                      <span className={estilos.badgeMasivo}>
+                        Aforo libre
+                      </span>
+                    )}
                   </div>
                 )}
 
@@ -413,9 +418,11 @@ export default function Eventos() {
                   </li>
                   <li className={estilos.metaItem}>
                     <Users className={estilos.metaIcon} aria-hidden="true" />
-                    {(evento.inscritos || 0) >= (evento.capacidad || 50)
-                      ? "Cupos agotados"
-                      : `${Math.max(0, (evento.capacidad || 50) - (evento.inscritos || 0))} cupos disponibles`}
+                    {evento.esMasivo
+                      ? "Aforo libre · Cupos ilimitados"
+                      : (evento.inscritos || 0) >= (evento.capacidad || 50)
+                        ? "Cupos agotados"
+                        : `${Math.max(0, (evento.capacidad || 50) - (evento.inscritos || 0))} cupos disponibles`}
                   </li>
                 </ul>
 

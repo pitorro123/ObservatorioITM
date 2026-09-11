@@ -78,6 +78,21 @@
   color: #b45309;
 }
 
+.insigniaMasivo {
+  position: absolute;
+  bottom: var(--espacio-sm);
+  left: var(--espacio-sm);
+  padding: 3px var(--espacio-sm);
+  border-radius: var(--radio-pildora);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background-color: rgba(16, 185, 129, 0.95);
+  color: white;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
 .estadoPublicado .puntoEstado {
   background-color: var(--color-exito);
 }
@@ -128,6 +143,11 @@
   background-color: var(--color-primario-suave);
   padding: 2px 8px;
   border-radius: var(--radio-pildora);
+}
+
+.capacidadBadgeMasivo {
+  color: #047857;
+  background-color: #d1fae5;
 }
 
 .iconoCapacidad {

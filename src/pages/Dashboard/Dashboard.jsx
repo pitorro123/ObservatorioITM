@@ -113,6 +113,9 @@ export default function Dashboard() {
                         <td>
                           <p className={estilos.nombreEvento}>{evento.titulo}</p>
                           <p className={estilos.fechaEvento}>{evento.fecha}</p>
+                          {evento.esMasivo && (
+                            <span className={estilos.badgeMasivoEvento}>Aforo libre</span>
+                          )}
                           {esDesfavorable && evento.tipo === "observacion" && evento.estado === "publicado" && (
                             <span className={estilos.badgeClimaEvento}>Modalidad en sala</span>
                           )}

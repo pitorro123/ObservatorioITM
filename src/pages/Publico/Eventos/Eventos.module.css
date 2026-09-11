@@ -521,6 +521,20 @@
   color: white;
 }
 
+.badgeMasivo {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background-color: rgba(16, 185, 129, 0.95);
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  display: inline-flex;
+  align-items: center;
+}
+
 .cardImage {
   height: 100%;
   width: 100%;
