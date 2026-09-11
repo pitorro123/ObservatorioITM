@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Clock, CalendarDays, MapPin } from "lucide-react";
 import Button from "../../../common/Button/Button.jsx";
 import { useEventosContext } from "../../../../context/EventosContext.jsx";
+import { useClima } from "../../../../hooks/useClima.js";
 import { formatearFecha, formatearHora } from "../../../../utils/formato.js";
 import styles from "./FeaturedEvent.module.css";
 
@@ -9,6 +10,8 @@ const hoyEnTexto = () => new Date().toISOString().slice(0, 10);
 
 export default function FeaturedEvent() {
   const { eventosPublicados } = useEventosContext();
+  const { estado: estadoClima } = useClima();
+  const esDesfavorable = estadoClima?.observatorio?.esDesfavorable;
 
   const evento = useMemo(() => {
     const hoy = hoyEnTexto();
@@ -54,6 +57,15 @@ export default function FeaturedEvent() {
             {evento.lugar}
           </li>
         </ul>
+
+        {esDesfavorable && (
+          <div className={styles.avisoClima} role="status">
+            <span className={styles.avisoClimaPunto} aria-hidden="true" />
+            <p className={styles.avisoClimaTexto}>
+              <strong>Evento 100% confirmado:</strong> Por condiciones climáticas de nubosidad o lluvia, la sesión se realizará en sala con charlas y talleres astronómicos.
+            </p>
+          </div>
+        )}
 
         <Button to={`/eventos/${evento.id}`} variant="primary" className={styles.btn}>
           Inscribirme
