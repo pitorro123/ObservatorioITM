@@ -7,50 +7,49 @@ import {
   CheckCircle2,
   ChevronLeft,
   Navigation,
-  Download,
-  Star,
-  MessageSquareHeart,
+  Users,
+  AlertCircle,
+  Copy,
+  Check,
+  Sparkles,
 } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
 import { useEventosContext } from "../../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../../utils/formato.js";
 import estilos from "./DetalleEvento.module.css";
 
-const UBICACION = {
-  lat: 6.2451243,
-  lng: -75.5499752,
-  direccion: "Institución Universitaria ITM · Campus Fraternidad, Cl. 54a #30-01, Villa Hermosa, Medellín, Antioquia",
-};
-
-function construirUrlMapa() {
-  const { lat, lng } = UBICACION;
-  const margen = 0.004;
-  return (
-    `https://www.openstreetmap.org/export/embed.html?` +
-    `bbox=${lng - margen}%2C${lat - margen}%2C${lng + margen}%2C${lat + margen}` +
-    `&layer=mapnik&marker=${lat}%2C${lng}`
-  );
+function construirUrlMapa(direccion) {
+  return `https://maps.google.com/maps?q=${encodeURIComponent(
+    direccion
+  )}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
 }
-
-const enlaceRuta = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-  "ITM Campus Fraternidad, Calle 54A #30-01, Medellín, Antioquia"
-)}`;
 
 export default function DetalleEvento() {
   const { id } = useParams();
-  const { obtenerEvento, inscribir, agregarFeedback, feedbackPorEvento } =
-    useEventosContext();
+  const { obtenerEvento, inscribir } = useEventosContext();
   const evento = obtenerEvento(id);
-  const reseñas = evento ? feedbackPorEvento(evento.id) : [];
+
+  const esMasivo = Boolean(evento?.esMasivo);
+  const capacidad = Number(evento?.capacidad) > 0 ? Number(evento.capacidad) : 50;
+  const inscritos = Number(evento?.inscritos) || 0;
+  const cuposDisponibles = esMasivo ? Infinity : Math.max(0, capacidad - inscritos);
+  const porcentajeOcupado = esMasivo ? 0 : Math.min(100, Math.round((inscritos / capacidad) * 100));
+  const estaAgotado = !esMasivo && cuposDisponibles === 0;
+  const ultimosCupos = !esMasivo && cuposDisponibles > 0 && cuposDisponibles <= 5;
+
+  const direccionEvento =
+    (evento?.ubicacionMapa || "").trim() ||
+    (evento?.lugar || "").trim() ||
+    "Institución Universitaria ITM · Campus Fraternidad, Cl. 54a #30-01, Villa Hermosa, Medellín, Antioquia";
+
+  const enlaceRuta = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+    direccionEvento
+  )}`;
 
   const [confirmada, setConfirmada] = useState(false);
   const [datos, setDatos] = useState({ nombre: "", correo: "", telefono: "" });
   const [inscripcion, setInscripcion] = useState(null);
+  const [copiado, setCopiado] = useState(false);
   const [error, setError] = useState("");
-
-  const [opinion, setOpinion] = useState({ nombre: "", calificacion: 0, comentario: "" });
-  const [errorOpinion, setErrorOpinion] = useState("");
-  const [opinionEnviada, setOpinionEnviada] = useState(null);
 
   const inscripcionRef = useRef(null);
 
@@ -148,37 +147,11 @@ export default function DetalleEvento() {
     setConfirmada(true);
   };
 
-  const descargarQr = () => {
-    const canvas = document.getElementById("qr-inscripcion");
-    if (!canvas) return;
-    const enlace = canvas.toDataURL("image/png");
-    const enlaceDescarga = document.createElement("a");
-    enlaceDescarga.href = enlace;
-    enlaceDescarga.download = `QR-${inscripcion.codigo}.png`;
-    enlaceDescarga.click();
-  };
-
-  const promedio = reseñas.reduce((acc, r) => acc + r.calificacion, 0) / reseñas.length;
-
-  const manejarEnvioOpinion = (e) => {
-    e.preventDefault();
-    setErrorOpinion("");
-
-    if (!opinion.calificacion) {
-      setErrorOpinion("Selecciona una calificación de 1 a 5 estrellas.");
-      return;
-    }
-    if (opinion.comentario.trim().length > 0 && opinion.comentario.trim().length < 3) {
-      setErrorOpinion("El comentario debe tener al menos 3 caracteres.");
-      return;
-    }
-
-    const resultado = agregarFeedback({ eventoId: evento.id, ...opinion });
-    if (!resultado.exito) {
-      setErrorOpinion(resultado.error);
-      return;
-    }
-    setOpinionEnviada(resultado.resena);
+  const copiarCodigo = () => {
+    if (!inscripcion?.codigo) return;
+    navigator.clipboard.writeText(inscripcion.codigo);
+    setCopiado(true);
+    setTimeout(() => setCopiado(false), 2500);
   };
 
   return (
@@ -200,9 +173,17 @@ export default function DetalleEvento() {
             </div>
           )}
           <div className={estilos.info}>
-            {evento.tipo === "semillero" && (
-              <span className={estilos.badgeSemillero}>Semillero de astronomía</span>
-            )}
+            <span
+              className={`${estilos.badgeTipo} ${
+                estilos[`badgeTipo_${evento.tipo}`] || estilos.badgeTipo_abierto
+              }`}
+            >
+              {evento.tipo === "charla"
+                ? "Charla"
+                : evento.tipo === "observacion"
+                  ? "Observación"
+                  : "Abierto al público"}
+            </span>
             <h1 className={estilos.titulo}>{evento.titulo}</h1>
             <p className={estilos.descripcion}>{evento.descripcion}</p>
 
@@ -219,6 +200,18 @@ export default function DetalleEvento() {
                 <MapPin className={estilos.metaIcon} aria-hidden="true" />
                 <span>{evento.lugar}</span>
               </li>
+              <li className={estilos.metaItem}>
+                <Users className={estilos.metaIcon} aria-hidden="true" />
+                <span>
+                  {esMasivo
+                    ? `Evento masivo · Entrada libre (${inscritos} ${
+                        inscritos === 1 ? "persona registrada" : "personas registradas"
+                      })`
+                    : estaAgotado
+                      ? `Capacidad máxima alcanzada (${capacidad} personas)`
+                      : `${cuposDisponibles} de ${capacidad} cupos disponibles`}
+                </span>
+              </li>
             </ul>
           </div>
         </div>
@@ -228,35 +221,70 @@ export default function DetalleEvento() {
           <div className={estilos.confirmacion} role="status">
             <CheckCircle2 className={estilos.iconoExito} aria-hidden="true" />
             <h2 className={estilos.confirmacionTitulo}>
-              ¡Inscripción confirmada, {datos.nombre || "participante"}!
+              {esMasivo
+                ? `¡Registro exitoso, ${datos.nombre || "participante"}!`
+                : `¡Inscripción confirmada, ${datos.nombre || "participante"}!`}
             </h2>
             <p className={estilos.confirmacionTexto}>
-              Te esperamos en {evento.lugar} el {formatearFecha(evento.fecha)} a las{" "}
-              {formatearHora(evento.hora)}. Guarda tu código QR de asistencia.
+              Te esperamos en <strong>{evento.lugar}</strong> el{" "}
+              <strong>{formatearFecha(evento.fecha)}</strong> a las{" "}
+              <strong>{formatearHora(evento.hora)}</strong>.
             </p>
 
-            <div className={estilos.qrBox}>
-              <span className={estilos.qrTitulo}>Tu código de asistencia</span>
-              <QRCodeSVG
-                id="qr-inscripcion"
-                value={inscripcion.codigo}
-                size={168}
-                className={estilos.qr}
-              />
-              <p className={estilos.qrCodigo}>{inscripcion.codigo}</p>
-              <p className={estilos.qrAyuda}>
-                Muestra este código al ingresar al evento. También puedes consultar tu
-                asistencia desde el panel docente.
-              </p>
-              <button
-                type="button"
-                className={estilos.botonDescargar}
-                onClick={descargarQr}
-              >
-                <Download className={estilos.iconoBoton} aria-hidden="true" />
-                Descargar QR
-              </button>
-            </div>
+            {esMasivo ? (
+              <div className={estilos.cajaMasivoConfirmacion}>
+                <div className={estilos.badgeMasivoExito}>
+                  <Sparkles className={estilos.iconoSparkle} aria-hidden="true" />
+                  <span>Evento Masivo · Entrada Libre</span>
+                </div>
+                <p className={estilos.textoMasivoExito}>
+                  Hemos registrado tus datos para llevar el control y aforo de participantes del evento.
+                </p>
+                <div className={estilos.avisoSinCorreo}>
+                  <p>
+                    Al ser un evento abierto y masivo con entrada libre, <strong>no requieres código de acceso</strong> ni se enviará confirmación a tu correo. ¡Solo acércate y disfruta del evento!
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className={estilos.codigoCaja}>
+                <span className={estilos.codigoEtiqueta}>Tu código de 4 dígitos</span>
+                <div className={estilos.digitosFila}>
+                  {String(inscripcion.codigo || "0000")
+                    .split("")
+                    .map((digito, i) => (
+                      <span key={i} className={estilos.bloqueDigito}>
+                        {digito}
+                      </span>
+                    ))}
+                </div>
+                <button
+                  type="button"
+                  className={estilos.botonCopiar}
+                  onClick={copiarCodigo}
+                  aria-label="Copiar código de 4 dígitos"
+                >
+                  {copiado ? (
+                    <>
+                      <Check className={estilos.iconoBoton} aria-hidden="true" />
+                      Código copiado
+                    </>
+                  ) : (
+                    <>
+                      <Copy className={estilos.iconoBoton} aria-hidden="true" />
+                      Copiar código ({inscripcion.codigo})
+                    </>
+                  )}
+                </button>
+                <p className={estilos.codigoCorreoAviso}>
+                  ✉️ Hemos enviado este código a tu correo:{" "}
+                  <strong>{inscripcion.correo}</strong>
+                </p>
+                <p className={estilos.codigoAyuda}>
+                  Presenta este código al ingresar al evento para registrar tu asistencia.
+                </p>
+              </div>
+            )}
 
             <Link to="/eventos" className={estilos.enlaceVolver}>
               Ver más eventos
@@ -266,228 +294,210 @@ export default function DetalleEvento() {
           <>
             <h2 className={estilos.inscripcionTitulo}>Inscríbete a este evento</h2>
             <p className={estilos.inscripcionTexto}>
-              Completa tus datos para reservar tu cupo. La entrada es gratuita.
+              {esMasivo
+                ? "Completa tus datos para registrar tu asistencia. La entrada es gratuita y de aforo libre."
+                : "Completa tus datos para reservar tu cupo. La entrada es gratuita."}
             </p>
 
-            <form className={estilos.formulario} onSubmit={manejarEnvio} noValidate>
-              {error && (
-                <p className={estilos.errorForm} role="alert">
-                  {error}
+            {/* Tarjeta de disponibilidad de cupos / Evento Masivo */}
+            {esMasivo ? (
+              <div className={estilos.disponibilidadCardMasivo}>
+                <div className={estilos.disponibilidadCabecera}>
+                  <div className={estilos.disponibilidadInfo}>
+                    <Users className={estilos.iconoDisponibilidad} aria-hidden="true" />
+                    <div>
+                      <span className={estilos.disponibilidadTitulo}>
+                        Acceso al evento
+                      </span>
+                      <span className={estilos.disponibilidadSub}>
+                        Evento masivo · Entrada libre
+                      </span>
+                    </div>
+                  </div>
+                  <span className={`${estilos.badgeDisponibilidad} ${estilos.badgeMasivo}`}>
+                    Aforo Libre
+                  </span>
+                </div>
+                <div className={estilos.infoMasivoDetalle}>
+                  <p className={estilos.textoMasivoCupos}>
+                    <strong>{inscritos}</strong> {inscritos === 1 ? "persona registrada" : "personas registradas"} hasta el momento.
+                  </p>
+                  <span className={estilos.notaMasivo}>
+                    No hay límite de cupos para este evento. Inscríbete para registrar tu participación.
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className={estilos.disponibilidadCard}>
+                <div className={estilos.disponibilidadCabecera}>
+                  <div className={estilos.disponibilidadInfo}>
+                    <Users className={estilos.iconoDisponibilidad} aria-hidden="true" />
+                    <div>
+                      <span className={estilos.disponibilidadTitulo}>
+                        Disponibilidad del evento
+                      </span>
+                      <span className={estilos.disponibilidadSub}>
+                        {estaAgotado
+                          ? "No quedan cupos disponibles"
+                          : `${cuposDisponibles} ${
+                              cuposDisponibles === 1 ? "cupo disponible" : "cupos disponibles"
+                            }`}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    className={`${estilos.badgeDisponibilidad} ${
+                      estaAgotado
+                        ? estilos.badgeAgotado
+                        : ultimosCupos
+                          ? estilos.badgeUltimos
+                          : estilos.badgeDisponible
+                    }`}
+                  >
+                    {estaAgotado
+                      ? "Cupos Agotados"
+                      : ultimosCupos
+                        ? `¡Últimos ${cuposDisponibles} cupos!`
+                        : "Cupos Disponibles"}
+                  </span>
+                </div>
+
+                <div className={estilos.progresoContenedor}>
+                  <div
+                    className={`${estilos.progresoBarra} ${
+                      estaAgotado
+                        ? estilos.progresoAgotado
+                        : ultimosCupos
+                          ? estilos.progresoUltimos
+                          : estilos.progresoDisponible
+                    }`}
+                    style={{ width: `${porcentajeOcupado}%` }}
+                    role="progressbar"
+                    aria-valuenow={inscritos}
+                    aria-valuemin={0}
+                    aria-valuemax={capacidad}
+                  />
+                </div>
+
+                <div className={estilos.progresoEtiquetas}>
+                  <span>
+                    <strong>{inscritos}</strong> inscritos
+                  </span>
+                  <span>
+                    Capacidad: <strong>{capacidad}</strong> personas
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {estaAgotado ? (
+              <div className={estilos.cajaAgotado}>
+                <AlertCircle className={estilos.iconoAgotado} aria-hidden="true" />
+                <h3 className={estilos.tituloAgotado}>Inscripciones completas</h3>
+                <p className={estilos.textoAgotado}>
+                  Este evento ha alcanzado el límite máximo de{" "}
+                  <strong>{capacidad} participantes</strong>. Te invitamos a explorar
+                  nuestras próximas actividades para asegurar tu lugar.
                 </p>
-              )}
-
-              <div className={estilos.campo}>
-                <label className={estilos.etiqueta} htmlFor="nombre">
-                  Nombre completo
-                </label>
-                <input
-                  id="nombre"
-                  type="text"
-                  required
-                  value={datos.nombre}
-                  onChange={manejarCambio("nombre")}
-                  className={estilos.input}
-                  placeholder="Tu nombre"
-                />
+                <Link to="/eventos" className={estilos.botonExplorarOtros}>
+                  Ver otros eventos disponibles
+                </Link>
               </div>
+            ) : (
+              <form className={estilos.formulario} onSubmit={manejarEnvio} noValidate>
+                {error && (
+                  <p className={estilos.errorForm} role="alert">
+                    {error}
+                  </p>
+                )}
 
-              <div className={estilos.campo}>
-                <label className={estilos.etiqueta} htmlFor="correo">
-                  Correo electrónico
-                </label>
-                <input
-                  id="correo"
-                  type="email"
-                  required
-                  value={datos.correo}
-                  onChange={manejarCambio("correo")}
-                  className={estilos.input}
-                  placeholder="tucorreo@ejemplo.com"
-                />
-              </div>
+                <div className={estilos.campo}>
+                  <label className={estilos.etiqueta} htmlFor="nombre">
+                    Nombre completo
+                  </label>
+                  <input
+                    id="nombre"
+                    type="text"
+                    required
+                    value={datos.nombre}
+                    onChange={manejarCambio("nombre")}
+                    className={estilos.input}
+                    placeholder="Tu nombre"
+                  />
+                </div>
 
-              <div className={estilos.campo}>
-                <label className={estilos.etiqueta} htmlFor="telefono">
-                  Teléfono / Celular
-                </label>
-                <input
-                  id="telefono"
-                  type="tel"
-                  required
-                  value={datos.telefono}
-                  onChange={manejarCambio("telefono")}
-                  className={estilos.input}
-                  placeholder="300 000 0000"
-                  maxLength={16}
-                />
-              </div>
+                <div className={estilos.campo}>
+                  <label className={estilos.etiqueta} htmlFor="correo">
+                    Correo electrónico
+                  </label>
+                  <input
+                    id="correo"
+                    type="email"
+                    required
+                    value={datos.correo}
+                    onChange={manejarCambio("correo")}
+                    className={estilos.input}
+                    placeholder="tucorreo@ejemplo.com"
+                  />
+                </div>
 
-              <button type="submit" className={estilos.botonInscribirse}>
-                Inscribirme
-              </button>
-            </form>
+                <div className={estilos.campo}>
+                  <label className={estilos.etiqueta} htmlFor="telefono">
+                    Teléfono / Celular
+                  </label>
+                  <input
+                    id="telefono"
+                    type="tel"
+                    required
+                    value={datos.telefono}
+                    onChange={manejarCambio("telefono")}
+                    className={estilos.input}
+                    placeholder="300 000 0000"
+                    maxLength={16}
+                  />
+                </div>
+
+                <button type="submit" className={estilos.botonInscribirse}>
+                  Inscribirme
+                </button>
+              </form>
+            )}
           </>
         )}
         </div>
 
         <div className={estilos.ubicacion}>
-        <div className={estilos.ubicacionHeader}>
-          <h2 className={estilos.ubicacionTitulo}>¿Cómo llegar?</h2>
-          <p className={estilos.ubicacionTexto}>
-            El evento se realiza en la {UBICACION.direccion}. Usa el mapa para ubicarte.
-          </p>
-          <a
-            href={enlaceRuta}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={estilos.botonRuta}
-          >
-            <Navigation className={estilos.iconoBoton} aria-hidden="true" />
-            Ver ruta en Google Maps
-          </a>
-        </div>
-
-        <div className={estilos.mapaWrap}>
-          <div className={estilos.mapaPin}>
-            <MapPin className={estilos.mapaPinIcono} aria-hidden="true" />
-            {UBICACION.direccion}
+          <div className={estilos.ubicacionHeader}>
+            <h2 className={estilos.ubicacionTitulo}>¿Cómo llegar?</h2>
+            <p className={estilos.ubicacionTexto}>
+              El evento se realiza en <strong>{direccionEvento}</strong>. Usa el mapa para ubicarte o calcular tu ruta.
+            </p>
+            <a
+              href={enlaceRuta}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={estilos.botonRuta}
+            >
+              <Navigation className={estilos.iconoBoton} aria-hidden="true" />
+              Ver ruta en Google Maps
+            </a>
           </div>
-          <iframe
-            src={construirUrlMapa()}
-            title={`Mapa de ubicación del evento ${evento.titulo}`}
-            className={estilos.mapa}
-            loading="lazy"
-          />
-        </div>
+
+          <div className={estilos.mapaWrap}>
+            <div className={estilos.mapaPin}>
+              <MapPin className={estilos.mapaPinIcono} aria-hidden="true" />
+              {direccionEvento}
+            </div>
+            <iframe
+              src={construirUrlMapa(direccionEvento)}
+              title={`Mapa de ubicación del evento ${evento.titulo}`}
+              className={estilos.mapa}
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
 
-      <section className={estilos.reseñas} aria-label="Opiniones sobre el evento">
-        <div className={estilos.reseñasResumen}>
-          <p className={estilos.etiquetaReseñas}>Opiniones de los asistentes</p>
-          <h2 className={estilos.tituloReseñas}>¿Qué te pareció este evento?</h2>
-          <p className={estilos.textoReseñas}>
-            Comparte tu experiencia con la comunidad del observatorio.
-          </p>
-
-          {reseñas.length > 0 && (
-            <span className={estilos.resumenEstrellas}>
-              <span className={estilos.estrellasMostrar} aria-label={`${promedio.toFixed(1)} de 5`}>
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <Star
-                    key={n}
-                    className={estilos.estrellaMostrar}
-                    fill={n <= Math.round(promedio) ? "currentColor" : "none"}
-                    aria-hidden="true"
-                  />
-                ))}
-              </span>
-              <strong>{promedio.toFixed(1)}</strong>
-              <span>· {reseñas.length} {reseñas.length === 1 ? "reseña" : "reseñas"}</span>
-            </span>
-          )}
-        </div>
-
-        {opinionEnviada ? (
-          <div className={estilos.opinionExito} role="status">
-            <CheckCircle2 className={estilos.iconoExito} aria-hidden="true" />
-            <p className={estilos.confirmacionTitulo}>¡Gracias por tu opinión!</p>
-            <p className={estilos.confirmacionTexto}>
-              Tu calificación y comentario ya están visibles en esta página.
-            </p>
-          </div>
-        ) : (
-          <form className={estilos.formularioResenas} onSubmit={manejarEnvioOpinion} noValidate>
-            {errorOpinion && (
-              <p className={estilos.errorForm} role="alert">
-                {errorOpinion}
-              </p>
-            )}
-
-            <div className={estilos.campo}>
-              <span className={estilos.etiqueta}>Tu calificación</span>
-              <div className={estilos.estrellas}>
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    className={estilos.botonEstrella}
-                    onClick={() => setOpinion((prev) => ({ ...prev, calificacion: n }))}
-                    aria-label={`${n} estrellas`}
-                  >
-                    <Star
-                      className={estilos.estrella}
-                      fill={n <= opinion.calificacion ? "currentColor" : "none"}
-                      aria-hidden="true"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className={estilos.campo}>
-              <label className={estilos.etiqueta} htmlFor="opinion-nombre">
-                Tu nombre
-              </label>
-              <input
-                id="opinion-nombre"
-                type="text"
-                value={opinion.nombre}
-                onChange={(e) => setOpinion((prev) => ({ ...prev, nombre: e.target.value }))}
-                className={estilos.input}
-                placeholder="Ej. Mariana Restrepo"
-              />
-            </div>
-
-            <div className={estilos.campo}>
-              <label className={estilos.etiqueta} htmlFor="opinion-comentario">
-                Tu comentario
-              </label>
-              <textarea
-                id="opinion-comentario"
-                rows={4}
-                value={opinion.comentario}
-                onChange={(e) => setOpinion((prev) => ({ ...prev, comentario: e.target.value }))}
-                className={estilos.textarea}
-                placeholder="Cuéntanos qué te gustó o cómo podríamos mejorar la experiencia."
-              />
-            </div>
-
-            <button type="submit" className={estilos.botonInscribirse}>
-              <MessageSquareHeart className={estilos.iconoBoton} aria-hidden="true" />
-              Enviar opinión
-            </button>
-          </form>
-        )}
-
-        {reseñas.length > 0 && (
-          <div className={estilos.listaResenas}>
-            {reseñas.map((reseña) => (
-              <article key={reseña.id} className={estilos.tarjetaResena}>
-                <div className={estilos.cabeceraResena}>
-                  <div>
-                    <p className={estilos.nombreResena}>{reseña.nombre}</p>
-                    <p className={estilos.fechaResena}>
-                      {new Date(reseña.fecha).toLocaleDateString("es-CO")}
-                    </p>
-                  </div>
-                  <span className={estilos.estrellasMostrar}>
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <Star
-                        key={n}
-                        className={estilos.estrellaMini}
-                        fill={n <= reseña.calificacion ? "currentColor" : "none"}
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </span>
-                </div>
-                {reseña.comentario && <p className={estilos.comentarioResena}>{reseña.comentario}</p>}
-              </article>
-            ))}
-          </div>
-        )}
-      </section>
     </section>
   );
 }
