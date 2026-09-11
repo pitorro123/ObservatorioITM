@@ -9,6 +9,8 @@ import {
   CalendarDays,
   MapPin,
   BadgeCheck,
+  FileText,
+  GraduationCap,
 } from "lucide-react";
 import Header from "../../components/layout/Header/Header.jsx";
 import Notificacion from "../../components/pages/Eventos/Notificacion/Notificacion.jsx";
@@ -86,7 +88,7 @@ export default function ValidarQR() {
           </span>
           <form className={estilos.formulario} onSubmit={manejarValidar}>
             <label className={estilos.etiqueta} htmlFor="codigo-validacion">
-              Código de 4 dígitos o correo del participante
+              Código de 4 dígitos, documento o correo del participante
             </label>
             <div className={estilos.filaInput}>
               <input
@@ -95,7 +97,7 @@ export default function ValidarQR() {
                 value={codigo}
                 onChange={(e) => setCodigo(e.target.value)}
                 className={estilos.input}
-                placeholder="Ej: 4829 o tucorreo@ejemplo.com"
+                placeholder="Ej: 4829, 1020304050 o tucorreo@ejemplo.com"
                 autoComplete="off"
               />
               <button type="submit" className={estilos.botonBuscar}>
@@ -105,7 +107,7 @@ export default function ValidarQR() {
             </div>
             <div className={estilos.barra_opciones}>
               <p className={estilos.ayuda}>
-                Ingresa el código numérico de 4 dígitos asignado al participante o su correo electrónico registrado para validar su asistencia.
+                Ingresa el código numérico de 4 dígitos, documento de identidad o correo registrado del participante para validar su asistencia.
               </p>
             </div>
           </form>
@@ -142,9 +144,27 @@ export default function ValidarQR() {
               <h2 className={estilos.nombre}>{inscripcionVisible.nombre}</h2>
 
               <ul className={estilos.meta}>
+                {inscripcionVisible.numeroDocumento && (
+                  <li>
+                    <FileText className={estilos.iconoMeta} aria-hidden="true" />
+                    <span>
+                      <strong>{inscripcionVisible.tipoDocumento || "CC"}:</strong> {inscripcionVisible.numeroDocumento}
+                    </span>
+                  </li>
+                )}
+                <li>
+                  <GraduationCap className={estilos.iconoMeta} aria-hidden="true" />
+                  <span>
+                    <strong>Relación:</strong> {inscripcionVisible.relacionUniversidad || "Externo"}
+                    {inscripcionVisible.programaAcademico ? ` (${inscripcionVisible.programaAcademico})` : ""}
+                  </span>
+                </li>
                 <li>
                   <User className={estilos.iconoMeta} aria-hidden="true" />
-                  {inscripcionVisible.correo}
+                  <span>
+                    {inscripcionVisible.correo}
+                    {inscripcionVisible.telefono ? ` · Tel: ${inscripcionVisible.telefono}` : ""}
+                  </span>
                 </li>
                 <li>
                   <CalendarDays className={estilos.iconoMeta} aria-hidden="true" />
