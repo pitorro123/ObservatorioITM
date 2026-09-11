@@ -50,16 +50,32 @@
   flex-shrink: 0;
 }
 
-.insigniaSemillero {
+.insigniaTipo {
   position: absolute;
   top: var(--espacio-sm);
   left: var(--espacio-sm);
-  padding: 4px var(--espacio-sm);
+  padding: 3px var(--espacio-sm);
   border-radius: var(--radio-pildora);
-  background-color: var(--obs-gold);
-  color: var(--obs-navy);
-  font-size: var(--texto-xs);
-  font-weight: var(--peso-semibold);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.insigniaTipo_abierto {
+  background-color: rgba(224, 242, 254, 0.95);
+  color: #0369a1;
+}
+
+.insigniaTipo_charla {
+  background-color: rgba(243, 232, 255, 0.95);
+  color: #7e22ce;
+}
+
+.insigniaTipo_observacion {
+  background-color: rgba(254, 243, 199, 0.95);
+  color: #b45309;
 }
 
 .estadoPublicado .puntoEstado {
@@ -90,9 +106,33 @@
   flex: 1;
 }
 
+.metaCabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-xs);
+}
+
 .fecha {
   font-size: var(--texto-xs);
   color: var(--color-texto-secundario);
+}
+
+.capacidadBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: var(--color-primario);
+  background-color: var(--color-primario-suave);
+  padding: 2px 8px;
+  border-radius: var(--radio-pildora);
+}
+
+.iconoCapacidad {
+  width: 12px;
+  height: 12px;
 }
 
 .titulo {

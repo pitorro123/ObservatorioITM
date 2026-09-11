@@ -1,4 +1,4 @@
-import { Trash2, Pencil, Send, XCircle } from "lucide-react";
+import { Trash2, Pencil, Send, XCircle, Users } from "lucide-react";
 import { formatearFechaCorta, formatearHora } from "../../../../utils/formato.js";
 import estilos from "./TarjetaEvento.module.css";
 
@@ -34,15 +34,29 @@ export default function TarjetaEvento({
           <span className={estilos.puntoEstado} aria-hidden="true" />
           {etiquetasEstado[evento.estado] || evento.estado}
         </span>
-        {evento.tipo === "semillero" && (
-          <span className={estilos.insigniaSemillero}>Semillero</span>
-        )}
+        <span
+          className={`${estilos.insigniaTipo} ${
+            estilos[`insigniaTipo_${evento.tipo}`] || estilos.insigniaTipo_abierto
+          }`}
+        >
+          {evento.tipo === "charla"
+            ? "Charla"
+            : evento.tipo === "observacion"
+              ? "Observación"
+              : "Abierto"}
+        </span>
       </div>
 
       <div className={estilos.cuerpo}>
-        <p className={estilos.fecha}>
-          {formatearFechaCorta(evento.fecha)} · {formatearHora(evento.hora)}
-        </p>
+        <div className={estilos.metaCabecera}>
+          <p className={estilos.fecha}>
+            {formatearFechaCorta(evento.fecha)} · {formatearHora(evento.hora)}
+          </p>
+          <span className={estilos.capacidadBadge} title="Inscritos / Capacidad total">
+            <Users className={estilos.iconoCapacidad} aria-hidden="true" />
+            {evento.inscritos || 0}/{evento.capacidad || 50}
+          </span>
+        </div>
         <h3 className={estilos.titulo}>{evento.titulo}</h3>
         <p className={estilos.descripcion}>{evento.descripcion}</p>
       </div>

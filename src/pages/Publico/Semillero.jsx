@@ -40,7 +40,7 @@ export default function Semillero() {
             <div className={estilos.heroContent}>
               <h1 className={estilos.heroTitle}>{semillero.titulo}</h1>
               <p className={estilos.heroDescription}>{semillero.descripcion}</p>
-              <Button to="/eventos?tipo=semillero" variant="ghost" className={estilos.heroBtn}>
+              <Button to="/eventos" variant="ghost" className={estilos.heroBtn}>
                 Ver próximas actividades
               </Button>
             </div>

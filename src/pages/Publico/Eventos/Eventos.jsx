@@ -7,6 +7,7 @@ import {
   Calendar,
   RotateCcw,
   ChevronDown,
+  Users,
 } from "lucide-react";
 import Button from "../../../components/common/Button/Button.jsx";
 import BuscadorSelect from "../../../components/common/BuscadorSelect/BuscadorSelect.jsx";
@@ -63,13 +64,15 @@ function CarruselSuperior({ eventos }) {
                 {evento.estado === "publicado" ? "Publicado" : "Cancelado"}
               </span>
               <span
-                className={
-                  evento.tipo === "semillero"
-                    ? estilos.badgeSemillero
-                    : estilos.badgeAbierto
-                }
+                className={`${estilos.badgeTipo} ${
+                  estilos[`badgeTipo_${evento.tipo}`] || estilos.badgeTipo_abierto
+                }`}
               >
-                {evento.tipo === "semillero" ? "Semillero" : "Abierto"}
+                {evento.tipo === "charla"
+                  ? "Charla"
+                  : evento.tipo === "observacion"
+                    ? "Observación"
+                    : "Abierto al público"}
               </span>
             </div>
 
@@ -234,8 +237,9 @@ export default function Eventos() {
               onChange={(e) => cambiarTipo(e.target.value)}
             >
               <option value="todos">Todos los tipos</option>
-              <option value="semillero">Semillero</option>
-              <option value="abierto">Abiertos a la comunidad</option>
+              <option value="abierto">Abierto al público</option>
+              <option value="charla">Charla</option>
+              <option value="observacion">Observación</option>
             </select>
             <ChevronDown className={estilos.selectChevron} aria-hidden="true" />
           </div>
@@ -344,13 +348,15 @@ export default function Eventos() {
                           : "Borrador"}
                     </span>
                     <span
-                      className={
-                        evento.tipo === "semillero"
-                          ? estilos.badgeSemillero
-                          : estilos.badgeAbierto
-                      }
+                      className={`${estilos.badgeTipo} ${
+                        estilos[`badgeTipo_${evento.tipo}`] || estilos.badgeTipo_abierto
+                      }`}
                     >
-                      {evento.tipo === "semillero" ? "Semillero" : "Abierto"}
+                      {evento.tipo === "charla"
+                        ? "Charla"
+                        : evento.tipo === "observacion"
+                          ? "Observación"
+                          : "Abierto al público"}
                     </span>
                   </div>
                 </div>
@@ -376,13 +382,15 @@ export default function Eventos() {
                           : "Borrador"}
                     </span>
                     <span
-                      className={
-                        evento.tipo === "semillero"
-                          ? estilos.badgeSemillero
-                          : estilos.badgeAbierto
-                      }
+                      className={`${estilos.badgeTipo} ${
+                        estilos[`badgeTipo_${evento.tipo}`] || estilos.badgeTipo_abierto
+                      }`}
                     >
-                      {evento.tipo === "semillero" ? "Semillero" : "Abierto"}
+                      {evento.tipo === "charla"
+                        ? "Charla"
+                        : evento.tipo === "observacion"
+                          ? "Observación"
+                          : "Abierto al público"}
                     </span>
                   </div>
                 )}
@@ -402,6 +410,12 @@ export default function Eventos() {
                   <li className={estilos.metaItem}>
                     <MapPin className={estilos.metaIcon} aria-hidden="true" />
                     {evento.lugar}
+                  </li>
+                  <li className={estilos.metaItem}>
+                    <Users className={estilos.metaIcon} aria-hidden="true" />
+                    {(evento.inscritos || 0) >= (evento.capacidad || 50)
+                      ? "Cupos agotados"
+                      : `${Math.max(0, (evento.capacidad || 50) - (evento.inscritos || 0))} cupos disponibles`}
                   </li>
                 </ul>
 
