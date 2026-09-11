@@ -68,6 +68,7 @@ export default function Dashboard() {
                 <thead>
                   <tr>
                     <th>Evento</th>
+                    <th>Docente</th>
                     <th>Estado</th>
                     <th>Inscritos</th>
                     <th>Asistentes</th>
@@ -83,6 +84,11 @@ export default function Dashboard() {
                         <td>
                           <p className={estilos.nombreEvento}>{evento.titulo}</p>
                           <p className={estilos.fechaEvento}>{evento.fecha}</p>
+                        </td>
+                        <td>
+                          <span className={estilos.docenteTexto}>
+                            {evento.creadoPorNombre || "Docente ITM"}
+                          </span>
                         </td>
                         <td>
                           <span

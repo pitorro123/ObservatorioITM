@@ -339,6 +339,27 @@
   background-color: var(--color-primario-hover);
 }
 
+.docenteAsignadoFila {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-xs);
+  padding: var(--espacio-sm) var(--espacio-md);
+  background-color: var(--color-fondo-general);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-sm);
+  font-size: var(--texto-sm);
+  color: var(--color-texto-principal);
+  font-weight: var(--peso-semibold);
+  min-height: 42px;
+}
+
+.iconoDocenteAsignado {
+  width: 18px;
+  height: 18px;
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
 @media (max-width: 640px) {
   .fila {
     grid-template-columns: 1fr;

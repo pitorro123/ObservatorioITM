@@ -150,6 +150,53 @@
   overflow: hidden;
 }
 
+.docenteTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 4px 8px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radio-md);
+  width: fit-content;
+}
+
+.iconoDocente {
+  width: 14px;
+  height: 14px;
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.docenteTexto {
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.docenteTexto strong {
+  color: #0f172a;
+}
+
+.badgeSoloLectura {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: #f8fafc;
+  color: #64748b;
+  border-radius: var(--radio-md);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+  border: 1px dashed #cbd5e1;
+}
+
+.iconoCandado {
+  width: 13px;
+  height: 13px;
+  color: #94a3b8;
+}
+
 .acciones {
   position: relative;
   display: flex;

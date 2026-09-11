@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { X, ImagePlus, MapPin, Users } from "lucide-react";
+import { X, ImagePlus, MapPin, Users, GraduationCap } from "lucide-react";
+import { useAuth } from "../../../../context/AuthContext.jsx";
 import estilos from "./FormularioEvento.module.css";
 
 const formularioVacio = {
@@ -13,6 +14,9 @@ const formularioVacio = {
   ubicacionMapa: "",
   imagen: "",
   tipo: "abierto",
+  creadoPorId: null,
+  creadoPorNombre: "",
+  creadoPorRol: "Docente",
   publicarDirectamente: false,
 };
 
@@ -38,6 +42,7 @@ const LUGARES_SUGERIDOS = [
 ];
 
 export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar }) {
+  const { usuarioActual, esAdmin, docentes } = useAuth();
   const [formulario, setFormulario] = useState(formularioVacio);
   const [error, setError] = useState("");
   const esEdicion = Boolean(evento);
@@ -66,12 +71,20 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
         ubicacionMapa: evento.ubicacionMapa || "",
         imagen: evento.imagen || "",
         tipo: tipoValido,
+        creadoPorId: evento.creadoPorId || usuarioActual?.id,
+        creadoPorNombre: evento.creadoPorNombre || usuarioActual?.nombre || "Docente ITM",
+        creadoPorRol: evento.creadoPorRol || usuarioActual?.rol || "Docente",
         publicarDirectamente: evento.estado === "publicado",
       });
     } else {
-      setFormulario(formularioVacio);
+      setFormulario({
+        ...formularioVacio,
+        creadoPorId: usuarioActual?.id,
+        creadoPorNombre: usuarioActual?.nombre || "Docente ITM",
+        creadoPorRol: usuarioActual?.rol || "Docente",
+      });
     }
-  }, [abierto, evento]);
+  }, [abierto, evento, usuarioActual]);
 
   if (!abierto) return null;
 
@@ -144,6 +157,9 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
       ubicacionMapa,
       imagen: formulario.imagen,
       tipo: formulario.tipo,
+      creadoPorId: formulario.creadoPorId || usuarioActual?.id,
+      creadoPorNombre: formulario.creadoPorNombre || usuarioActual?.nombre || "Docente ITM",
+      creadoPorRol: formulario.creadoPorRol || usuarioActual?.rol || "Docente",
       estado: formulario.publicarDirectamente ? "publicado" : "borrador",
     };
 
@@ -169,10 +185,11 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
 
         <form className={estilos.formulario} onSubmit={manejarEnvio} noValidate>
           {error && (
-            <p className={estilos.errorForm} role="alert">
+            <p className={estilos.error} role="alert">
               {error}
             </p>
           )}
+
           <div className={estilos.campo}>
             <label className={estilos.etiqueta} htmlFor="ev-titulo">
               Nombre
@@ -195,7 +212,7 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
             <textarea
               id="ev-descripcion"
               required
-              rows="4"
+              rows={3}
               value={formulario.descripcion}
               onChange={cambiarCampo("descripcion")}
               className={estilos.textarea}
@@ -246,107 +263,107 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
               className={estilos.input}
               placeholder="Ej: Observatorio Astronómico ITM - Sede Fraternidad"
             />
-            <div className={estilos.sugerenciasUbicacion}>
+            <div className={estilos.sugerenciasLugar}>
               <span className={estilos.sugerenciasTexto}>Accesos rápidos:</span>
-              {LUGARES_SUGERIDOS.map((sug) => (
-                <button
-                  key={`lugar-${sug.nombreBoton}`}
-                  type="button"
-                  className={estilos.botonSugerencia}
-                  onClick={() =>
-                    setFormulario((prev) => ({
-                      ...prev,
-                      lugar: sug.lugar,
-                      ubicacionMapa: prev.ubicacionMapa ? prev.ubicacionMapa : sug.direccion,
-                    }))
-                  }
-                >
-                  {sug.nombreBoton}
-                </button>
-              ))}
+              <div className={estilos.sugerenciasBotones}>
+                {LUGARES_SUGERIDOS.map((sug) => (
+                  <button
+                    key={sug.lugar}
+                    type="button"
+                    className={estilos.botonSugerencia}
+                    onClick={() => {
+                      setFormulario((prev) => ({
+                        ...prev,
+                        lugar: sug.lugar,
+                        ubicacionMapa: prev.ubicacionMapa ? prev.ubicacionMapa : sug.direccion,
+                      }));
+                    }}
+                  >
+                    {sug.nombreBoton}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
           <div className={estilos.campo}>
-            <div className={estilos.etiquetaConAyuda}>
-              <label className={estilos.etiqueta} htmlFor="ev-ubicacion-mapa">
-                <MapPin className={estilos.iconoCampo} aria-hidden="true" />
-                Ubicación para el mapa (dirección exacta)
-              </label>
-            </div>
+            <label className={estilos.etiqueta} htmlFor="ev-ubicacionMapa">
+              <MapPin className={estilos.iconoCampo} aria-hidden="true" />
+              Ubicación para el mapa (dirección exacta)
+            </label>
             <input
-              id="ev-ubicacion-mapa"
+              id="ev-ubicacionMapa"
               type="text"
               value={formulario.ubicacionMapa}
               onChange={cambiarCampo("ubicacionMapa")}
               className={estilos.input}
               placeholder="Ej: Cl. 54a #30-01, Villa Hermosa, Medellín o Campus Fraternidad"
             />
-            <div className={estilos.sugerenciasUbicacion}>
+            <div className={estilos.sugerenciasLugar}>
               <span className={estilos.sugerenciasTexto}>Accesos rápidos:</span>
-              {LUGARES_SUGERIDOS.map((sug) => (
-                <button
-                  key={`mapa-${sug.nombreBoton}`}
-                  type="button"
-                  className={estilos.botonSugerencia}
-                  onClick={() =>
-                    setFormulario((prev) => ({
-                      ...prev,
-                      ubicacionMapa: sug.direccion,
-                    }))
-                  }
-                >
-                  {sug.nombreBoton}
-                </button>
-              ))}
+              <div className={estilos.sugerenciasBotones}>
+                {LUGARES_SUGERIDOS.map((sug) => (
+                  <button
+                    key={`mapa-${sug.lugar}`}
+                    type="button"
+                    className={estilos.botonSugerencia}
+                    onClick={() => {
+                      setFormulario((prev) => ({
+                        ...prev,
+                        ubicacionMapa: sug.direccion,
+                      }));
+                    }}
+                  >
+                    {sug.nombreBoton}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className={estilos.campoMasivo}>
-            <label className={estilos.cajaMasivo}>
+          <div className={estilos.cajaMasivo}>
+            <label className={estilos.labelMasivo}>
               <input
                 type="checkbox"
                 checked={formulario.esMasivo}
                 onChange={cambiarCampo("esMasivo")}
                 className={estilos.checkbox}
               />
-              <div className={estilos.infoMasivo}>
-                <span className={estilos.tituloMasivo}>Evento masivo</span>
-                <span className={estilos.subtituloMasivo}>
-                  Desactiva la capacidad de participantes (cupos ilimitados) y no genera códigos de acceso.
-                </span>
-              </div>
+              <span className={estilos.textoMasivo}>Evento masivo</span>
             </label>
+            <p className={estilos.ayudaMasivo}>
+              Desactiva la capacidad de participantes (cupos ilimitados) y no genera códigos de acceso.
+            </p>
+          </div>
+
+          <div className={estilos.campo}>
+            <label
+              className={`${estilos.etiqueta} ${formulario.esMasivo ? estilos.etiquetaDeshabilitada : ""}`}
+              htmlFor="ev-capacidad"
+            >
+              <Users className={estilos.iconoCampo} aria-hidden="true" />
+              Capacidad de participantes
+            </label>
+            <input
+              id="ev-capacidad"
+              type="number"
+              min="1"
+              max="5000"
+              disabled={formulario.esMasivo}
+              required={!formulario.esMasivo}
+              value={formulario.esMasivo ? "" : formulario.capacidad}
+              onChange={cambiarCampo("capacidad")}
+              className={`${estilos.input} ${formulario.esMasivo ? estilos.inputDeshabilitado : ""}`}
+              placeholder={formulario.esMasivo ? "Ilimitada (Evento masivo)" : "Ej: 50"}
+            />
+            <span className={estilos.ayudaCampo}>
+              {formulario.esMasivo
+                ? "Capacidad ilimitada para evento masivo."
+                : "Cupos totales disponibles para inscripción."}
+            </span>
           </div>
 
           <div className={estilos.fila}>
-            <div className={estilos.campo}>
-              <label
-                className={`${estilos.etiqueta} ${formulario.esMasivo ? estilos.etiquetaDeshabilitada : ""}`}
-                htmlFor="ev-capacidad"
-              >
-                <Users className={estilos.iconoCampo} aria-hidden="true" />
-                Capacidad de participantes
-              </label>
-              <input
-                id="ev-capacidad"
-                type="number"
-                min="1"
-                max="5000"
-                disabled={formulario.esMasivo}
-                required={!formulario.esMasivo}
-                value={formulario.esMasivo ? "" : formulario.capacidad}
-                onChange={cambiarCampo("capacidad")}
-                className={`${estilos.input} ${formulario.esMasivo ? estilos.inputDeshabilitado : ""}`}
-                placeholder={formulario.esMasivo ? "Ilimitada (Evento masivo)" : "Ej: 50"}
-              />
-              <span className={estilos.ayudaCampo}>
-                {formulario.esMasivo
-                  ? "Capacidad ilimitada para evento masivo."
-                  : "Cupos totales disponibles para inscripción."}
-              </span>
-            </div>
-
             <div className={estilos.campo}>
               <label className={estilos.etiqueta} htmlFor="ev-tipo">
                 Tipo de evento
@@ -361,6 +378,46 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
                 <option value="charla">Charla</option>
                 <option value="observacion">Observación</option>
               </select>
+            </div>
+
+            <div className={estilos.campo}>
+              <label className={estilos.etiqueta} htmlFor="ev-docente">
+                <GraduationCap className={estilos.iconoCampo} aria-hidden="true" />
+                Docente responsable
+              </label>
+              {esAdmin ? (
+                <select
+                  id="ev-docente"
+                  value={formulario.creadoPorId || usuarioActual?.id}
+                  onChange={(e) => {
+                    const id = Number(e.target.value);
+                    const doc =
+                      docentes.find((d) => d.id === id) ||
+                      (id === usuarioActual?.id ? usuarioActual : null);
+                    setFormulario((prev) => ({
+                      ...prev,
+                      creadoPorId: id,
+                      creadoPorNombre: doc ? doc.nombre : "Docente ITM",
+                      creadoPorRol: doc ? doc.rol : "Docente",
+                    }));
+                  }}
+                  className={`${estilos.input} ${estilos.select}`}
+                >
+                  {docentes.map((doc) => (
+                    <option key={doc.id} value={doc.id}>
+                      {doc.nombre} ({doc.correo})
+                    </option>
+                  ))}
+                  <option value={usuarioActual?.id}>
+                    {usuarioActual?.nombre} (Administrador)
+                  </option>
+                </select>
+              ) : (
+                <div className={estilos.docenteAsignadoFila}>
+                  <GraduationCap className={estilos.iconoDocenteAsignado} aria-hidden="true" />
+                  <span>{formulario.creadoPorNombre || usuarioActual?.nombre || "Docente ITM"}</span>
+                </div>
+              )}
             </div>
           </div>
 

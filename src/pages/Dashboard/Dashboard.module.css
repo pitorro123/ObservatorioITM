@@ -157,6 +157,16 @@
   color: var(--color-texto-principal);
 }
 
+.docenteTexto {
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+  color: #1e40af;
+  background-color: #eff6ff;
+  padding: 3px 8px;
+  border-radius: var(--radio-sm);
+  white-space: nowrap;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

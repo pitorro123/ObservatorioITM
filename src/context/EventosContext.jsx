@@ -32,10 +32,20 @@ export function EventosProvider({ children }) {
         tipo = tipo === "semillero" ? "charla" : "abierto";
       }
       const esMasivo = Boolean(ev.esMasivo);
+      const creadoPorId =
+        ev.creadoPorId || (Number(ev.id) % 2 === 0 ? 3 : 2);
+      const creadoPorNombre =
+        ev.creadoPorNombre ||
+        (creadoPorId === 3 ? "Laura Gómez" : "Juan Camilo");
+      const creadoPorRol = ev.creadoPorRol || "Docente";
+
       return {
         ...ev,
         tipo,
         esMasivo,
+        creadoPorId,
+        creadoPorNombre,
+        creadoPorRol,
         capacidad: esMasivo
           ? null
           : Number(ev.capacidad) > 0
@@ -90,6 +100,9 @@ export function EventosProvider({ children }) {
       imagen: datos.imagen || "/images/Imagen.png",
       estado: datos.estado || "borrador",
       tipo,
+      creadoPorId: datos.creadoPorId || 1,
+      creadoPorNombre: datos.creadoPorNombre || "Administrador",
+      creadoPorRol: datos.creadoPorRol || "Docente",
       inscritos: 0,
       asistentes: 0,
     };

@@ -1,5 +1,6 @@
-import { Trash2, Pencil, Send, XCircle, Users } from "lucide-react";
+import { Trash2, Pencil, Send, XCircle, Users, GraduationCap, Lock } from "lucide-react";
 import { formatearFechaCorta, formatearHora } from "../../../../utils/formato.js";
+import { useAuth } from "../../../../context/AuthContext.jsx";
 import estilos from "./TarjetaEvento.module.css";
 
 const clasesEstado = {
@@ -21,6 +22,10 @@ export default function TarjetaEvento({
   onPublicar,
   onCancelar,
 }) {
+  const { usuarioActual, esAdmin } = useAuth();
+  const esAutor = usuarioActual ? Number(usuarioActual.id) === Number(evento.creadoPorId) : false;
+  const puedeGestionar = esAdmin || esAutor;
+
   return (
     <article className={estilos.tarjeta}>
       <div className={estilos.contenedorImagen}>
@@ -57,54 +62,74 @@ export default function TarjetaEvento({
             {evento.inscritos || 0}/{evento.capacidad || 50}
           </span>
         </div>
+
+        <div className={estilos.docenteTag}>
+          <GraduationCap className={estilos.iconoDocente} aria-hidden="true" />
+          <span className={estilos.docenteTexto}>
+            Docente: <strong>{evento.creadoPorNombre || "Docente ITM"}</strong>
+          </span>
+        </div>
+
         <h3 className={estilos.titulo}>{evento.titulo}</h3>
         <p className={estilos.descripcion}>{evento.descripcion}</p>
       </div>
 
       <div className={estilos.acciones}>
-        {evento.estado === "borrador" && (
-          <button
-            type="button"
-            className={`${estilos.botonAccion} ${estilos.botonPublicar}`}
-            onClick={() => onPublicar?.(evento)}
+        {puedeGestionar ? (
+          <>
+            {evento.estado === "borrador" && (
+              <button
+                type="button"
+                className={`${estilos.botonAccion} ${estilos.botonPublicar}`}
+                onClick={() => onPublicar?.(evento)}
+              >
+                <Send className={estilos.iconoAccion} aria-hidden="true" />
+                Publicar
+                <span className={estilos.tooltip}>Publicar evento en el portal</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              className={`${estilos.botonIcono} ${estilos.botonEditar}`}
+              onClick={() => onEditar?.(evento)}
+              aria-label="Editar evento"
+            >
+              <Pencil className={estilos.iconoAccion} aria-hidden="true" />
+              <span className={estilos.tooltip}>Editar evento</span>
+            </button>
+
+            {evento.estado !== "cancelado" && (
+              <button
+                type="button"
+                className={`${estilos.botonIcono} ${estilos.botonCancelar}`}
+                onClick={() => onCancelar?.(evento)}
+                aria-label="Cancelar evento"
+              >
+                <XCircle className={estilos.iconoAccion} aria-hidden="true" />
+                <span className={estilos.tooltip}>Cancelar evento</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              className={`${estilos.botonIcono} ${estilos.botonEliminar}`}
+              onClick={() => onEliminar?.(evento)}
+              aria-label="Eliminar evento"
+            >
+              <Trash2 className={estilos.iconoAccion} aria-hidden="true" />
+              <span className={estilos.tooltip}>Eliminar evento</span>
+            </button>
+          </>
+        ) : (
+          <div
+            className={estilos.badgeSoloLectura}
+            title="Solo el docente creador o un administrador puede editar o eliminar este evento"
           >
-            <Send className={estilos.iconoAccion} aria-hidden="true" />
-            Publicar
-            <span className={estilos.tooltip}>Publicar evento en el portal</span>
-          </button>
+            <Lock className={estilos.iconoCandado} aria-hidden="true" />
+            <span>Solo lectura</span>
+          </div>
         )}
-
-        <button
-          type="button"
-          className={`${estilos.botonIcono} ${estilos.botonEditar}`}
-          onClick={() => onEditar?.(evento)}
-          aria-label="Editar evento"
-        >
-          <Pencil className={estilos.iconoAccion} aria-hidden="true" />
-          <span className={estilos.tooltip}>Editar evento</span>
-        </button>
-
-        {evento.estado !== "cancelado" && (
-          <button
-            type="button"
-            className={`${estilos.botonIcono} ${estilos.botonCancelar}`}
-            onClick={() => onCancelar?.(evento)}
-            aria-label="Cancelar evento"
-          >
-            <XCircle className={estilos.iconoAccion} aria-hidden="true" />
-            <span className={estilos.tooltip}>Cancelar evento</span>
-          </button>
-        )}
-
-        <button
-          type="button"
-          className={`${estilos.botonIcono} ${estilos.botonEliminar}`}
-          onClick={() => onEliminar?.(evento)}
-          aria-label="Eliminar evento"
-        >
-          <Trash2 className={estilos.iconoAccion} aria-hidden="true" />
-          <span className={estilos.tooltip}>Eliminar evento</span>
-        </button>
       </div>
     </article>
   );
