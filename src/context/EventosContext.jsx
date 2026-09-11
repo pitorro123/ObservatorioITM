@@ -299,6 +299,24 @@ export function EventosProvider({ children }) {
     );
 
     if (!inscripcion) {
+      if (eventoId) {
+        const inscripcionEnOtro = inscripciones.find(
+          (i) =>
+            ((i.codigo && i.codigo.toLowerCase() === limpio) ||
+              (i.correo && i.correo.toLowerCase() === limpio) ||
+              (i.numeroDocumento && i.numeroDocumento.toLowerCase() === limpio) ||
+              (i.id && String(i.id).toLowerCase() === limpio))
+        );
+        if (inscripcionEnOtro) {
+          const ev = eventos.find((e) => e.id === inscripcionEnOtro.eventoId);
+          return {
+            exito: false,
+            error: `El participante está inscrito en otro evento ("${ev?.titulo || "Otro evento"}"), no en el evento seleccionado.`,
+            inscripcion: inscripcionEnOtro,
+            otroEvento: ev,
+          };
+        }
+      }
       return { exito: false, error: "Registro no encontrado. Verifica el código de 4 dígitos, documento o correo." };
     }
     if (inscripcion.asistencia === "Asistió") {
@@ -323,6 +341,22 @@ export function EventosProvider({ children }) {
     );
 
     if (!inscripcion) {
+      if (eventoId) {
+        const inscripcionEnOtro = inscripciones.find(
+          (i) =>
+            ((i.codigo && i.codigo.toLowerCase() === limpio) ||
+              (i.correo && i.correo.toLowerCase() === limpio) ||
+              (i.numeroDocumento && i.numeroDocumento.toLowerCase() === limpio) ||
+              (i.id && String(i.id).toLowerCase() === limpio))
+        );
+        if (inscripcionEnOtro) {
+          const ev = eventos.find((e) => e.id === inscripcionEnOtro.eventoId);
+          return {
+            exito: false,
+            error: `Este participante está inscrito en "${ev?.titulo || "otro evento"}", no en este evento.`,
+          };
+        }
+      }
       return { exito: false, error: "Registro no encontrado." };
     }
     if (inscripcion.asistencia === "Asistió") {
