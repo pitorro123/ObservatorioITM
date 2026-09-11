@@ -8,17 +8,36 @@ import {
 const EventosContext = createContext(null);
 
 function generarCodigo4Digitos(eventoId, inscripcionesExistentes = []) {
-  const codigosExistentes = new Set(
+  // Códigos ya asignados en todo el observatorio (todos los eventos)
+  const codigosGlobales = new Set(
+    inscripcionesExistentes
+      .filter((i) => i.codigo)
+      .map((i) => String(i.codigo).trim())
+  );
+
+  // Códigos ya asignados a este evento específico
+  const codigosDelEvento = new Set(
     inscripcionesExistentes
       .filter((i) => i.eventoId === Number(eventoId) && i.codigo)
       .map((i) => String(i.codigo).trim())
   );
+
+  // 1. Prioridad: Código 100% único a nivel global (no se repite en ningún evento)
   for (let intentos = 0; intentos < 10000; intentos++) {
     const num = Math.floor(1000 + Math.random() * 9000).toString();
-    if (!codigosExistentes.has(num)) {
+    if (!codigosGlobales.has(num)) {
       return num;
     }
   }
+
+  // 2. Respaldo estricto: Si se llenaran los 9.000 códigos globales, asegurar que NO se repita en este evento
+  for (let intentos = 0; intentos < 10000; intentos++) {
+    const num = Math.floor(1000 + Math.random() * 9000).toString();
+    if (!codigosDelEvento.has(num)) {
+      return num;
+    }
+  }
+
   return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
@@ -264,7 +283,7 @@ export function EventosProvider({ children }) {
     return { exito: true, inscripcion };
   };
 
-  const obtenerInscripcion = (termino) => {
+  const obtenerInscripcion = (termino, eventoId = null) => {
     const limpio = (termino || "").trim().toLowerCase();
     if (!limpio) {
       return { exito: false, error: "Ingresa el código, documento o correo del participante." };
@@ -272,10 +291,11 @@ export function EventosProvider({ children }) {
 
     const inscripcion = inscripciones.find(
       (i) =>
-        (i.codigo && i.codigo.toLowerCase() === limpio) ||
-        (i.correo && i.correo.toLowerCase() === limpio) ||
-        (i.numeroDocumento && i.numeroDocumento.toLowerCase() === limpio) ||
-        (i.id && String(i.id).toLowerCase() === limpio)
+        (eventoId ? i.eventoId === Number(eventoId) : true) &&
+        ((i.codigo && i.codigo.toLowerCase() === limpio) ||
+          (i.correo && i.correo.toLowerCase() === limpio) ||
+          (i.numeroDocumento && i.numeroDocumento.toLowerCase() === limpio) ||
+          (i.id && String(i.id).toLowerCase() === limpio))
     );
 
     if (!inscripcion) {
@@ -291,14 +311,15 @@ export function EventosProvider({ children }) {
     return { exito: true, inscripcion };
   };
 
-  const marcarAsistencia = (termino) => {
+  const marcarAsistencia = (termino, eventoId = null) => {
     const limpio = (termino || "").trim().toLowerCase();
     const inscripcion = inscripciones.find(
       (i) =>
-        (i.codigo && i.codigo.toLowerCase() === limpio) ||
-        (i.correo && i.correo.toLowerCase() === limpio) ||
-        (i.numeroDocumento && i.numeroDocumento.toLowerCase() === limpio) ||
-        (i.id && String(i.id).toLowerCase() === limpio)
+        (eventoId ? i.eventoId === Number(eventoId) : true) &&
+        ((i.codigo && i.codigo.toLowerCase() === limpio) ||
+          (i.correo && i.correo.toLowerCase() === limpio) ||
+          (i.numeroDocumento && i.numeroDocumento.toLowerCase() === limpio) ||
+          (i.id && String(i.id).toLowerCase() === limpio))
     );
 
     if (!inscripcion) {
