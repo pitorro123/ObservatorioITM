@@ -427,14 +427,12 @@ export default function Eventos() {
                     <MapPin className={estilos.metaIcon} aria-hidden="true" />
                     {evento.lugar}
                   </li>
-                  <li className={estilos.metaItem}>
-                    <Users className={estilos.metaIcon} aria-hidden="true" />
-                    {evento.esMasivo
-                      ? "Aforo libre · Cupos ilimitados"
-                      : (evento.inscritos || 0) >= (evento.capacidad || 50)
-                        ? "Cupos agotados"
-                        : `${Math.max(0, (evento.capacidad || 50) - (evento.inscritos || 0))} cupos disponibles`}
-                  </li>
+                  {!evento.esMasivo && (evento.inscritos || 0) >= (evento.capacidad || 50) && (
+                    <li className={`${estilos.metaItem} ${estilos.metaItemAgotado}`}>
+                      <Users className={estilos.metaIcon} aria-hidden="true" />
+                      No hay cupos disponibles
+                    </li>
+                  )}
                 </ul>
 
                 {evento.estado === "cancelado" ? (
@@ -464,6 +462,7 @@ export default function Eventos() {
         abierto={Boolean(eventoCanceladoModal)}
         onCerrar={() => setEventoCanceladoModal(null)}
         tituloEvento={eventoCanceladoModal?.titulo}
+        motivo={eventoCanceladoModal?.motivoCancelacion || "clima"}
       />
     </section>
   );

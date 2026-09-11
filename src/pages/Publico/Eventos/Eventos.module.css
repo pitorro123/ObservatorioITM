@@ -584,6 +584,15 @@
   color: var(--obs-blue);
 }
 
+.metaItemAgotado {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.metaItemAgotado .metaIcon {
+  color: #dc2626;
+}
+
 .cardBtn {
   margin-top: 12px;
   width: 100%;

@@ -161,6 +161,15 @@
   color: var(--obs-blue);
 }
 
+.metaItemAgotado {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.metaItemAgotado .metaIcon {
+  color: #dc2626;
+}
+
 /* ── Inscripción ── */
 .inscripcion {
   display: flex;

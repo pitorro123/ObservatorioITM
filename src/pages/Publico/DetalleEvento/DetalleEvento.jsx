@@ -13,6 +13,7 @@ import {
   Check,
   Sparkles,
   CloudRain,
+  UserX,
 } from "lucide-react";
 import ModalEventoCancelado from "../../../components/common/ModalEventoCancelado/ModalEventoCancelado.jsx";
 import { useEventosContext } from "../../../context/EventosContext.jsx";
@@ -251,18 +252,12 @@ export default function DetalleEvento() {
                 <MapPin className={estilos.metaIcon} aria-hidden="true" />
                 <span>{evento.lugar}</span>
               </li>
-              <li className={estilos.metaItem}>
-                <Users className={estilos.metaIcon} aria-hidden="true" />
-                <span>
-                  {esMasivo
-                    ? `Evento masivo · Entrada libre (${inscritos} ${
-                        inscritos === 1 ? "persona registrada" : "personas registradas"
-                      })`
-                    : estaAgotado
-                      ? `Capacidad máxima alcanzada (${capacidad} personas)`
-                      : `${cuposDisponibles} de ${capacidad} cupos disponibles`}
-                </span>
-              </li>
+              {estaAgotado && (
+                <li className={`${estilos.metaItem} ${estilos.metaItemAgotado}`}>
+                  <Users className={estilos.metaIcon} aria-hidden="true" />
+                  <span>No hay cupos disponibles</span>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -363,113 +358,32 @@ export default function DetalleEvento() {
           </div>
         ) : (
           <>
-            <h2 className={estilos.inscripcionTitulo}>Inscríbete a este evento</h2>
-            <p className={estilos.inscripcionTexto}>
-              {esMasivo
-                ? "Completa tus datos para registrar tu asistencia. La entrada es gratuita y de aforo libre."
-                : "Completa tus datos para reservar tu cupo. La entrada es gratuita."}
-            </p>
-
-            {/* Tarjeta de disponibilidad de cupos / Evento Masivo */}
-            {esMasivo ? (
-              <div className={estilos.disponibilidadCardMasivo}>
-                <div className={estilos.disponibilidadCabecera}>
-                  <div className={estilos.disponibilidadInfo}>
-                    <Users className={estilos.iconoDisponibilidad} aria-hidden="true" />
-                    <div>
-                      <span className={estilos.disponibilidadTitulo}>
-                        Acceso al evento
-                      </span>
-                      <span className={estilos.disponibilidadSub}>
-                        Evento masivo · Entrada libre
-                      </span>
-                    </div>
-                  </div>
-                  <span className={`${estilos.badgeDisponibilidad} ${estilos.badgeMasivo}`}>
-                    Aforo Libre
-                  </span>
-                </div>
-                <div className={estilos.infoMasivoDetalle}>
-                  <p className={estilos.textoMasivoCupos}>
-                    <strong>{inscritos}</strong> {inscritos === 1 ? "persona registrada" : "personas registradas"} hasta el momento.
-                  </p>
-                  <span className={estilos.notaMasivo}>
-                    No hay límite de cupos para este evento. Inscríbete para registrar tu participación.
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div className={estilos.disponibilidadCard}>
-                <div className={estilos.disponibilidadCabecera}>
-                  <div className={estilos.disponibilidadInfo}>
-                    <Users className={estilos.iconoDisponibilidad} aria-hidden="true" />
-                    <div>
-                      <span className={estilos.disponibilidadTitulo}>
-                        Disponibilidad del evento
-                      </span>
-                      <span className={estilos.disponibilidadSub}>
-                        {estaAgotado
-                          ? "No quedan cupos disponibles"
-                          : `${cuposDisponibles} ${
-                              cuposDisponibles === 1 ? "cupo disponible" : "cupos disponibles"
-                            }`}
-                      </span>
-                    </div>
-                  </div>
-                  <span
-                    className={`${estilos.badgeDisponibilidad} ${
-                      estaAgotado
-                        ? estilos.badgeAgotado
-                        : ultimosCupos
-                          ? estilos.badgeUltimos
-                          : estilos.badgeDisponible
-                    }`}
-                  >
-                    {estaAgotado
-                      ? "Cupos Agotados"
-                      : ultimosCupos
-                        ? `¡Últimos ${cuposDisponibles} cupos!`
-                        : "Cupos Disponibles"}
-                  </span>
-                </div>
-
-                <div className={estilos.progresoContenedor}>
-                  <div
-                    className={`${estilos.progresoBarra} ${
-                      estaAgotado
-                        ? estilos.progresoAgotado
-                        : ultimosCupos
-                          ? estilos.progresoUltimos
-                          : estilos.progresoDisponible
-                    }`}
-                    style={{ width: `${porcentajeOcupado}%` }}
-                    role="progressbar"
-                    aria-valuenow={inscritos}
-                    aria-valuemin={0}
-                    aria-valuemax={capacidad}
-                  />
-                </div>
-
-                <div className={estilos.progresoEtiquetas}>
-                  <span>
-                    <strong>{inscritos}</strong> inscritos
-                  </span>
-                  <span>
-                    Capacidad: <strong>{capacidad}</strong> personas
-                  </span>
-                </div>
-              </div>
+            {!esCancelado && !estaAgotado && (
+              <>
+                <h2 className={estilos.inscripcionTitulo}>Inscríbete a este evento</h2>
+                <p className={estilos.inscripcionTexto}>
+                  {esMasivo
+                    ? "Completa tus datos para registrar tu asistencia. La entrada es gratuita y de aforo libre."
+                    : "Completa tus datos para reservar tu cupo. La entrada es gratuita."}
+                </p>
+              </>
             )}
 
             {esCancelado ? (
               <div className={estilos.cajaCancelado}>
                 <div className={estilos.iconoCanceladoWrap}>
-                  <CloudRain className={estilos.iconoCancelado} aria-hidden="true" />
+                  {evento?.motivoCancelacion === "personal" ? (
+                    <UserX className={estilos.iconoCancelado} aria-hidden="true" />
+                  ) : (
+                    <CloudRain className={estilos.iconoCancelado} aria-hidden="true" />
+                  )}
                 </div>
                 <span className={estilos.badgeCanceladoCard}>Cancelado por el docente</span>
                 <h3 className={estilos.tituloCancelado}>Inscripciones no disponibles</h3>
                 <p className={estilos.textoCancelado}>
-                  Este evento ha sido cancelado por el docente debido a condiciones climáticas desfavorables.
+                  {evento?.motivoCancelacion === "personal"
+                    ? "Este evento ha sido cancelado por el docente por motivos personales o fuerza mayor."
+                    : "Este evento ha sido cancelado por el docente debido a condiciones climáticas desfavorables."}
                 </p>
                 <button
                   type="button"
@@ -485,11 +399,9 @@ export default function DetalleEvento() {
             ) : estaAgotado ? (
               <div className={estilos.cajaAgotado}>
                 <AlertCircle className={estilos.iconoAgotado} aria-hidden="true" />
-                <h3 className={estilos.tituloAgotado}>Inscripciones completas</h3>
+                <h3 className={estilos.tituloAgotado}>No hay cupos disponibles</h3>
                 <p className={estilos.textoAgotado}>
-                  Este evento ha alcanzado el límite máximo de{" "}
-                  <strong>{capacidad} participantes</strong>. Te invitamos a explorar
-                  nuestras próximas actividades para asegurar tu lugar.
+                  Este evento ha alcanzado el aforo máximo y no cuenta con cupos disponibles para inscripción. Te invitamos a explorar nuestras próximas actividades.
                 </p>
                 <Link to="/eventos" className={estilos.botonExplorarOtros}>
                   Ver otros eventos disponibles
@@ -675,6 +587,7 @@ export default function DetalleEvento() {
         abierto={modalCanceladoAbierto}
         onCerrar={() => setModalCanceladoAbierto(false)}
         tituloEvento={evento?.titulo}
+        motivo={evento?.motivoCancelacion || "clima"}
       />
     </section>
   );
