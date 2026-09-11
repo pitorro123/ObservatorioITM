@@ -54,9 +54,7 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
       const tiposValidos = ["abierto", "charla", "observacion"];
       const tipoValido = tiposValidos.includes(evento.tipo)
         ? evento.tipo
-        : evento.tipo === "semillero"
-          ? "charla"
-          : "abierto";
+        : "abierto";
 
       const esMasivo = Boolean(evento.esMasivo);
 

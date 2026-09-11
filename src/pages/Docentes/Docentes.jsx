@@ -156,7 +156,7 @@ export default function Docentes() {
         <Header rutaBreadcrumb={["Dashboard", "Docentes"]} titulo="Cuentas de docentes" />
         <p className={estilos.descripcion}>
           Crea, edita y gestiona el estado (activar/desactivar) de las cuentas de acceso
-          de los docentes encargados de la gestión del observatorio y el semillero.
+          de los docentes encargados de la gestión del observatorio astronómico.
         </p>
       </div>
 

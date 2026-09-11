@@ -29,7 +29,7 @@ export function EventosProvider({ children }) {
     return almacenados.map((ev) => {
       let tipo = ev.tipo;
       if (!tiposValidos.includes(tipo)) {
-        tipo = tipo === "semillero" ? "charla" : "abierto";
+        tipo = "abierto";
       }
       const esMasivo = Boolean(ev.esMasivo);
       const creadoPorId =
