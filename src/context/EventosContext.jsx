@@ -181,7 +181,16 @@ export function EventosProvider({ children }) {
     [eventos, inscripciones]
   );
 
-  const inscribir = ({ eventoId, nombre, correo, telefono }) => {
+  const inscribir = ({
+    eventoId,
+    nombre,
+    tipoDocumento = "CC",
+    numeroDocumento = "",
+    correo,
+    telefono,
+    relacionUniversidad = "Externo",
+    programaAcademico = "",
+  }) => {
     const eventoActual = eventos.find((e) => e.id === Number(eventoId));
     if (eventoActual && !eventoActual.esMasivo) {
       const capacidad = Number(eventoActual.capacidad) > 0 ? Number(eventoActual.capacidad) : 50;
@@ -194,13 +203,18 @@ export function EventosProvider({ children }) {
       }
     }
 
+    const docLimpio = (numeroDocumento || "").trim().toLowerCase();
     const yaInscrito = inscripciones.some(
       (i) =>
         i.eventoId === Number(eventoId) &&
-        i.correo.toLowerCase() === correo.trim().toLowerCase()
+        (i.correo.toLowerCase() === correo.trim().toLowerCase() ||
+          (docLimpio && i.numeroDocumento && i.numeroDocumento.toLowerCase() === docLimpio))
     );
     if (yaInscrito) {
-      return { exito: false, error: "Ya estás inscrito en este evento con ese correo." };
+      return {
+        exito: false,
+        error: "Ya existe una inscripción registrada con ese correo o número de documento.",
+      };
     }
 
     // Para eventos masivos no se genera código ni se envía nada al correo
@@ -213,8 +227,12 @@ export function EventosProvider({ children }) {
       codigo,
       eventoId: Number(eventoId),
       nombre: nombre.trim(),
+      tipoDocumento: tipoDocumento || "CC",
+      numeroDocumento: (numeroDocumento || "").trim(),
       correo: correo.trim(),
       telefono: telefono.trim(),
+      relacionUniversidad: relacionUniversidad || "Otro",
+      programaAcademico: (programaAcademico || "").trim(),
       asistencia: "Pendiente",
       fechaInscripcion: new Date().toISOString(),
       esMasivo: Boolean(eventoActual?.esMasivo),
@@ -235,18 +253,19 @@ export function EventosProvider({ children }) {
   const obtenerInscripcion = (termino) => {
     const limpio = (termino || "").trim().toLowerCase();
     if (!limpio) {
-      return { exito: false, error: "Ingresa el código de 4 dígitos o correo del participante." };
+      return { exito: false, error: "Ingresa el código, documento o correo del participante." };
     }
 
     const inscripcion = inscripciones.find(
       (i) =>
         (i.codigo && i.codigo.toLowerCase() === limpio) ||
         (i.correo && i.correo.toLowerCase() === limpio) ||
+        (i.numeroDocumento && i.numeroDocumento.toLowerCase() === limpio) ||
         (i.id && String(i.id).toLowerCase() === limpio)
     );
 
     if (!inscripcion) {
-      return { exito: false, error: "Registro no encontrado. Verifica el código de 4 dígitos o correo." };
+      return { exito: false, error: "Registro no encontrado. Verifica el código de 4 dígitos, documento o correo." };
     }
     if (inscripcion.asistencia === "Asistió") {
       return {
@@ -264,6 +283,7 @@ export function EventosProvider({ children }) {
       (i) =>
         (i.codigo && i.codigo.toLowerCase() === limpio) ||
         (i.correo && i.correo.toLowerCase() === limpio) ||
+        (i.numeroDocumento && i.numeroDocumento.toLowerCase() === limpio) ||
         (i.id && String(i.id).toLowerCase() === limpio)
     );
 

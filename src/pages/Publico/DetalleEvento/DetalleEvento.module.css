@@ -396,7 +396,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 480px;
+  max-width: 560px;
 }
 
 .campo {
@@ -426,8 +426,42 @@
   border-color: var(--obs-blue);
 }
 
-.input::placeholder {
-  color: var(--slate-400);
+.filaFormulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 540px) {
+  .filaFormulario {
+    grid-template-columns: 1fr;
+  }
+}
+
+.select {
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  background-color: white;
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  color: var(--slate-700);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  transition: border-color var(--transition-fast);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--obs-blue);
+}
+
+.ayudaCampo {
+  font-size: 0.75rem;
+  color: var(--slate-500);
 }
 
 .botonInscribirse {
@@ -721,6 +755,36 @@
   font-size: 0.875rem;
   color: var(--slate-600);
   line-height: 1.6;
+}
+
+.resumenInscrito {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 16px;
+  background-color: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  font-size: 0.8125rem;
+  color: var(--slate-700);
+  max-width: 440px;
+  width: 100%;
+}
+
+.resumenInscritoFila {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.resumenInscritoEtiqueta {
+  font-weight: 600;
+  color: var(--obs-navy);
+  flex-shrink: 0;
+}
+
+.resumenInscritoValor {
+  color: var(--slate-600);
 }
 
 .enlaceVolver {

@@ -15,6 +15,11 @@ import {
 } from "lucide-react";
 import { useEventosContext } from "../../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../../utils/formato.js";
+import {
+  TIPOS_DOCUMENTO,
+  RELACIONES_ITM,
+  PROGRAMAS_ITM,
+} from "../../../data/programasItm.js";
 import estilos from "./DetalleEvento.module.css";
 
 function construirUrlMapa(direccion) {
@@ -46,7 +51,15 @@ export default function DetalleEvento() {
   )}`;
 
   const [confirmada, setConfirmada] = useState(false);
-  const [datos, setDatos] = useState({ nombre: "", correo: "", telefono: "" });
+  const [datos, setDatos] = useState({
+    nombre: "",
+    tipoDocumento: "CC",
+    numeroDocumento: "",
+    correo: "",
+    telefono: "",
+    relacionUniversidad: "Estudiante",
+    programaAcademico: "",
+  });
   const [inscripcion, setInscripcion] = useState(null);
   const [copiado, setCopiado] = useState(false);
   const [error, setError] = useState("");
@@ -66,7 +79,16 @@ export default function DetalleEvento() {
     if (campo === "telefono") {
       valor = valor.replace(/[^\d\s\-+()]/g, "");
     }
-    setDatos((prev) => ({ ...prev, [campo]: valor }));
+    if (campo === "numeroDocumento") {
+      valor = valor.replace(/[^\w\-]/g, "");
+    }
+    setDatos((prev) => {
+      const nuevos = { ...prev, [campo]: valor };
+      if (campo === "relacionUniversidad" && valor !== "Estudiante") {
+        nuevos.programaAcademico = "";
+      }
+      return nuevos;
+    });
     if (error) setError("");
   };
 
@@ -74,11 +96,15 @@ export default function DetalleEvento() {
     e.preventDefault();
 
     const nombre = datos.nombre.trim();
+    const tipoDocumento = datos.tipoDocumento;
+    const numeroDocumento = datos.numeroDocumento.trim();
     const correo = datos.correo.trim();
     const telefono = datos.telefono.trim();
+    const relacionUniversidad = datos.relacionUniversidad;
+    const programaAcademico = (datos.programaAcademico || "").trim();
 
     if (!nombre) {
-      setError("Escribe tu nombre completo.");
+      setError("Escribe tus nombres y apellidos.");
       return;
     }
 
@@ -88,11 +114,16 @@ export default function DetalleEvento() {
       /[aeiouáéíóúü]/i.test(palabra);
 
     if (palabrasNombre.length < 2) {
-      setError("Ingresa tu nombre y apellido.");
+      setError("Ingresa al menos un nombre y un apellido.");
       return;
     }
     if (!palabrasNombre.every(palabraValida)) {
-      setError("El nombre no parece real. Escribe tu nombre y apellido.");
+      setError("El nombre no parece real. Escribe tus nombres y apellidos.");
+      return;
+    }
+
+    if (!numeroDocumento || numeroDocumento.length < 5) {
+      setError("Ingresa tu número de documento válido (mínimo 5 caracteres).");
       return;
     }
 
@@ -133,11 +164,20 @@ export default function DetalleEvento() {
       return;
     }
 
+    if (relacionUniversidad === "Estudiante" && !programaAcademico) {
+      setError("Por favor selecciona tu programa académico del ITM.");
+      return;
+    }
+
     const resultado = inscribir({
       eventoId: evento.id,
       nombre,
+      tipoDocumento,
+      numeroDocumento,
       correo,
       telefono,
+      relacionUniversidad,
+      programaAcademico,
     });
     if (!resultado.exito) {
       setError(resultado.error);
@@ -230,6 +270,26 @@ export default function DetalleEvento() {
               <strong>{formatearFecha(evento.fecha)}</strong> a las{" "}
               <strong>{formatearHora(evento.hora)}</strong>.
             </p>
+
+            <div className={estilos.resumenInscrito}>
+              <div className={estilos.resumenInscritoFila}>
+                <span className={estilos.resumenInscritoEtiqueta}>Participante:</span>
+                <span className={estilos.resumenInscritoValor}>{inscripcion.nombre}</span>
+              </div>
+              <div className={estilos.resumenInscritoFila}>
+                <span className={estilos.resumenInscritoEtiqueta}>Documento:</span>
+                <span className={estilos.resumenInscritoValor}>
+                  {inscripcion.tipoDocumento} {inscripcion.numeroDocumento}
+                </span>
+              </div>
+              <div className={estilos.resumenInscritoFila}>
+                <span className={estilos.resumenInscritoEtiqueta}>Relación ITM:</span>
+                <span className={estilos.resumenInscritoValor}>
+                  {inscripcion.relacionUniversidad}
+                  {inscripcion.programaAcademico ? ` · ${inscripcion.programaAcademico}` : ""}
+                </span>
+              </div>
+            </div>
 
             {esMasivo ? (
               <div className={estilos.cajaMasivoConfirmacion}>
@@ -413,7 +473,7 @@ export default function DetalleEvento() {
 
                 <div className={estilos.campo}>
                   <label className={estilos.etiqueta} htmlFor="nombre">
-                    Nombre completo
+                    Nombres y apellidos *
                   </label>
                   <input
                     id="nombre"
@@ -422,43 +482,124 @@ export default function DetalleEvento() {
                     value={datos.nombre}
                     onChange={manejarCambio("nombre")}
                     className={estilos.input}
-                    placeholder="Tu nombre"
+                    placeholder="Ej: Juan Camilo Pérez Restrepo"
                   />
                 </div>
 
-                <div className={estilos.campo}>
-                  <label className={estilos.etiqueta} htmlFor="correo">
-                    Correo electrónico
-                  </label>
-                  <input
-                    id="correo"
-                    type="email"
-                    required
-                    value={datos.correo}
-                    onChange={manejarCambio("correo")}
-                    className={estilos.input}
-                    placeholder="tucorreo@ejemplo.com"
-                  />
+                <div className={estilos.filaFormulario}>
+                  <div className={estilos.campo}>
+                    <label className={estilos.etiqueta} htmlFor="tipoDocumento">
+                      Tipo de documento *
+                    </label>
+                    <select
+                      id="tipoDocumento"
+                      value={datos.tipoDocumento}
+                      onChange={manejarCambio("tipoDocumento")}
+                      className={estilos.select}
+                    >
+                      {TIPOS_DOCUMENTO.map((td) => (
+                        <option key={td.valor} value={td.valor}>
+                          {td.etiqueta}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={estilos.campo}>
+                    <label className={estilos.etiqueta} htmlFor="numeroDocumento">
+                      Número de documento *
+                    </label>
+                    <input
+                      id="numeroDocumento"
+                      type="text"
+                      required
+                      value={datos.numeroDocumento}
+                      onChange={manejarCambio("numeroDocumento")}
+                      className={estilos.input}
+                      placeholder="Ej: 1020304050"
+                      maxLength={20}
+                    />
+                  </div>
+                </div>
+
+                <div className={estilos.filaFormulario}>
+                  <div className={estilos.campo}>
+                    <label className={estilos.etiqueta} htmlFor="correo">
+                      Correo electrónico *
+                    </label>
+                    <input
+                      id="correo"
+                      type="email"
+                      required
+                      value={datos.correo}
+                      onChange={manejarCambio("correo")}
+                      className={estilos.input}
+                      placeholder="tucorreo@ejemplo.com"
+                    />
+                  </div>
+
+                  <div className={estilos.campo}>
+                    <label className={estilos.etiqueta} htmlFor="telefono">
+                      Teléfono / Celular *
+                    </label>
+                    <input
+                      id="telefono"
+                      type="tel"
+                      required
+                      value={datos.telefono}
+                      onChange={manejarCambio("telefono")}
+                      className={estilos.input}
+                      placeholder="Ej: 300 123 4567"
+                      maxLength={16}
+                    />
+                  </div>
                 </div>
 
                 <div className={estilos.campo}>
-                  <label className={estilos.etiqueta} htmlFor="telefono">
-                    Teléfono / Celular
+                  <label className={estilos.etiqueta} htmlFor="relacionUniversidad">
+                    Relación con la universidad *
                   </label>
-                  <input
-                    id="telefono"
-                    type="tel"
-                    required
-                    value={datos.telefono}
-                    onChange={manejarCambio("telefono")}
-                    className={estilos.input}
-                    placeholder="300 000 0000"
-                    maxLength={16}
-                  />
+                  <select
+                    id="relacionUniversidad"
+                    value={datos.relacionUniversidad}
+                    onChange={manejarCambio("relacionUniversidad")}
+                    className={estilos.select}
+                  >
+                    {RELACIONES_ITM.map((rel) => (
+                      <option key={rel.valor} value={rel.valor}>
+                        {rel.etiqueta}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
+                {datos.relacionUniversidad === "Estudiante" && (
+                  <div className={estilos.campo}>
+                    <label className={estilos.etiqueta} htmlFor="programaAcademico">
+                      Programa académico en el ITM *
+                    </label>
+                    <select
+                      id="programaAcademico"
+                      value={datos.programaAcademico}
+                      onChange={manejarCambio("programaAcademico")}
+                      className={estilos.select}
+                      required
+                    >
+                      <option value="">-- Selecciona tu programa académico --</option>
+                      {PROGRAMAS_ITM.map((prog) => (
+                        <option key={prog} value={prog}>
+                          {prog}
+                        </option>
+                      ))}
+                    </select>
+                    <span className={estilos.ayudaCampo}>
+                      Selecciona la carrera o tecnología que estás cursando actualmente.
+                    </span>
+                  </div>
+                )}
 
                 <button type="submit" className={estilos.botonInscribirse}>
-                  Inscribirme
+                  {esMasivo ? "Registrarme al evento" : "Inscribirme"}
                 </button>
               </form>
             )}
