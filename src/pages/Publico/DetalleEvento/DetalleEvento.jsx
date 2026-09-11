@@ -63,7 +63,11 @@ export default function DetalleEvento() {
   }
 
   const manejarCambio = (campo) => (eventoInput) => {
-    setDatos((prev) => ({ ...prev, [campo]: eventoInput.target.value }));
+    let valor = eventoInput.target.value;
+    if (campo === "telefono") {
+      valor = valor.replace(/[^\d\s\-+()]/g, "");
+    }
+    setDatos((prev) => ({ ...prev, [campo]: valor }));
     if (error) setError("");
   };
 
@@ -99,12 +103,35 @@ export default function DetalleEvento() {
       return;
     }
 
-    if (telefono) {
-      const soloDigitos = telefono.replace(/\D/g, "");
-      if (soloDigitos.length < 7 || soloDigitos.length > 15) {
-        setError("Ingresa un número de teléfono válido (solo números).");
-        return;
-      }
+    if (!telefono) {
+      setError("Ingresa tu número de celular.");
+      return;
+    }
+
+    let soloDigitos = telefono.replace(/\D/g, "");
+
+    // Si comienza con código de país 57 (Colombia) y tiene 12 dígitos, extraer los 10 dígitos locales
+    if (soloDigitos.startsWith("57") && soloDigitos.length === 12) {
+      soloDigitos = soloDigitos.slice(2);
+    }
+
+    // Celular en Colombia (10 dígitos comenzando en 3) o formato internacional (+ seguido de 10 a 15 dígitos)
+    const esCelularColombia = /^3\d{9}$/.test(soloDigitos);
+    const esInternacional =
+      telefono.startsWith("+") &&
+      soloDigitos.length >= 10 &&
+      soloDigitos.length <= 15;
+
+    if (!esCelularColombia && !esInternacional) {
+      setError(
+        "Ingresa un número de celular válido de 10 dígitos (ej: 300 123 4567)."
+      );
+      return;
+    }
+
+    if (/^(\d)\1{9,}$/.test(soloDigitos)) {
+      setError("El número de celular ingresado no parece ser real.");
+      return;
     }
 
     const resultado = inscribir({
@@ -281,15 +308,17 @@ export default function DetalleEvento() {
 
               <div className={estilos.campo}>
                 <label className={estilos.etiqueta} htmlFor="telefono">
-                  Teléfono
+                  Teléfono / Celular
                 </label>
                 <input
                   id="telefono"
                   type="tel"
+                  required
                   value={datos.telefono}
                   onChange={manejarCambio("telefono")}
                   className={estilos.input}
                   placeholder="300 000 0000"
+                  maxLength={16}
                 />
               </div>
 
