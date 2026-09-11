@@ -12,7 +12,9 @@ import {
   Copy,
   Check,
   Sparkles,
+  CloudRain,
 } from "lucide-react";
+import ModalEventoCancelado from "../../../components/common/ModalEventoCancelado/ModalEventoCancelado.jsx";
 import { useEventosContext } from "../../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../../utils/formato.js";
 import {
@@ -38,8 +40,9 @@ export default function DetalleEvento() {
   const inscritos = Number(evento?.inscritos) || 0;
   const cuposDisponibles = esMasivo ? Infinity : Math.max(0, capacidad - inscritos);
   const porcentajeOcupado = esMasivo ? 0 : Math.min(100, Math.round((inscritos / capacidad) * 100));
-  const estaAgotado = !esMasivo && cuposDisponibles === 0;
-  const ultimosCupos = !esMasivo && cuposDisponibles > 0 && cuposDisponibles <= 5;
+  const esCancelado = evento?.estado === "cancelado";
+  const estaAgotado = !esMasivo && !esCancelado && cuposDisponibles === 0;
+  const ultimosCupos = !esMasivo && !esCancelado && cuposDisponibles > 0 && cuposDisponibles <= 5;
 
   const direccionEvento =
     (evento?.ubicacionMapa || "").trim() ||
@@ -51,6 +54,7 @@ export default function DetalleEvento() {
   )}`;
 
   const [confirmada, setConfirmada] = useState(false);
+  const [modalCanceladoAbierto, setModalCanceladoAbierto] = useState(false);
   const [datos, setDatos] = useState({
     nombre: "",
     tipoDocumento: "CC",
@@ -70,7 +74,7 @@ export default function DetalleEvento() {
     inscripcionRef.current?.scrollIntoView({ block: "start" });
   }, []);
 
-  if (!evento || evento.estado !== "publicado") {
+  if (!evento || (evento.estado !== "publicado" && evento.estado !== "cancelado")) {
     return <Navigate to="/eventos" replace />;
   }
 
@@ -213,17 +217,24 @@ export default function DetalleEvento() {
             </div>
           )}
           <div className={estilos.info}>
-            <span
-              className={`${estilos.badgeTipo} ${
-                estilos[`badgeTipo_${evento.tipo}`] || estilos.badgeTipo_abierto
-              }`}
-            >
-              {evento.tipo === "charla"
-                ? "Charla"
-                : evento.tipo === "observacion"
-                  ? "Observación"
-                  : "Abierto al público"}
-            </span>
+            <div className={estilos.badgesHeaderWrap}>
+              <span
+                className={`${estilos.badgeTipo} ${
+                  estilos[`badgeTipo_${evento.tipo}`] || estilos.badgeTipo_abierto
+                }`}
+              >
+                {evento.tipo === "charla"
+                  ? "Charla"
+                  : evento.tipo === "observacion"
+                    ? "Observación"
+                    : "Abierto al público"}
+              </span>
+              {esCancelado && (
+                <span className={estilos.badgeCanceladoHero}>
+                  Cancelado por el docente
+                </span>
+              )}
+            </div>
             <h1 className={estilos.titulo}>{evento.titulo}</h1>
             <p className={estilos.descripcion}>{evento.descripcion}</p>
 
@@ -450,7 +461,28 @@ export default function DetalleEvento() {
               </div>
             )}
 
-            {estaAgotado ? (
+            {esCancelado ? (
+              <div className={estilos.cajaCancelado}>
+                <div className={estilos.iconoCanceladoWrap}>
+                  <CloudRain className={estilos.iconoCancelado} aria-hidden="true" />
+                </div>
+                <span className={estilos.badgeCanceladoCard}>Cancelado por el docente</span>
+                <h3 className={estilos.tituloCancelado}>Inscripciones no disponibles</h3>
+                <p className={estilos.textoCancelado}>
+                  Este evento ha sido cancelado por el docente debido a condiciones climáticas desfavorables.
+                </p>
+                <button
+                  type="button"
+                  className={estilos.botonIntentarInscripcion}
+                  onClick={() => setModalCanceladoAbierto(true)}
+                >
+                  Inscribirme
+                </button>
+                <Link to="/eventos" className={estilos.botonExplorarOtros}>
+                  Ver otros eventos disponibles
+                </Link>
+              </div>
+            ) : estaAgotado ? (
               <div className={estilos.cajaAgotado}>
                 <AlertCircle className={estilos.iconoAgotado} aria-hidden="true" />
                 <h3 className={estilos.tituloAgotado}>Inscripciones completas</h3>
@@ -639,6 +671,11 @@ export default function DetalleEvento() {
         </div>
       </div>
 
+      <ModalEventoCancelado
+        abierto={modalCanceladoAbierto}
+        onCerrar={() => setModalCanceladoAbierto(false)}
+        tituloEvento={evento?.titulo}
+      />
     </section>
   );
 }

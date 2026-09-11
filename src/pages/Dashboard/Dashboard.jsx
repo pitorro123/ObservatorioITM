@@ -42,26 +42,10 @@ export default function Dashboard() {
 
         {esDesfavorable && (
           <div className={estilos.bannerAvisoClima} role="alert">
-            <span className={estilos.bannerIconoWrap}>
-              <CloudRain className={estilos.bannerIcono} aria-hidden="true" />
-            </span>
-            <div className={estilos.bannerContenido}>
-              <div className={estilos.bannerHeader}>
-                <h3 className={estilos.bannerTitulo}>
-                  Aviso Meteorológico para Docentes · Condiciones No Favorables
-                </h3>
-                <span className={estilos.bannerBadge}>
-                  {Math.round(estadoClima?.temperatura ?? 22)}°C · {estadoClima?.probabilidadLluviaHoy ?? 0}% lluvia
-                </span>
-              </div>
-              <p className={estilos.bannerTexto}>
-                {estadoClima?.observatorio?.mensajeDocente}
-              </p>
-              <div className={estilos.bannerPie}>
-                <span className={estilos.bannerDirectriz}>
-                  Directriz Institucional: No cancelar eventos programados · Mantener inscripciones activas y trasladar la jornada a aula o auditorio.
-                </span>
-              </div>
+            <CloudRain className={estilos.bannerIcono} aria-hidden="true" />
+            <div className={estilos.bannerTexto}>
+              <strong>Aviso meteorológico:</strong> Clima no favorable.{" "}
+              <strong>Directriz ITM:</strong> no canceles el evento, trasládalo a aula o auditorio bajo techo.
             </div>
           </div>
         )}

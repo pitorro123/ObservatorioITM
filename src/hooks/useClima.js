@@ -79,11 +79,11 @@ function calcularCondiciones(clima) {
     descripcion:
       "El cielo está nublado o con probabilidad de lluvia para la observación telescópica.",
     recomendacion:
-      "¡Los eventos no se cancelan! Adaptamos la jornada a charlas interactivas, talleres y experimentos en salas bajo techo.",
+      "¡Evento confirmado! Disfruta de charlas interactivas y talleres astronómicos en sala.",
     mensajeLanding:
-      "¡Los eventos no se cancelan por clima! Aunque las nubes no permitan el uso de telescopios, te esperamos para disfrutar de charlas interactivas y talleres astronómicos en nuestras salas.",
+      "¡Observatorio abierto! Te esperamos en nuestras salas con charlas y talleres astronómicos interactivos.",
     mensajeDocente:
-      "Aviso meteorológico para docentes: Las condiciones actuales en Medellín no son favorables para observación telescópica exterior (nubosidad o lluvia). Recuerda que la directriz del Observatorio ITM es NO cancelar el evento; te invitamos a dirigir la jornada en modalidad bajo techo (charlas, talleres o simulaciones en aula/auditorio).",
+      "Aviso meteorológico: Clima no favorable. Directriz ITM: no canceles el evento, trasládalo a aula o auditorio bajo techo.",
     observatorioEstado: "ABIERTO (ACTIVIDAD EN SALA)",
     observatorioEstadoDesc:
       "Instalaciones abiertas. Todos los eventos se realizan en salas y auditorios protegidos del clima.",

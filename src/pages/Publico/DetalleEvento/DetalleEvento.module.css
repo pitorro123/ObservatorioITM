@@ -337,6 +337,106 @@
   color: var(--slate-500);
 }
 
+/* ── Alerta Evento Cancelado ── */
+.cajaCancelado {
+  margin-top: 20px;
+  padding: 28px 24px;
+  border-radius: var(--radius-xl);
+  background-color: white;
+  border: 1px solid #fecaca;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.iconoCanceladoWrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fee2e2 0%, #fef3c7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.15);
+}
+
+.iconoCancelado {
+  width: 28px;
+  height: 28px;
+  color: #dc2626;
+}
+
+.badgeCanceladoCard {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.tituloCancelado {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #991b1b;
+  margin: 0;
+}
+
+.textoCancelado {
+  font-size: 0.875rem;
+  color: var(--slate-600);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.botonIntentarInscripcion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 260px;
+  padding: 12px 20px;
+  border-radius: var(--radius-lg);
+  background-color: #dc2626;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.25);
+  transition: all var(--transition-fast);
+}
+
+.botonIntentarInscripcion:hover {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.badgesHeaderWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badgeCanceladoHero {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
 /* ── Alerta Cupos Agotados ── */
 .cajaAgotado {
   margin-top: 20px;

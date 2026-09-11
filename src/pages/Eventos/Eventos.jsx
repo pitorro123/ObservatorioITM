@@ -134,8 +134,8 @@ export default function Eventos() {
           <div className={estilos.avisoClimaDocente} role="alert">
             <CloudRain className={estilos.avisoClimaIcono} aria-hidden="true" />
             <div className={estilos.avisoClimaTexto}>
-              <strong>Aviso meteorológico para docentes:</strong> Condiciones actuales no favorables para observación al aire libre en Medellín. 
-              <strong> Por directriz institucional, no canceles los eventos;</strong> adáptalos a modalidad bajo techo en aulas o auditorio.
+              <strong>Aviso meteorológico:</strong> Clima no favorable. 
+              <strong> Directriz ITM:</strong> no canceles el evento, trasládalo a aula o auditorio bajo techo.
             </div>
           </div>
         )}
@@ -214,17 +214,19 @@ export default function Eventos() {
         titulo="¿Cancelar este evento?"
         mensaje={
           eventoCancelar
-            ? `Se cancelará "${eventoCancelar.titulo}". Dejará de mostrarse en el portal público.`
+            ? `Estás a punto de cancelar "${eventoCancelar.titulo}". Dejará de mostrarse en el portal público.`
             : ""
         }
         advertencia={
-          eventoCancelar?.tipo === "observacion" || esDesfavorable
-            ? "Recordatorio institucional: Si el motivo de la cancelación es el clima, la directriz del Observatorio ITM es NO cancelar el evento. Los eventos se mantienen activos y se realizan charlas, talleres o simulaciones en sala con los inscritos."
-            : undefined
+          <>
+            <strong>¿Deseas cancelar el evento por condiciones climáticas?</strong>
+            <br />
+            Por directriz institucional del Observatorio ITM, <strong>los eventos no se cancelan por lluvia o mal clima</strong>. Te sugerimos mantener el evento activo y trasladar la jornada a aula o auditorio en modalidad bajo techo con talleres y charlas interactivas.
+          </>
         }
         onCerrar={() => setEventoCancelar(null)}
         onConfirmar={manejarCancelar}
-        etiquetaConfirmar="Cancelar evento"
+        etiquetaConfirmar="Confirmar cancelación"
       />
 
       <Notificacion mensaje={notificacion} onCerrar={() => setNotificacion("")} />

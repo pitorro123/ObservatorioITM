@@ -11,12 +11,13 @@ import {
 } from "lucide-react";
 import Button from "../../../components/common/Button/Button.jsx";
 import BuscadorSelect from "../../../components/common/BuscadorSelect/BuscadorSelect.jsx";
+import ModalEventoCancelado from "../../../components/common/ModalEventoCancelado/ModalEventoCancelado.jsx";
 import { useEventosContext } from "../../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../../utils/formato.js";
 import estilos from "./Eventos.module.css";
 
 /* ── Carrusel Continuo de Eventos (Movimiento de Izquierda a Derecha) ── */
-function CarruselSuperior({ eventos }) {
+function CarruselSuperior({ eventos, onAbrirCancelado }) {
   const eventosCarrusel = useMemo(() => {
     return eventos.filter((e) => e.imagen && e.estado !== "borrador");
   }, [eventos]);
@@ -42,6 +43,12 @@ function CarruselSuperior({ eventos }) {
           <Link
             key={`${evento.id}-${index}`}
             to={`/eventos/${evento.id}`}
+            onClick={(e) => {
+              if (evento.estado === "cancelado") {
+                e.preventDefault();
+                onAbrirCancelado?.(evento);
+              }
+            }}
             className={estilos.carruselCard}
             title={`Ver detalles de ${evento.titulo}`}
           >
@@ -113,6 +120,7 @@ export default function Eventos() {
   const [fechaSeleccionada, setFechaSeleccionada] = useState(
     searchParams.get("fecha") || ""
   );
+  const [eventoCanceladoModal, setEventoCanceladoModal] = useState(null);
 
   // Sincronizar parámetros con la URL
   const actualizarParams = (eventoId, tipo, estado, fecha) => {
@@ -200,7 +208,10 @@ export default function Eventos() {
   return (
     <section className={estilos.raiz}>
       {/* 1. Carrusel continuo de fotos de eventos (movimiento de izquierda a derecha) */}
-      <CarruselSuperior eventos={eventos} />
+      <CarruselSuperior
+        eventos={eventos}
+        onAbrirCancelado={(ev) => setEventoCanceladoModal(ev)}
+      />
 
       {/* 2. Encabezado de la sección */}
       <div className={estilos.headerSeccion}>
@@ -426,18 +437,34 @@ export default function Eventos() {
                   </li>
                 </ul>
 
-                <Button
-                  to={`/eventos/${evento.id}`}
-                  variant="primary"
-                  className={estilos.cardBtn}
-                >
-                  Ver detalle
-                </Button>
+                {evento.estado === "cancelado" ? (
+                  <Button
+                    onClick={() => setEventoCanceladoModal(evento)}
+                    variant="primary"
+                    className={estilos.cardBtn}
+                  >
+                    Ver detalle
+                  </Button>
+                ) : (
+                  <Button
+                    to={`/eventos/${evento.id}`}
+                    variant="primary"
+                    className={estilos.cardBtn}
+                  >
+                    Ver detalle
+                  </Button>
+                )}
               </div>
             </article>
           ))}
         </div>
       )}
+
+      <ModalEventoCancelado
+        abierto={Boolean(eventoCanceladoModal)}
+        onCerrar={() => setEventoCanceladoModal(null)}
+        tituloEvento={eventoCanceladoModal?.titulo}
+      />
     </section>
   );
 }
