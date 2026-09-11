@@ -1,6 +1,7 @@
-import { CalendarDays, CalendarCheck, Users, UserCheck } from "lucide-react";
+import { CalendarDays, CalendarCheck, Users, UserCheck, CloudRain } from "lucide-react";
 import Header from "../../components/layout/Header/Header.jsx";
 import { useEventosContext } from "../../context/EventosContext.jsx";
+import { useClima } from "../../hooks/useClima.js";
 import estilos from "./Dashboard.module.css";
 
 const HOY = new Date().toISOString().slice(0, 10);
@@ -20,6 +21,8 @@ const tarjetasResumen = [
 
 export default function Dashboard() {
   const { eventos, resumenDashboard } = useEventosContext();
+  const { estado: estadoClima } = useClima();
+  const esDesfavorable = estadoClima?.observatorio?.esDesfavorable;
 
   const eventosOrdenados = [...eventos].sort((a, b) => a.fecha.localeCompare(b.fecha));
 
@@ -36,6 +39,32 @@ export default function Dashboard() {
             comunidad.
           </p>
         </div>
+
+        {esDesfavorable && (
+          <div className={estilos.bannerAvisoClima} role="alert">
+            <span className={estilos.bannerIconoWrap}>
+              <CloudRain className={estilos.bannerIcono} aria-hidden="true" />
+            </span>
+            <div className={estilos.bannerContenido}>
+              <div className={estilos.bannerHeader}>
+                <h3 className={estilos.bannerTitulo}>
+                  Aviso Meteorológico para Docentes · Condiciones No Favorables
+                </h3>
+                <span className={estilos.bannerBadge}>
+                  {Math.round(estadoClima?.temperatura ?? 22)}°C · {estadoClima?.probabilidadLluviaHoy ?? 0}% lluvia
+                </span>
+              </div>
+              <p className={estilos.bannerTexto}>
+                {estadoClima?.observatorio?.mensajeDocente}
+              </p>
+              <div className={estilos.bannerPie}>
+                <span className={estilos.bannerDirectriz}>
+                  Directriz Institucional: No cancelar eventos programados · Mantener inscripciones activas y trasladar la jornada a aula o auditorio.
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className={estilos.grillaResumen}>
           {tarjetasResumen.map((tarjeta) => {
@@ -84,6 +113,9 @@ export default function Dashboard() {
                         <td>
                           <p className={estilos.nombreEvento}>{evento.titulo}</p>
                           <p className={estilos.fechaEvento}>{evento.fecha}</p>
+                          {esDesfavorable && evento.tipo === "observacion" && evento.estado === "publicado" && (
+                            <span className={estilos.badgeClimaEvento}>Modalidad en sala</span>
+                          )}
                         </td>
                         <td>
                           <span className={estilos.docenteTexto}>
