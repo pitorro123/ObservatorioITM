@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X, ImagePlus } from "lucide-react";
+import { X, ImagePlus, MapPin, Users } from "lucide-react";
 import estilos from "./FormularioEvento.module.css";
 
 const formularioVacio = {
@@ -8,10 +8,34 @@ const formularioVacio = {
   fecha: "",
   hora: "",
   lugar: "",
+  esMasivo: false,
+  capacidad: 50,
+  ubicacionMapa: "",
   imagen: "",
   tipo: "abierto",
   publicarDirectamente: false,
 };
+
+const LUGARES_SUGERIDOS = [
+  {
+    nombreBoton: "Campus Fraternidad",
+    lugar: "Observatorio Astronómico ITM - Sede Fraternidad",
+    direccion:
+      "Institución Universitaria ITM · Campus Fraternidad, Cl. 54a #30-01, Villa Hermosa, Medellín, Antioquia",
+  },
+  {
+    nombreBoton: "Campus Robledo",
+    lugar: "ITM - Campus Robledo",
+    direccion:
+      "Institución Universitaria ITM · Campus Robledo, Calle 73 #76A-354, Medellín, Antioquia",
+  },
+  {
+    nombreBoton: "Parque Explora",
+    lugar: "Parque Explora",
+    direccion:
+      "Parque Explora, Carrera 52 #73-75, Aranjuez, Medellín, Antioquia, Colombia",
+  },
+];
 
 export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar }) {
   const [formulario, setFormulario] = useState(formularioVacio);
@@ -22,14 +46,26 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
     if (!abierto) return;
     setError("");
     if (evento) {
+      const tiposValidos = ["abierto", "charla", "observacion"];
+      const tipoValido = tiposValidos.includes(evento.tipo)
+        ? evento.tipo
+        : evento.tipo === "semillero"
+          ? "charla"
+          : "abierto";
+
+      const esMasivo = Boolean(evento.esMasivo);
+
       setFormulario({
         titulo: evento.titulo,
         descripcion: evento.descripcion,
         fecha: evento.fecha,
         hora: evento.hora,
         lugar: evento.lugar,
+        esMasivo,
+        capacidad: esMasivo ? "" : (evento.capacidad !== undefined ? evento.capacidad : 50),
+        ubicacionMapa: evento.ubicacionMapa || "",
         imagen: evento.imagen || "",
-        tipo: evento.tipo || "abierto",
+        tipo: tipoValido,
         publicarDirectamente: evento.estado === "publicado",
       });
     } else {
@@ -41,7 +77,7 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
 
   const cambiarCampo = (clave) => (eventoInput) => {
     const valor =
-      clave === "publicarDirectamente"
+      clave === "publicarDirectamente" || clave === "esMasivo"
         ? eventoInput.target.checked
         : eventoInput.target.value;
     setFormulario((prev) => ({ ...prev, [clave]: valor }));
@@ -64,6 +100,7 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
     const titulo = formulario.titulo.trim();
     const descripcion = formulario.descripcion.trim();
     const lugar = formulario.lugar.trim();
+    const ubicacionMapa = (formulario.ubicacionMapa || "").trim() || lugar;
 
     if (titulo.length < 3) {
       setError("Escribe el nombre del evento (mínimo 3 caracteres).");
@@ -86,12 +123,25 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
       return;
     }
 
+    let capacidadFinal = null;
+    if (!formulario.esMasivo) {
+      const capacidadNum = Number(formulario.capacidad);
+      if (isNaN(capacidadNum) || capacidadNum < 1) {
+        setError("Ingresa una capacidad de integrantes válida (mínimo 1 cupo).");
+        return;
+      }
+      capacidadFinal = capacidadNum;
+    }
+
     const datos = {
       titulo,
       descripcion,
       fecha: formulario.fecha,
       hora: formulario.hora,
       lugar,
+      esMasivo: Boolean(formulario.esMasivo),
+      capacidad: capacidadFinal,
+      ubicacionMapa,
       imagen: formulario.imagen,
       tipo: formulario.tipo,
       estado: formulario.publicarDirectamente ? "publicado" : "borrador",
@@ -185,7 +235,7 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
 
           <div className={estilos.campo}>
             <label className={estilos.etiqueta} htmlFor="ev-lugar">
-              Lugar
+              Lugar / Espacio
             </label>
             <input
               id="ev-lugar"
@@ -196,21 +246,122 @@ export default function FormularioEvento({ abierto, evento, onCerrar, onGuardar 
               className={estilos.input}
               placeholder="Ej: Observatorio Astronómico ITM - Sede Fraternidad"
             />
+            <div className={estilos.sugerenciasUbicacion}>
+              <span className={estilos.sugerenciasTexto}>Accesos rápidos:</span>
+              {LUGARES_SUGERIDOS.map((sug) => (
+                <button
+                  key={`lugar-${sug.nombreBoton}`}
+                  type="button"
+                  className={estilos.botonSugerencia}
+                  onClick={() =>
+                    setFormulario((prev) => ({
+                      ...prev,
+                      lugar: sug.lugar,
+                      ubicacionMapa: prev.ubicacionMapa ? prev.ubicacionMapa : sug.direccion,
+                    }))
+                  }
+                >
+                  {sug.nombreBoton}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className={estilos.campo}>
-            <label className={estilos.etiqueta} htmlFor="ev-tipo">
-              Tipo de evento
+            <div className={estilos.etiquetaConAyuda}>
+              <label className={estilos.etiqueta} htmlFor="ev-ubicacion-mapa">
+                <MapPin className={estilos.iconoCampo} aria-hidden="true" />
+                Ubicación para el mapa (dirección exacta)
+              </label>
+            </div>
+            <input
+              id="ev-ubicacion-mapa"
+              type="text"
+              value={formulario.ubicacionMapa}
+              onChange={cambiarCampo("ubicacionMapa")}
+              className={estilos.input}
+              placeholder="Ej: Cl. 54a #30-01, Villa Hermosa, Medellín o Campus Fraternidad"
+            />
+            <div className={estilos.sugerenciasUbicacion}>
+              <span className={estilos.sugerenciasTexto}>Accesos rápidos:</span>
+              {LUGARES_SUGERIDOS.map((sug) => (
+                <button
+                  key={`mapa-${sug.nombreBoton}`}
+                  type="button"
+                  className={estilos.botonSugerencia}
+                  onClick={() =>
+                    setFormulario((prev) => ({
+                      ...prev,
+                      ubicacionMapa: sug.direccion,
+                    }))
+                  }
+                >
+                  {sug.nombreBoton}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={estilos.campoMasivo}>
+            <label className={estilos.cajaMasivo}>
+              <input
+                type="checkbox"
+                checked={formulario.esMasivo}
+                onChange={cambiarCampo("esMasivo")}
+                className={estilos.checkbox}
+              />
+              <div className={estilos.infoMasivo}>
+                <span className={estilos.tituloMasivo}>Evento masivo</span>
+                <span className={estilos.subtituloMasivo}>
+                  Desactiva la capacidad de participantes (cupos ilimitados) y no genera códigos de acceso.
+                </span>
+              </div>
             </label>
-            <select
-              id="ev-tipo"
-              value={formulario.tipo}
-              onChange={cambiarCampo("tipo")}
-              className={`${estilos.input} ${estilos.select}`}
-            >
-              <option value="abierto">Abierto a la comunidad</option>
-              <option value="semillero">Semillero de astronomía</option>
-            </select>
+          </div>
+
+          <div className={estilos.fila}>
+            <div className={estilos.campo}>
+              <label
+                className={`${estilos.etiqueta} ${formulario.esMasivo ? estilos.etiquetaDeshabilitada : ""}`}
+                htmlFor="ev-capacidad"
+              >
+                <Users className={estilos.iconoCampo} aria-hidden="true" />
+                Capacidad de participantes
+              </label>
+              <input
+                id="ev-capacidad"
+                type="number"
+                min="1"
+                max="5000"
+                disabled={formulario.esMasivo}
+                required={!formulario.esMasivo}
+                value={formulario.esMasivo ? "" : formulario.capacidad}
+                onChange={cambiarCampo("capacidad")}
+                className={`${estilos.input} ${formulario.esMasivo ? estilos.inputDeshabilitado : ""}`}
+                placeholder={formulario.esMasivo ? "Ilimitada (Evento masivo)" : "Ej: 50"}
+              />
+              <span className={estilos.ayudaCampo}>
+                {formulario.esMasivo
+                  ? "Capacidad ilimitada para evento masivo."
+                  : "Cupos totales disponibles para inscripción."}
+              </span>
+            </div>
+
+            <div className={estilos.campo}>
+              <label className={estilos.etiqueta} htmlFor="ev-tipo">
+                Tipo de evento
+              </label>
+              <select
+                id="ev-tipo"
+                value={formulario.tipo}
+                onChange={cambiarCampo("tipo")}
+                className={`${estilos.input} ${estilos.select}`}
+              >
+                <option value="abierto">Abierto al público</option>
+                <option value="charla">Charla</option>
+                <option value="observacion">Observación</option>
+              </select>
+            </div>
           </div>
 
           <div className={estilos.campo}>
