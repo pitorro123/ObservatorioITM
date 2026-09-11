@@ -16,9 +16,9 @@ import Header from "../../components/layout/Header/Header.jsx";
 import Notificacion from "../../components/pages/Eventos/Notificacion/Notificacion.jsx";
 import { useEventosContext } from "../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../utils/formato.js";
-import estilos from "./ValidarQR.module.css";
+import estilos from "./ValidarAsistencia.module.css";
 
-export default function ValidarQR() {
+export default function ValidarAsistencia() {
   const { obtenerEvento, obtenerInscripcion, marcarAsistencia } = useEventosContext();
   const [codigo, setCodigo] = useState("");
   const [resultado, setResultado] = useState(null);

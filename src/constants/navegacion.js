@@ -3,6 +3,7 @@ export const RUTAS = {
   EVENTOS: "/admin/eventos",
   ASISTENCIA: "/admin/asistencia",
   VALIDAR_QR: "/admin/validar-qr",
+  VALIDAR_ASISTENCIA: "/admin/validar-asistencia",
   DOCENTES: "/admin/docentes",
 };
 
@@ -11,5 +12,6 @@ export const ENLACES_NAVEGACION = [
   { etiqueta: "Eventos", ruta: RUTAS.EVENTOS, icono: "CalendarDays", roles: ["Administrador", "Docente"] },
   { etiqueta: "Asistencia", ruta: RUTAS.ASISTENCIA, icono: "ClipboardCheck", roles: ["Administrador", "Docente"] },
   { etiqueta: "Validar Asistencia", ruta: RUTAS.VALIDAR_QR, icono: "KeyRound", roles: ["Administrador", "Docente"] },
+  { etiqueta: "Validar Asistencia", ruta: RUTAS.VALIDAR_ASISTENCIA, icono: "KeyRound", roles: ["Administrador", "Docente"] },
   { etiqueta: "Docentes", ruta: RUTAS.DOCENTES, icono: "GraduationCap", roles: ["Administrador"] },
 ];

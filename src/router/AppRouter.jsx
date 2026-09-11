@@ -14,7 +14,7 @@ import CambiarPassword from "../pages/Login/CambiarPassword.jsx";
 import Dashboard from "../pages/Dashboard/Dashboard.jsx";
 import Eventos from "../pages/Eventos/Eventos.jsx";
 import Asistencia from "../pages/Asistencia/Asistencia.jsx";
-import ValidarQR from "../pages/ValidarQR/ValidarQR.jsx";
+import ValidarAsistencia from "../pages/ValidarAsistencia/ValidarAsistencia.jsx";
 import Docentes from "../pages/Docentes/Docentes.jsx";
 import Perfil from "../pages/Perfil/Perfil.jsx";
 import ProtegerRuta from "./ProtegerRuta.jsx";
@@ -48,7 +48,7 @@ export default function AppRouter() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="eventos" element={<Eventos />} />
         <Route path="asistencia" element={<Asistencia />} />
-        <Route path="validar-qr" element={<ValidarQR />} />
+        <Route path="validar-asistencia" element={<ValidarAsistencia />} />
         <Route
           path="docentes"
           element={
