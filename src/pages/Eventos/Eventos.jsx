@@ -9,13 +9,16 @@ import Notificacion from "../../components/pages/Eventos/Notificacion/Notificaci
 import { useEventos } from "../../hooks/useEventos.js";
 import { useEventosContext } from "../../context/EventosContext.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { Plus } from "lucide-react";
+import { useClima } from "../../hooks/useClima.js";
+import { Plus, CloudRain } from "lucide-react";
 import estilos from "./Eventos.module.css";
 
 export default function Eventos() {
   const { usuarioActual, esAdmin } = useAuth();
   const { eventos, crearEvento, editarEvento, eliminarEvento, publicarEvento, cancelarEvento } =
     useEventosContext();
+  const { estado: estadoClima } = useClima();
+  const esDesfavorable = estadoClima?.observatorio?.esDesfavorable;
 
   const {
     pestañaActiva,
@@ -127,6 +130,16 @@ export default function Eventos() {
       <div className={estilos.seccionSuperior}>
         <Header rutaBreadcrumb={["Dashboard", "Eventos"]} titulo="Eventos" />
 
+        {esDesfavorable && (
+          <div className={estilos.avisoClimaDocente} role="alert">
+            <CloudRain className={estilos.avisoClimaIcono} aria-hidden="true" />
+            <div className={estilos.avisoClimaTexto}>
+              <strong>Aviso meteorológico para docentes:</strong> Condiciones actuales no favorables para observación al aire libre en Medellín. 
+              <strong> Por directriz institucional, no canceles los eventos;</strong> adáptalos a modalidad bajo techo en aulas o auditorio.
+            </div>
+          </div>
+        )}
+
         <BarraFiltros
           conteos={conteosPorEstado}
           pestañaActiva={pestañaActiva}
@@ -203,6 +216,11 @@ export default function Eventos() {
           eventoCancelar
             ? `Se cancelará "${eventoCancelar.titulo}". Dejará de mostrarse en el portal público.`
             : ""
+        }
+        advertencia={
+          eventoCancelar?.tipo === "observacion" || esDesfavorable
+            ? "Recordatorio institucional: Si el motivo de la cancelación es el clima, la directriz del Observatorio ITM es NO cancelar el evento. Los eventos se mantienen activos y se realizan charlas, talleres o simulaciones en sala con los inscritos."
+            : undefined
         }
         onCerrar={() => setEventoCancelar(null)}
         onConfirmar={manejarCancelar}

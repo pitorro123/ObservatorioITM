@@ -5,6 +5,7 @@ export default function ConfirmacionModal({
   abierto,
   titulo,
   mensaje,
+  advertencia,
   onCerrar,
   onConfirmar,
   etiquetaConfirmar = "Confirmar",
@@ -27,6 +28,12 @@ export default function ConfirmacionModal({
 
         <h2 className={estilos.titulo}>{titulo}</h2>
         <p className={estilos.mensaje}>{mensaje}</p>
+
+        {advertencia && (
+          <div className={estilos.advertenciaCaja} role="alert">
+            <p className={estilos.advertenciaTexto}>{advertencia}</p>
+          </div>
+        )}
 
         <div className={estilos.acciones}>
           <button type="button" className={estilos.botonCancelar} onClick={onCerrar}>

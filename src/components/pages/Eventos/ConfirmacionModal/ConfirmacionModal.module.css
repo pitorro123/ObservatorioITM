@@ -60,6 +60,22 @@
   line-height: 1.5;
 }
 
+.advertenciaCaja {
+  margin-top: var(--espacio-xs);
+  padding: 10px 14px;
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radio-md);
+  text-align: left;
+}
+
+.advertenciaTexto {
+  font-size: var(--texto-xs);
+  color: #92400e;
+  line-height: 1.45;
+  margin: 0;
+}
+
 .acciones {
   display: flex;
   justify-content: center;
