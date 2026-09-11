@@ -195,6 +195,17 @@
   white-space: nowrap;
 }
 
+.badgeSinCodigo {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: var(--radio-sm);
+  background-color: #f1f5f9;
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+  color: #64748b;
+  white-space: nowrap;
+}
+
 .badgeAsistencia {
   display: inline-flex;
   align-items: center;

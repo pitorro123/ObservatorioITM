@@ -126,8 +126,10 @@ export default function Asistencia() {
               <tbody>
                 {inscripciones.map((inscripcion) => {
                   const asistio = inscripcion.asistencia === "Asistió";
+                  const idUnico = inscripcion.id || inscripcion.codigo;
+                  const identificador = inscripcion.codigo || inscripcion.id;
                   return (
-                    <tr key={inscripcion.codigo}>
+                    <tr key={idUnico}>
                       <td>
                         <p className={estilos.nombreInscrito}>{inscripcion.nombre}</p>
                         <p className={estilos.metaInscrito}>
@@ -140,7 +142,11 @@ export default function Asistencia() {
                       </td>
                       <td className={estilos.celdaCorreo}>{inscripcion.correo}</td>
                       <td>
-                        <code className={estilos.codigo}>{inscripcion.codigo}</code>
+                        {inscripcion.codigo ? (
+                          <code className={estilos.codigo}>{inscripcion.codigo}</code>
+                        ) : (
+                          <span className={estilos.badgeSinCodigo}>Evento masivo</span>
+                        )}
                       </td>
                       <td>
                         <span
@@ -156,7 +162,7 @@ export default function Asistencia() {
                           <button
                             type="button"
                             className={estilos.botonMarcar}
-                            onClick={() => manejarMarcar(inscripcion.codigo)}
+                            onClick={() => manejarMarcar(identificador)}
                           >
                             <Check className={estilos.iconoBoton} aria-hidden="true" />
                             Marcar asistencia

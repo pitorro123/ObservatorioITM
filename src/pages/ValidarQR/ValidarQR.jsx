@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
-  ScanLine,
-  Camera,
+  KeyRound,
   Search,
   CheckCircle2,
   XCircle,
@@ -11,10 +10,8 @@ import {
   MapPin,
   BadgeCheck,
 } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
 import Header from "../../components/layout/Header/Header.jsx";
 import Notificacion from "../../components/pages/Eventos/Notificacion/Notificacion.jsx";
-import EscanerVideo from "../../components/pages/ValidarQR/EscanerVideo/EscanerVideo.jsx";
 import { useEventosContext } from "../../context/EventosContext.jsx";
 import { formatearFecha, formatearHora } from "../../utils/formato.js";
 import estilos from "./ValidarQR.module.css";
@@ -26,7 +23,6 @@ export default function ValidarQR() {
   const [tipoResultado, setTipoResultado] = useState("");
   const [ingresos, setIngresos] = useState([]);
   const [notificacion, setNotificacion] = useState("");
-  const [escanerAbierto, setEscanerAbierto] = useState(false);
 
   const validarCodigo = (texto) => {
     const verificar = obtenerInscripcion(texto);
@@ -56,14 +52,10 @@ export default function ValidarQR() {
     validarCodigo(codigo.trim());
   };
 
-  const manejarDetectado = (texto) => {
-    setEscanerAbierto(false);
-    validarCodigo(texto);
-  };
-
   const manejarConfirmar = () => {
     if (!resultado) return;
-    const marcado = marcarAsistencia(resultado.inscripcion.codigo);
+    const clave = resultado.inscripcion.id || resultado.inscripcion.codigo || resultado.inscripcion.correo;
+    const marcado = marcarAsistencia(clave);
     if (!marcado.exito) {
       setNotificacion(marcado.error);
       setTipoResultado("error");
@@ -82,28 +74,28 @@ export default function ValidarQR() {
     <div className={estilos.pagina}>
       <div className={estilos.seccionSuperior}>
         <Header
-          rutaBreadcrumb={["Dashboard", "Validar código QR"]}
-          titulo="Validar código QR de asistencia"
+          rutaBreadcrumb={["Dashboard", "Validar Asistencia"]}
+          titulo="Validar código de asistencia"
         />
       </div>
 
       <div className={estilos.contenedor}>
         <div className={estilos.tarjetaEscaner}>
           <span className={estilos.iconoEscanerWrap}>
-            <ScanLine className={estilos.iconoEscaner} aria-hidden="true" />
+            <KeyRound className={estilos.iconoEscaner} aria-hidden="true" />
           </span>
           <form className={estilos.formulario} onSubmit={manejarValidar}>
-            <label className={estilos.etiqueta} htmlFor="codigo-qr">
-              Código QR del participante
+            <label className={estilos.etiqueta} htmlFor="codigo-validacion">
+              Código de 4 dígitos o correo del participante
             </label>
             <div className={estilos.filaInput}>
               <input
-                id="codigo-qr"
+                id="codigo-validacion"
                 type="text"
                 value={codigo}
                 onChange={(e) => setCodigo(e.target.value)}
                 className={estilos.input}
-                placeholder="ITM-XXXX-XXXXXX"
+                placeholder="Ej: 4829 o tucorreo@ejemplo.com"
                 autoComplete="off"
               />
               <button type="submit" className={estilos.botonBuscar}>
@@ -112,36 +104,34 @@ export default function ValidarQR() {
               </button>
             </div>
             <div className={estilos.barra_opciones}>
-              <button
-                type="button"
-                className={estilos.botonEscanear}
-                onClick={() => setEscanerAbierto((abierto) => !abierto)}
-              >
-                <Camera className={estilos.iconoBoton} aria-hidden="true" />
-                {escanerAbierto ? "Cerrar cámara" : "Escanear con cámara"}
-              </button>
               <p className={estilos.ayuda}>
-                Escanea el QR del participante con la cámara o ingresa el código
-                manualmente para registrar su asistencia.
+                Ingresa el código numérico de 4 dígitos asignado al participante o su correo electrónico registrado para validar su asistencia.
               </p>
             </div>
           </form>
         </div>
 
-        {escanerAbierto && (
-          <div className={estilos.tarjetaCamara}>
-            <h2 className={estilos.tituloCamara}>
-              Escanea el código QR del participante
-            </h2>
-            <EscanerVideo onDetect={manejarDetectado} onCerrar={() => setEscanerAbierto(false)} />
-          </div>
-        )}
-
         {tipoResultado === "encontrado" && inscripcionVisible && eventoVisible && (
           <div className={estilos.tarjetaResultado} role="status">
-            <div className={estilos.qrWrap}>
-              <QRCodeSVG value={inscripcionVisible.codigo} size={140} />
-              <p className={estilos.codigoQr}>{inscripcionVisible.codigo}</p>
+            <div className={estilos.codigoWrap}>
+              {inscripcionVisible.codigo ? (
+                <>
+                  <span className={estilos.codigoWrapTitulo}>Código de acceso</span>
+                  <div className={estilos.digitosGrid}>
+                    {String(inscripcionVisible.codigo)
+                      .split("")
+                      .map((digito, i) => (
+                        <span key={i} className={estilos.digitoCaja}>
+                          {digito}
+                        </span>
+                      ))}
+                  </div>
+                </>
+              ) : (
+                <span className={estilos.badgeEventoMasivo}>
+                  Evento Masivo · Libre
+                </span>
+              )}
             </div>
 
             <div className={estilos.datosResultado}>
@@ -201,8 +191,8 @@ export default function ValidarQR() {
             <div>
               <h2 className={estilos.tituloError}>
                 {resultado?.inscripcion
-                  ? "Este código ya fue validado"
-                  : "Código no válido"}
+                  ? "Este registro ya fue validado"
+                  : "Registro no encontrado"}
               </h2>
               <p className={estilos.textoError}>{resultado?.error}</p>
             </div>
@@ -214,10 +204,12 @@ export default function ValidarQR() {
             <h2 className={estilos.tituloIngresos}>Asistencias registradas en esta sesión</h2>
             <ul className={estilos.listaIngresos}>
               {ingresos.map((inscripcion) => (
-                <li key={inscripcion.codigo} className={estilos.filaIngreso}>
+                <li key={inscripcion.id || inscripcion.codigo} className={estilos.filaIngreso}>
                   <BadgeCheck className={estilos.iconoIngreso} aria-hidden="true" />
                   <span className={estilos.nombreIngreso}>{inscripcion.nombre}</span>
-                  <code className={estilos.codigoIngreso}>{inscripcion.codigo}</code>
+                  <code className={estilos.codigoIngreso}>
+                    {inscripcion.codigo ? `Código: ${inscripcion.codigo}` : "Evento Masivo"}
+                  </code>
                 </li>
               ))}
             </ul>
