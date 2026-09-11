@@ -6,7 +6,7 @@
 }
 
 .topBar {
-  background-color: var(--obs-blue-light);
+  background-color: var(--obs-footer); /* #151946 */
 }
 
 .topBarInner {
@@ -60,7 +60,7 @@
   padding: 8px 14px;
   border-radius: var(--radius-full);
   background-color: white;
-  color: var(--obs-blue-light);
+  color: var(--obs-footer);
   font-size: 0.8125rem;
   font-weight: 700;
   box-shadow: var(--shadow-sm);
